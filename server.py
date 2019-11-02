@@ -1,26 +1,18 @@
-from flask import Flask, render_template
+from flask import Flask
+
+import views
 
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+	app.add_url_rule("/", view_func=views.home_page)
+    app.add_url_rule("/players", view_func=views.players_page)
+    app.add_url_rule("/teams", view_func=views.teams_page)
+    app.add_url_rule("/matches", view_func=views.matches_page)
 
-
-@app.route("/")
-def home_page():
-    return render_template("home.html")
-
-@app.route("/matches")
-def matches_page():
-    return render_template("matches.html")
-    
-@app.route("/players")
-def players_page():
-    return render_template("players.html")
-    
-@app.route("/teams")
-def teams_page():
-    return render_template("teams.html")
-
+    return app
 
 
 if __name__ == "__main__":
-    app.run()
+    app = create_app()
+    app.run(host="127.0.0.1", port=5000, debug=True)
