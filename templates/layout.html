@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Football - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"/>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='mymovies.css') }}"/>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar" aria-label="main navigation">
+        <div class="navbar-brand">
+          <span class="navbar-item">
+            <a class="button is-link" href="{{ url_for('home_page') }}">Home</a>
+          </span>
+          <span class="navbar-item">
+            <a class="button is-link" href="{{ url_for('players_page') }}">Players</a>
+          </span>
+          <span class="navbar-item">
+            <a class="button is-link" href="{{ url_for('teams_page') }}">Teams</a>
+          </span>
+          <span class="navbar-item">
+            <a class="button is-link" href="{{ url_for('matches_page') }}">Matches</a>
+          </span>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="content">
+          {% block content %}{% endblock %}
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="content">
+        <small>&copy; 2019, itucsdb1901</small>
+      </div>
+    </footer>
+  </body>
+</html>
