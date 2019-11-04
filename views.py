@@ -13,4 +13,7 @@ def players_page():
 def teams_page():
     return render_template("teams.html")
 
+def leagues_page():
+	return render_template("leagues.html")
+
 
