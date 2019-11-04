@@ -7,7 +7,7 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"/>
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='mymovies.css') }}"/>
+          href="{{ url_for('static', filename='sytles.css') }}"/>
   </head>
   <body>
     <header>
@@ -24,6 +24,9 @@
           </span>
           <span class="navbar-item">
             <a class="button is-link" href="{{ url_for('matches_page') }}">Matches</a>
+          </span>
+          <span class="navbar-item">
+            <a class="button is-link" href="{{ url_for('leagues_page') }}">Leagues</a>
           </span>
         </div>
       </nav>
