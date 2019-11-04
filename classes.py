@@ -1,7 +1,7 @@
 class Person:
 	def __init__(self, id, name, birthDay, nationality):
 		self.id = id
-		self.name = named
+		self.name = name
 		self.birthDay = birthDay
 		self.nationality = nationality
 
