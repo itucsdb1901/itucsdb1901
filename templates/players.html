@@ -7,6 +7,12 @@
         {% for player in players %}
         <tr>
             <td>{{player}}</td>
+            <td>
+                <form method="POST" name ="{{player[0]}}" action="/">
+                    <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
+                </form>
+            </td>
+            
         </tr>
         {% endfor %}
     </table>
