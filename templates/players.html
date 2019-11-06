@@ -2,4 +2,13 @@
 {% block title %}Players{% endblock %}
 {% block content %}
     <h1>Players Page</h1>
+    {% if players %}
+    <table>
+        {% for player in players %}
+        <tr>
+            <td>{{player}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
 {% endblock %}
