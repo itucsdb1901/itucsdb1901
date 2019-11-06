@@ -65,8 +65,8 @@ class Goal:
 class Assist:
 	def __init__(self, id, playerID, goalID):
 		self.id = id
-		self.playerID
-		self.goalID
+		self.playerID=playerID
+		self.goalID=goalID
 
 class Card:
 	def __init__(self, id, playerID, yellowOrRed, minute, matchID):
