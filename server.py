@@ -7,9 +7,10 @@ import psycopg2 as dbapi2
 
 def create_app():
     app = Flask(__name__)
-    app.add_url_rule("/", view_func=views.home_page)
+    app.add_url_rule("/", methods=["POST", "GET"], view_func=views.home_page)
     app.add_url_rule("/add_player", methods=["POST"], view_func=views.add_player)
-    app.add_url_rule("/players", view_func=views.players_page)
+    app.add_url_rule("/players/<int:personid>", methods=["GET"], view_func=views.player_page)
+    app.add_url_rule("/players", methods=["POST", "GET"], view_func=views.players_page)
     app.add_url_rule("/teams", view_func=views.teams_page)
     app.add_url_rule("/matches", view_func=views.matches_page)
     app.add_url_rule("/leagues", view_func=views.leagues_page)
