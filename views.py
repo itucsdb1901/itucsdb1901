@@ -3,6 +3,7 @@ import sys
 import psycopg2 as dbapi2
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
+import classes
 
 
 def executeSQLquery(url, statements):
@@ -20,13 +21,27 @@ def listTable(url, statement):
         cursor.close()
     return result
 
+def getOneRowQuery(url,statement):
+    with dbapi2.connect(url) as connection:
+        cursor=connection.cursor()
+        cursor.execute(statement)
+        result= cursor.fetchone()
+        cursor.close()
+    return result
 
 def home_page():
     return render_template("home.html")
 
 def matches_page():
     return render_template("matches.html")
-    
+
+def player_page(personid):
+    url = current_app.config["db_url"]
+    query = "SELECT * FROM test1 WHERE (id=%d)"%personid
+    result=getOneRowQuery(url,query)
+    person=classes.Person(id=int(result[0]),name=result[1],birthDay=1990,nationality="b")
+    return render_template("player.html",player=person)
+
 def players_page():
     url = current_app.config['db_url']
     listSQL = "SELECT * FROM test1"
