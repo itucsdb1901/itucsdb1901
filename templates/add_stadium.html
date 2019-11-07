@@ -2,4 +2,13 @@
 {% block title %}Player Added{% endblock %}
 {% block content %}
     <h1>Add Stadium</h1>
+    <form method="POST">
+        <label>Stadium Name</label>
+        <input class="input" type="text" name="name" placeholder="Stadium Name" maxlength="20"/>
+        <label>Stadium Capacity</label>
+        <input class="input" type="number" name="capacity" placeholder="Stadium Capacity" maxlength="20"/>
+        <label>Stadium City</label>
+        <input class="input" type="text" name="city" placeholder="Stadium City" maxlength="20"/>
+        <input type="submit" title="Save Stadium" value="Save">
+    </form> 
 {% endblock %}
