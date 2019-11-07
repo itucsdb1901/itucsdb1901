@@ -2,4 +2,17 @@
 {% block title %}Player Added{% endblock %}
 {% block content %}
     <h1>Add Team</h1>
+    <form method="POST">
+            <label>Team Name</label>
+            <input class="input" type="text" name="name" placeholder="Team Name" maxlength="20"/>
+            <label>Stadium</label>
+            <div class="select">
+                <select>
+                    {% for stadium in stadiums %}
+                        <option>{{stadium[1]}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+            <input type="submit" title="Save Team" value="Save">
+        </form> 
 {% endblock %}

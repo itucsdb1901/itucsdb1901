@@ -73,7 +73,13 @@ def add_person():
     return render_template("add_person.html")
 
 def add_team():
-    return render_template("add_team.html")
+    url = current_app.config['db_url']
+    if(request.method == 'POST'):
+        print("sd")
+    else:
+        getStadiumsSQL = "SELECT * FROM stadium"
+        stadiums = listTable(url, getStadiumsSQL)
+    return render_template("add_team.html", stadiums = stadiums)
 
 def add_stadium():
     url = current_app.config['db_url']
