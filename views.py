@@ -1,8 +1,6 @@
 from flask import render_template, request, current_app
 import sys
 import psycopg2 as dbapi2
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
 import classes
 
 
