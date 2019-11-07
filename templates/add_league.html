@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Add League{% endblock %}
+{% block content %}
+    <h1>Add League</h1>
+
+    <form method="POST" >
+        <label>Name: </label>
+        <input name="name" id="name" type="text" />
+        <br>
+        <label>Team count: </label>
+        <input name="teamcount" id="teamcount" type="number" />
+        <br>
+        <label>Country: </label>
+        <input name="country" id="country" type= "text" />
+        <br>
+        <input value="Submit" type="submit"/>
+    </form>
+{% endblock %}

@@ -72,6 +72,17 @@ def add_person():
         executeSQLquery(url,statement)
     return render_template("add_person.html")
 
+def add_league():
+    if(request.method=='POST'):
+        name=request.form["name"]
+        teamcount=int(request.form["teamcount"])
+        country=request.form["country"]
+        query="INSERT INTO LEAGUE (NAME,TEAMCOUNT,COUNTRY) VALUES ('%s',%d,'%s')"%(name,teamcount,country)
+        statement=[query]
+        url=current_app.config["db_url"]
+        executeSQLquery(url,statement)
+    return render_template("add_league.html")
+
 def add_team():
     url = current_app.config['db_url']
     if(request.method == 'POST'):

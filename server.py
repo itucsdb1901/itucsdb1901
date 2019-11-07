@@ -17,6 +17,7 @@ def create_app():
     app.add_url_rule("/add_data", view_func=views.add_data_page)
     app.add_url_rule("/add_person", methods=["POST", "GET"], view_func=views.add_person)
     app.add_url_rule("/add_team", methods=["POST", "GET"], view_func=views.add_team)
+    app.add_url_rule("/add_league", methods=["POST", "GET"], view_func=views.add_league)
     app.add_url_rule("/add_stadium", methods=["POST", "GET"], view_func=views.add_stadium)
     app.config['db_url'] = 'postgres://postgres:docker@localhost:5432/football'
     return app
