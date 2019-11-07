@@ -1,7 +1,29 @@
 {% extends "layout.html" %}
 {% block title %}Player Profile{% endblock %}
+{% block headerTitle %}{{player[1]}}{% endblock %}
+{% block subTitle %}{{player[0]}}{% endblock %}
 {% block content %}
-    <h1>Player Profile</h1>
-    <h2>{{player.name}}</h2>
-    <h3>{{player.id}}</h3>
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">PLAYER DETAILS</h1>
+                <h2 class="subtitle">{{player.name}}</h2>
+            </div>
+        </div>
+        <form method="POST" name ="delete{{player.id}}" action="/player/delete_{{player.id}}">
+            <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
+        </form>
+    </section>
+    <div class="tile is-parent is-vertical">
+        <article class="tile is-child notification is-warning">
+                <table>
+                    <tr>
+                        <th>Nationality</th>
+                        <th>Position</th>
+                    </tr>
+                </table>
+        </article>
+    </div>
+    
+    
 {% endblock %}
