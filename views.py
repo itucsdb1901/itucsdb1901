@@ -68,6 +68,13 @@ def add_team():
     return render_template("add_team.html")
 
 def add_stadium():
+    url = current_app.config['db_url']
+    if(request.method == 'POST'):
+        name = request.form['name']
+        capacity = int(request.form['capacity'])
+        city = request.form['city']
+        query = "INSERT INTO stadium (name, capacity, city) VALUES ('%s', %d, '%s')" %(name, capacity, city) 
+        executeSQLquery(url, [query])
     return render_template("add_stadium.html")
 
 def add_data_page():
