@@ -61,12 +61,14 @@ def teams_page():
 def leagues_page():
 	return render_template("leagues.html")
 
-def add_player():
-    name = request.form['name']
-    url = current_app.config['db_url']
-    addName = "INSERT INTO TEST1 (FIRST_NAME) VALUES ('" + name + "');"
-    statements = [addName]
-    executeSQLquery(url, statements)
-    return render_template("add_player.html", name=name)
+def add_person():
+    return render_template("add_person.html")
 
+def add_team():
+    return render_template("add_team.html")
 
+def add_stadium():
+    return render_template("add_stadium.html")
+
+def add_data_page():
+    return render_template("add_data.html")

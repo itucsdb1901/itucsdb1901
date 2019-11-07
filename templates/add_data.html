@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Player Added{% endblock %}
+{% block content %}
+    <h1>Add Data</h1>
+    <table>
+        <tr>
+            <td>
+                <a class="button is-link" href="{{ url_for('add_person') }}">Add Person</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a class="button is-link" href="{{ url_for('add_team') }}">Add Team</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a class="button is-link" href="{{ url_for('add_stadium') }}">Add Stadium</a>
+            </td>
+        </tr>
+    </table>
+    
+    
+{% endblock %}
