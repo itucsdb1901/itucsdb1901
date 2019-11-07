@@ -44,7 +44,7 @@ def player_page(personid):
     url = current_app.config["db_url"]
     query = "SELECT * FROM PERSON WHERE (id=%d)"%personid
     result=getOneRowQuery(url,query)
-    person=classes.Person(id=int(result[0]),name=result[1],birthDay=1990,nationality="b")
+    person=classes.Person(id=int(result[0]),name=result[1],birthyear=result[2],nationality=result[3])
     return render_template("player.html",player=person)
 
 def players_page():
