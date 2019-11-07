@@ -21,8 +21,7 @@ def create_app():
     app.config['db_url'] = 'postgres://wdsryolq:IN21pt58A0DnjBoBbZU_V_JLon4z82zy@balarama.db.elephantsql.com:5432/wdsryolq'
     return app
 
-
+app = create_app()
 
 if __name__ == "__main__":
-    app = create_app()
     app.run(host="127.0.0.1", port=5000, debug=True)
