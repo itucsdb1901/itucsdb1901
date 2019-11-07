@@ -6,9 +6,8 @@
     <section class="hero is-primary">
         <div class="hero-body">
             <div class="container">
-                <h1 class="title">PLAYER DETAILS</h1>
-                <h2 class="subtitle">{{player.name}}</h2>
-                <h2>{{player.birthyear}}</h2>
+                <h1 class="subtitle">{{player.name}}</h1>
+                <h2>{{year-player.birthDay}}</h2>
             </div>
         </div>
         <form method="POST" name ="delete{{player.id}}" action="/player/delete_{{player.id}}">
@@ -23,7 +22,7 @@
                         <th>Position</th>
                     </tr>
                     <tr>
-                        <td>{{player.natinonality}}</td>
+                        <td>{{player.nationality}}</td>
                         <td>MO</td>
                     </tr>
                 </table>

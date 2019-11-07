@@ -2,6 +2,7 @@ from flask import render_template, request, current_app
 import sys
 import psycopg2 as dbapi2
 import classes
+import datetime
 
 
 def executeSQLquery(url, statements):
@@ -44,8 +45,8 @@ def player_page(personid):
     url = current_app.config["db_url"]
     query = "SELECT * FROM PERSON WHERE (id=%d)"%personid
     result=getOneRowQuery(url,query)
-    person=classes.Person(id=int(result[0]),name=result[1],birthyear=result[2],nationality=result[3])
-    return render_template("player.html",player=person)
+    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
+    return render_template("player.html",player=person, year = int(datetime.datetime.now().year))
 
 def players_page():
     url = current_app.config['db_url']
