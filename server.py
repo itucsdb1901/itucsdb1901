@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy 
 import views
 import psycopg2 as dbapi2
 
