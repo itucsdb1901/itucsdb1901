@@ -85,12 +85,20 @@ def add_league():
 
 def add_team():
     url = current_app.config['db_url']
+    getPeopleSQL = "SELECT * FROM person"
+    getStadiumsSQL = "SELECT * FROM stadium"
+    getLeaguesSQL = "SELECT * FROM league"
+    people = listTable(url, getPeopleSQL)
+    leagues = listTable(url, getLeaguesSQL)
+    stadiums = listTable(url, getStadiumsSQL)
     if(request.method == 'POST'):
-        print("sd")
-    else:
-        getStadiumsSQL = "SELECT * FROM stadium"
-        stadiums = listTable(url, getStadiumsSQL)
-    return render_template("add_team.html", stadiums = stadiums)
+        name = request.form['name']
+        coachid = int(request.form['coach'])
+        leagueid = int(request.form['league'])
+        stadiumid = int(request.form['stadium'])
+        query = "INSERT INTO team (name, leagueid, stadiumid, coach) VALUES ('%s', %d, %d, %d)" %(name, leagueid, stadiumid, coachid)
+        executeSQLquery(url, [query])
+    return render_template("add_team.html", stadiums = stadiums, leagues = leagues, people = people)
 
 def add_stadium():
     url = current_app.config['db_url']

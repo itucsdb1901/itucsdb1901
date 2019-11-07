@@ -6,13 +6,41 @@
             <label>Team Name</label>
             <input class="input" type="text" name="name" placeholder="Team Name" maxlength="20"/>
             <label>Stadium</label>
-            <div class="select">
-                <select>
-                    {% for stadium in stadiums %}
-                        <option>{{stadium[1]}}</option>
-                    {%endfor%}
-                </select>
+            <div class="field">
+                <div class="control">
+                    <div class="select is-primary">
+                    <select name="stadium">
+                        {% for stadium in stadiums %}
+                        <option value="{{stadium[0]}}">{{stadium[1]}}</option>
+                        {%endfor%}
+                    </select>
+                    </div>
+                </div>
             </div>
-            <input type="submit" title="Save Team" value="Save">
+            <label>League</label>
+            <div class="field">
+                <div class="control">
+                    <div class="select is-primary">
+                        <select name="league">
+                            {% for league in leagues %}
+                                <option value="{{league[0]}}">{{league[1]}} - {{league[3]}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <label>Coach</label>
+            <div class="field">
+                    <div class="control">
+                        <div class="select is-primary">
+                            <select name="coach">
+                                {% for person in people %}
+                                    <option value="{{person[0]}}">{{person[1]}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <input class="button is-success" type="submit" title="Save Team" value="Save">
         </form> 
 {% endblock %}
