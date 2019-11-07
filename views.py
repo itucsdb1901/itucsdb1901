@@ -29,6 +29,13 @@ def getOneRowQuery(url,statement):
         cursor.close()
     return result
 
+def delete_player(personid):
+    url = current_app.config['db_url']
+    query = 'DELETE FROM test1 WHERE (id=%d)'%personid
+    executeSQLquery(url, [query])
+    return players_page()
+
+
 def home_page():
     return render_template("home.html")
 
