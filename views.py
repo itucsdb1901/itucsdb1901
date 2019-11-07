@@ -62,6 +62,14 @@ def leagues_page():
 	return render_template("leagues.html")
 
 def add_person():
+    if(request.method=='POST'):
+        name=request.form["name"]
+        birthyear=int(request.form["birthyear"])
+        nationality=request.form["nationality"]
+        query="INSERT INTO PERSON (NAME,BIRTHYEAR,NATIONALITY) VALUES ('%s',%d,'%s')"%(name,birthyear,nationality)
+        statement=[query]
+        url=current_app.config["db_url"]
+        executeSQLquery(url,statement)
     return render_template("add_person.html")
 
 def add_team():

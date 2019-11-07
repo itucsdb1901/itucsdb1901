@@ -2,4 +2,17 @@
 {% block title %}Player Added{% endblock %}
 {% block content %}
     <h1>Add Person</h1>
+
+    <form method="POST"  >
+        <label>Name: </label>
+        <input name="name" id="name" type="text" />
+        <br>
+        <label>Birth Year: </label>
+        <input name="birthyear" id="birthyear" type="number" />
+        <br>
+        <label>Nationality</label>
+        <input name="nationality" id="nationality" type= "text" />
+        <br>
+        <input value="Submit" type="submit"/>
+    </form>
 {% endblock %}
