@@ -7,7 +7,7 @@
         <div class="hero-body">
             <div class="container">
                 <h1 class="subtitle">{{player.name}}</h1>
-                <h2>{{year-player.birthDay}}</h2>
+                <h3>Age: {{year-player.birthDay}}</h3>
             </div>
         </div>
         <form method="POST" name ="delete{{player.id}}" action="/player/delete_{{player.id}}">
@@ -16,13 +16,21 @@
     </section>
     <div class="tile is-parent is-vertical">
         <article class="tile is-child notification is-warning">
-                <table>
+                <table >
                     <tr>
-                        <th>Nationality</th>
-                        <th>Position</th>
+                        <th>Team</th>
+                        <td></td>
                     </tr>
                     <tr>
+                        <th>Nationality</th>
                         <td>{{player.nationality}}</td>
+                    </tr>
+                    <tr>
+                        <th>Kit Number</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Position</th>
                         <td>MO</td>
                     </tr>
                 </table>
