@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Player Profile{% endblock %}
+{% block headerTitle %}{{player[1]}}{% endblock %}
+{% block subTitle %}{{player[0]}}{% endblock %}
+{% block content %}
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="subtitle">{{team.name}}</h1>
+        </div>
+    </div>
+</section>
+<div class="tile is-parent is-vertical">
+    <article class="tile is-child notification is-warning">
+            <table >
+                <tr>
+                    <th>League:</th>
+                    <td>{{team.leagueID}}</td>
+                </tr>
+                <tr>
+                    <th>Coach:</th>
+                    <td>{{team.coachID}}</td>
+                </tr>
+                <tr>
+                    <th>Stadium</th>
+                    <td>{{team.stadiumID}}</td>
+                </tr>
+            </table>
+    </article>
+</div>
+    
+{% endblock %}

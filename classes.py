@@ -10,7 +10,7 @@ class Team:
 		self.id = id
 		self.name = name
 		self.leagueID = leagueID
-		self.coahID = coachID
+		self.coachID = coachID
 		self.stadiumID = stadiumID
 
 class Squad:
