@@ -48,10 +48,18 @@ def player_page(personid):
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
     return render_template("player.html",player=person, year = int(datetime.datetime.now().year))
 
-def players_page():
+def search_player():
     url = current_app.config['db_url']
-    listSQL = "SELECT * FROM PERSON"
+    search = request.form['search']
+    listSQL = "SELECT * FROM PERSON WHERE (name LIKE '%" + search + "%')"
     players = listTable(url, listSQL)
+    return players_page(players)
+
+def players_page(players=None):
+    url = current_app.config['db_url']
+    if players == None:
+        listSQL = "SELECT * FROM PERSON"
+        players = listTable(url, listSQL)
     return render_template("players.html", players=players)
     
 def teams_page():
@@ -70,6 +78,7 @@ def add_person():
         url=current_app.config["db_url"]
         executeSQLquery(url,statement)
     return render_template("add_person.html")
+
 
 def add_league():
     if(request.method=='POST'):
