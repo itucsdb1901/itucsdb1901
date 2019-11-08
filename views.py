@@ -62,10 +62,16 @@ def teams_page():
 
 def team_page(teamid):
     url = current_app.config["db_url"]
-    query = "SELECT t.id,t.name, l.name, p.name, s.name FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
+    query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
     result=getOneRowQuery(url,query)
     team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3])
-    return render_template("team.html",team=team)
+    return render_template("team.html",team=team,country=result[5])
+
+def delete_team(teamid):
+    url = current_app.config['db_url']
+    query = 'DELETE FROM TEAM WHERE (id=%d)'%teamid
+    executeSQLquery(url, [query])
+    return teams_page()
 
 def leagues_page():
 	return render_template("leagues.html")

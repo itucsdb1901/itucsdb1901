@@ -14,6 +14,10 @@
     <article class="tile is-child notification is-warning">
             <table >
                 <tr>
+                    <th>Country:</th>
+                    <td>{{country}}</td>
+                </tr>
+                <tr>
                     <th>League:</th>
                     <td>{{team.leagueID}}</td>
                 </tr>
@@ -24,6 +28,13 @@
                 <tr>
                     <th>Stadium</th>
                     <td>{{team.stadiumID}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <form method="POST" name ="delete{{team.id}}" action="/teams/delete_{{team.id}}">
+                            <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
+                        </form>
+                    </td>
                 </tr>
             </table>
     </article>
