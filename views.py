@@ -63,7 +63,23 @@ def players_page(players=None):
     return render_template("players.html", players=players)
     
 def teams_page():
-    return render_template("teams.html")
+    url = current_app.config['db_url']
+    listSQL = "SELECT * FROM TEAM"
+    teams = listTable(url, listSQL)
+    return render_template("teams.html", teams=teams)
+
+def team_page(teamid):
+    url = current_app.config["db_url"]
+    query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
+    result=getOneRowQuery(url,query)
+    team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3])
+    return render_template("team.html",team=team,country=result[5])
+
+def delete_team(teamid):
+    url = current_app.config['db_url']
+    query = 'DELETE FROM TEAM WHERE (id=%d)'%teamid
+    executeSQLquery(url, [query])
+    return teams_page()
 
 def leagues_page():
 	return render_template("leagues.html")
@@ -107,6 +123,27 @@ def add_team():
         query = "INSERT INTO team (name, leagueid, stadiumid, coach) VALUES ('%s', %d, %d, %d)" %(name, leagueid, stadiumid, coachid)
         executeSQLquery(url, [query])
     return render_template("add_team.html", stadiums = stadiums, leagues = leagues, people = people)
+
+def add_match():
+    url = current_app.config['db_url']
+    getTeamSQL = "SELECT * FROM team"
+    getStadiumsSQL = "SELECT * FROM stadium"
+    getLeaguesSQL = "SELECT * FROM league"
+    teams = listTable(url, getTeamSQL)
+    leagues = listTable(url, getLeaguesSQL)
+    stadiums = listTable(url, getStadiumsSQL)
+    if(request.method == 'POST'):
+        homeid = int(request.form['hometeamid'])
+        awayid = int(request.form['awayteamid'])
+        homescore = int(request.form['homescore'])
+        awayscore = int(request.form['awayscore'])
+        leagueid = int(request.form['leagueid'])
+        stadiumid = int(request.form['stadiumid'])
+        matchdate = request.form['matchdate']
+        matchdate = datetime.datetime.strptime(matchdate, '%Y-%m-%d').date()
+        query = "INSERT INTO match (homeid, awayid, homescore, awayscore, leagueid, stadiumid, matchdate) VALUES (%d, %d, %d, %d, %d, %d, CAST('%s' AS  DATE))" %(homeid, awayid, homescore, awayscore, leagueid, stadiumid, matchdate)
+        executeSQLquery(url, [query])
+    return render_template("add_match.html", stadiums = stadiums, leagues = leagues, teams = teams)
 
 def add_stadium():
     url = current_app.config['db_url']
