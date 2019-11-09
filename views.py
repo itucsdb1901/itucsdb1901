@@ -69,7 +69,7 @@ def players_page():
     
 def teams_page():
     url = current_app.config['db_url']
-    listSQL = "SELECT * FROM TEAM"
+    listSQL = "SELECT t.id, t.name, l.name as leaguename FROM TEAM t LEFT JOIN LEAGUE l ON (t.leagueid = l.id)"
     teams = listTable(url, listSQL)
     return render_template("teams.html", teams=teams)
 def search_team():
