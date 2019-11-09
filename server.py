@@ -7,6 +7,7 @@ def create_app():
     app = Flask(__name__)
     app.add_url_rule("/", methods=["POST", "GET"], view_func=views.home_page)
     app.add_url_rule("/players/detail_<int:personid>", methods=["POST","GET"], view_func=views.player_page)
+    app.add_url_rule("/player/add_card_to_player_<int:playerid>", methods=["POST","GET"], view_func=views.add_card_to_player)
     app.add_url_rule("/players/search_player", methods=["POST","GET"], view_func=views.search_player)
     app.add_url_rule("/player/delete_<int:personid>", methods=["POST"], view_func=views.delete_player)
     app.add_url_rule("/players", methods=["POST", "GET"], view_func=views.players_page)

@@ -13,6 +13,9 @@
         <form method="POST" name ="delete{{player.id}}" action="/player/delete_{{player.id}}">
             <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
         </form>
+        <form method="GET" name ="add_card_to_player{{player.id}}" action="/player/add_card_to_player_{{player.id}}">
+            <input type="submit" id="add_card_to_player" name="add_card_to_player" value="ADD CARD" />
+        </form>
     </section>
     <div class="tile is-parent is-vertical">
         <article class="tile is-child notification is-warning">

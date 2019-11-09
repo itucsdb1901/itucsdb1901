@@ -54,6 +54,20 @@ def player_page(personid):
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
     return render_template("player.html",player=person, year = int(datetime.datetime.now().year))
 
+def add_card_to_player(playerid):
+    url=current_app.config['db_url']
+    getMatchesSQL='''SELECT a.name,match.homescore,match.awayscore,b.name,match.id FROM MATCH,TEAM a,TEAM b,PERSON,SQUAD 
+    WHERE(a.id=match.homeid and b.id=match.awayid and person.id=%d and person.id=squad.personid and 
+    (squad.teamid=match.homeid or squad.teamid=match.awayid)) '''%playerid
+    matches=listTable(url,getMatchesSQL)
+    if(request.method == 'POST'):
+        matchid=int(request.form['match'])
+        minute=int(request.form['minute'])
+        red=bool(request.form['cardColor'])
+        query = "INSERT INTO CARD (playerid,red,matchid,minute) VALUES (%d, %r ,%d,%d)" %(playerid, red, matchid,minute)
+        executeSQLquery(url, [query])
+    return render_template("add_card_to_player.html",matches=matches,playerid=playerid)
+
 def search_player():
     url = current_app.config['db_url']
     search = request.form['search']
