@@ -59,13 +59,12 @@ def search_player():
     search = request.form['search']
     listSQL = "SELECT * FROM PERSON WHERE (name LIKE '%" + search + "%')"
     players = listTable(url, listSQL)
-    return players_page(players)
+    return render_template("players.html", players=players)
 
-def players_page(players=None):
+def players_page():
     url = current_app.config['db_url']
-    if players == None:
-        listSQL = "SELECT * FROM PERSON"
-        players = listTable(url, listSQL)
+    listSQL = "SELECT * FROM PERSON"
+    players = listTable(url, listSQL)
     return render_template("players.html", players=players)
     
 def teams_page():
@@ -73,6 +72,12 @@ def teams_page():
     listSQL = "SELECT * FROM TEAM"
     teams = listTable(url, listSQL)
     return render_template("teams.html", teams=teams)
+def search_team():
+    url = current_app.config['db_url']
+    search = request.form['search']
+    listSQL = "SELECT * FROM TEAM WHERE (name LIKE '%" + search + "%')"
+    teams = listTable(url, listSQL)
+    return render_template("teams.html", teams=teams)   
 
 def team_page(teamid):
     url = current_app.config["db_url"]
