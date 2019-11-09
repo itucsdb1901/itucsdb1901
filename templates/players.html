@@ -5,10 +5,10 @@
     <form action="/players/search_player" method="POST">
         <div class="columns">
             <div class="column is-one-fifth">
-                <input class="input is-primary" type="text" name="search" id="search" placeholder="Search..">
+                <input class="input is-info" type="text" name="search" id="search" placeholder="Search..">
             </div>
             <div class="column">
-                <button class="button is-primary" action='submit'>Search Players</button>
+                <button class="button is-link" action='submit'>Search Players</button>
             </div>
         </div>
     </form>
@@ -18,6 +18,7 @@
         <tr>
             <th>id</th>
             <th>Name</th>
+            <th>Detail</th>
         </tr>
         {% for player in players %}
         <tr>
@@ -25,7 +26,7 @@
             <td>{{player[1]}}</td>
             <td>
                 <form method="POST" name ="detail{{player[0]}}" action="/players/detail_{{player[0]}}">
-                    <input type="submit" id="detailButton" name="detailButton" value="SEE PLAYER" />
+                    <button class="button is-danger" action="submit" id="detailButton" name="detailButton" >See Detail</button>
                 </form>
             </td>
             
