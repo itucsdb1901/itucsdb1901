@@ -40,7 +40,7 @@ def home_page():
 
 def matches_page():
     url = current_app.config['db_url']
-    query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate 
+    query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid 
                 FROM match m, team t1, team t2, stadium std, league lg
                     WHERE (m.homeid = t1.id AND m.awayid = t2.id 
                         AND m.stadiumid = std.id AND m.leagueid = lg.id)'''
