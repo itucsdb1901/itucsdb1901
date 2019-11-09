@@ -2,6 +2,14 @@
 {% block title %}Teams{% endblock %}
 {% block content %}
     <h1>Teams Page</h1>
+    <form action="/teams/search_team" method="POST">
+        <div class="columns">
+            <div class="column is-one-fifth">
+                <input class="input is-primary" type="text" name="search" id="search" placeholder="Search..">
+                <button action='submit'>Search Teams</button>
+            </div>
+        </div>
+    </form>
     {% if teams %}
     <table>
         <tr>
