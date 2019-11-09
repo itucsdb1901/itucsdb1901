@@ -49,10 +49,40 @@ def matches_page():
 
 def player_page(personid):
     url = current_app.config["db_url"]
-    query = "SELECT * FROM PERSON WHERE (id=%d)"%personid
+    query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,query)
+    (teamID, temName, position) = (result[4], result[5], result[6])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
-    return render_template("player.html",player=person, year = int(datetime.datetime.now().year))
+    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = temName, position = position )
+
+def add_goal(personid):
+    url = current_app.config["db_url"]
+    infoQuery = "SELECT p.*, t.id, t.name FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
+    result=getOneRowQuery(url,infoQuery)
+    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
+    (teamID, temName) = (result[4], result[5])
+    matchesQuery = '''
+    SELECT m.id, t1.name, t2.name, m.homescore, m.awayscore, t1.id, t2.id FROM MATCH m 
+        JOIN TEAM t1 ON (t1.id = m.homeid)
+        JOIN TEAM t2 ON (t2.id = m.awayid)
+        WHERE ( (m.homeid = %d AND m.homescore > 0) OR (m.awayid = %d AND m.awayscore > 0) )'''%(teamID, teamID)
+    matches = listTable(url, matchesQuery)
+    assistPlayerQuery = '''
+    SELECT p.* FROM PERSON p JOIN SQUAD s ON (s.personid = p.id AND s.teamid = %d AND p.id <> %d)
+    ''' %(teamID,personid)
+    assistPlayers = listTable(url, assistPlayerQuery)
+    if request.method == "POST":
+        minute = int(request.form.get('minute', False))
+        assistPlayerID = int(request.form.get('assistPlayerid', False))
+        matchID = int(request.form.get('matchid', False))
+        addGoalQuery = "INSERT INTO GOAL (matchid, playerid, minute) VALUES (%d, %d, %d)" %(matchID, personid, minute)
+        executeSQLquery(url, [addGoalQuery])
+        findGoalIDSQL = "SELECT id FROM GOAL WHERE (minute=%d AND matchid = %d)" %(minute, matchID)
+        goalID = getOneRowQuery(url, findGoalIDSQL)
+        goalID = goalID[0]
+        addAssistQuery = "INSERT INTO ASSIST (playerid, goalid) VALUES (%d, %d)"%(assistPlayerID, goalID)
+        executeSQLquery(url, [assistPlayerQuery])
+    return render_template("add_goal.html", matches=matches, person=person, assistPlayers = assistPlayers)
 
 def search_player():
     url = current_app.config['db_url']
@@ -63,7 +93,7 @@ def search_player():
 
 def players_page():
     url = current_app.config['db_url']
-    listSQL = "SELECT * FROM PERSON"
+    listSQL = "SELECT DISTINCT p.* FROM PERSON p JOIN SQUAD s ON (p.id = s.personid)"
     players = listTable(url, listSQL)
     return render_template("players.html", players=players)
     

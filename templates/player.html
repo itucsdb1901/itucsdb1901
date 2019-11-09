@@ -9,17 +9,36 @@
                 <h1 class="subtitle">{{player.name}}</h1>
                 <h3>Age: {{year-player.birthDay}}</h3>
             </div>
+            <div class="container">
+                <div class="columns">
+                    <div class="column">
+                        <form method="POST" name ="delete{{player.id}}" action="/player/delete_{{player.id}}">
+                            <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
+                        </form>
+                    </div>
+                    <div class="column">
+                        <form method="GET" name ="add_goal{{player.id}}" action="/player/add_goal_{{player.id}}">
+                            <input type="submit" id="addgoal" name="addgoal" value="ADD GOAL" />
+                        </form>
+                    </div>
+                    <div class="column">
+                        <form method="POST" name ="add_goal{{player.id}}" action="/player/add_assist_{{player.id}}">
+                            <input type="submit" id="addassist" name="addassist" value="ADD ASSIST" />
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
         </div>
-        <form method="POST" name ="delete{{player.id}}" action="/player/delete_{{player.id}}">
-            <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
-        </form>
+        
+
     </section>
     <div class="tile is-parent is-vertical">
         <article class="tile is-child notification is-warning">
                 <table >
                     <tr>
                         <th>Team</th>
-                        <td></td>
+                        <td>{{teamName}}</td>
                     </tr>
                     <tr>
                         <th>Nationality</th>
@@ -31,7 +50,7 @@
                     </tr>
                     <tr>
                         <th>Position</th>
-                        <td>MO</td>
+                        <td>{{position}}</td>
                     </tr>
                 </table>
         </article>
