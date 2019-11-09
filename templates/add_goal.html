@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}Add Goal{% endblock %}
+{% block content %}
+    <h1>Add Goal to {{person.name}}</h1>
+    <form method="POST">
+        <div class="columns">
+            <div class="column">
+                <label>Select Match</label>
+                <div class="field">
+                    <div class="control">
+                        <div class="select is-primary">
+                            <select name="matchid">
+                            {% for match in matches %}
+                                <option value="{{match[0]}}">{{match[1]}} {{match[3]}}-{{match[4]}} {{match[2]}}</option>
+                            {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <div/>
+            <div class="column">
+                <label>Select Assist</label>
+                <div class="field">
+                    <div class="control">
+                        <div class="select is-primary">
+                            <select name="assistPlayerid">
+                            {% for player in assistPlayers %}
+                                <option value="{{player[0]}}">{{player[1]}}</option>
+                            {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <label>Minute</label>
+                <div class="field">
+                    <input class="input" type="number" name="minute"/>
+                </div>
+            </div>
+            <input type="submit" value="SAVE GOAL"/>
+        </div>
+    </form>
+            
+            
+{% endblock %}
