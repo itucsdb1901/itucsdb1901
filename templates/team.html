@@ -35,6 +35,11 @@
                             <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
                         </form>
                     </td>
+                    <td>
+                        <form method="POST" name ="add_player_to_squad{{team}}" action="/teams/add_player_to_squad_{{team.id}}">
+                            <input type="submit" id="add_player_to_squad" name="add_player_to_squad" value="ADD PLAYER" />
+                        </form>
+                    </td>
                 </tr>
             </table>
     </article>

@@ -73,6 +73,24 @@ def delete_team(teamid):
     executeSQLquery(url, [query])
     return teams_page()
 
+def add_player_to_squad(teamid):
+    url = current_app.config['db_url']
+    teamSQL = "SELECT id, name FROM team WHERE id=%d" %teamid
+    getPlayerListSQL = '''
+    SELECT person.id, person.name as namee from person LEFT JOIN team ON person.id=team.coach 
+        WHERE team.coach is null
+    intersect 
+    SELECT person.id, person.name as namee from person LEFT JOIN squad ON person.id=squad.personid 
+        WHERE squad.personid is null '''
+    playerList=listTable(url, getPlayerListSQL)
+    team = getOneRowQuery(url, teamSQL)
+    if(request.method == 'POST'):
+        position = request.form['position']
+        playerid = int(request.form['playerbox'])
+        query = "INSERT INTO squad (personid,teamid,position) VALUES (%d, %d ,'%s')" %(playerid, teamid, position)
+        executeSQLquery(url, [query])
+    return render_template("add_player_to_squad.html",playerList=playerList,team=team)
+
 def leagues_page():
 	return render_template("leagues.html")
 
