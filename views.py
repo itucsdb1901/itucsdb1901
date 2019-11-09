@@ -51,9 +51,9 @@ def player_page(personid):
     url = current_app.config["db_url"]
     query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,query)
-    (teamID, temName, position) = (result[4], result[5], result[6])
+    (teamID, teamName, position) = (result[4], result[5], result[6])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
-    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = temName, position = position )
+    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position )
 
 def add_goal(personid):
     url = current_app.config["db_url"]
