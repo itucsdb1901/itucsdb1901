@@ -39,7 +39,13 @@ def home_page():
     return render_template("home.html")
 
 def matches_page():
-    return render_template("matches.html")
+    url = current_app.config['db_url']
+    query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate 
+                FROM match m, team t1, team t2, stadium std, league lg
+                    WHERE (m.homeid = t1.id AND m.awayid = t2.id 
+                        AND m.stadiumid = std.id AND m.leagueid = lg.id)'''
+    matches = listTable(url, query)
+    return render_template("matches.html", matches = matches)
 
 def player_page(personid):
     url = current_app.config["db_url"]
