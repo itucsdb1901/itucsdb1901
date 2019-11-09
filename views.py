@@ -39,7 +39,13 @@ def home_page():
     return render_template("home.html")
 
 def matches_page():
-    return render_template("matches.html")
+    url = current_app.config['db_url']
+    query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid 
+                FROM match m, team t1, team t2, stadium std, league lg
+                    WHERE (m.homeid = t1.id AND m.awayid = t2.id 
+                        AND m.stadiumid = std.id AND m.leagueid = lg.id)'''
+    matches = listTable(url, query)
+    return render_template("matches.html", matches = matches)
 
 def player_page(personid):
     url = current_app.config["db_url"]
@@ -72,14 +78,43 @@ def team_page(teamid):
     url = current_app.config["db_url"]
     query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
     result=getOneRowQuery(url,query)
+    getSquadSQL="SELECT DISTINCT p.name,s.position,p.id FROM person p,squad s,team t where(p.id=s.personid and s.teamid=%d)"%teamid
+    squad=listTable(url,getSquadSQL)
     team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3])
-    return render_template("team.html",team=team,country=result[5])
+    return render_template("team.html",team=team,country=result[5],squad=squad)
 
 def delete_team(teamid):
     url = current_app.config['db_url']
     query = 'DELETE FROM TEAM WHERE (id=%d)'%teamid
     executeSQLquery(url, [query])
     return teams_page()
+
+def add_player_to_squad(teamid):
+    url = current_app.config['db_url']
+    teamSQL = "SELECT id, name FROM team WHERE id=%d" %teamid
+    getPlayerListSQL = '''
+    SELECT person.id, person.name as namee from person LEFT JOIN team ON person.id=team.coach 
+        WHERE team.coach is null
+    intersect 
+    SELECT person.id, person.name as namee from person LEFT JOIN squad ON person.id=squad.personid 
+        WHERE squad.personid is null '''
+    playerList=listTable(url, getPlayerListSQL)
+    team = getOneRowQuery(url, teamSQL)
+    if(request.method == 'POST'):
+        position = request.form['position']
+        playerid = int(request.form['playerbox'])
+        query = "INSERT INTO squad (personid,teamid,position) VALUES (%d, %d ,'%s')" %(playerid, teamid, position)
+        executeSQLquery(url, [query])
+    return render_template("add_player_to_squad.html",playerList=playerList,team=team)
+
+def delete_player_from_squad(playerid):
+    url = current_app.config['db_url']
+    getTeamIDSQL="SELECT teamid from squad where personid=%d"%playerid
+    teamid=listTable(url,getTeamIDSQL)
+    query = 'DELETE FROM SQUAD WHERE (personid=%d)'%playerid
+    executeSQLquery(url, [query])
+    return team_page(teamid[0])
+
 
 def leagues_page():
 	return render_template("leagues.html")

@@ -35,7 +35,29 @@
                             <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
                         </form>
                     </td>
+                    <td>
+                        <form method="GET" name ="add_player_to_squad{{team}}" action="/teams/add_player_to_squad_{{team.id}}">
+                            <input type="submit" id="add_player_to_squad" name="add_player_to_squad" value="ADD PLAYER" />
+                        </form>
+                    </td>
                 </tr>
+            </table>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                </tr>
+                {%for player in squad%}
+                <tr>
+                    <td>{{player[0]}}</td>
+                    <td>{{player[1]}}</td>
+                    <td>
+                        <form method="POST" name="delete_player_from_squad{{player[2]}}" action="/teams/delete_player_from_squad_{{player[2]}}">
+                            <input value="DELETE FROM SQUAD" type="submit" id="delete_player_from_squad"/>
+                        </form>
+                    </td>
+                </tr>
+                {%endfor%}
             </table>
     </article>
 </div>
