@@ -17,17 +17,13 @@
         <tr>
             <th>id</th>
             <th>Name</th>
+            <th>League</th>
         </tr>
         {% for team in teams %}
         <tr>
             <td>{{team[0]}}</td>
-            <td>{{team[1]}}</td>
-            <td>
-                <form method="POST" name ="detail{{team[0]}}" action="/teams/detail_{{team[0]}}">
-                    <input type="submit" id="detailButton" name="detailButton" value="SEE TEAM" />
-                </form>
-            </td>
-            
+            <td><a href="/teams/detail_{{team[0]}}">{{team[1]}}</a></td>
+            <td><a href="#">{{team[2]}}</a></td>
         </tr>
         {% endfor %}
     </table>
