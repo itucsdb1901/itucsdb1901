@@ -78,8 +78,10 @@ def team_page(teamid):
     url = current_app.config["db_url"]
     query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
     result=getOneRowQuery(url,query)
+    getSquadSQL="SELECT DISTINCT p.name,s.position,p.id FROM person p,squad s,team t where(p.id=s.personid and s.teamid=%d)"%teamid
+    squad=listTable(url,getSquadSQL)
     team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3])
-    return render_template("team.html",team=team,country=result[5])
+    return render_template("team.html",team=team,country=result[5],squad=squad)
 
 def delete_team(teamid):
     url = current_app.config['db_url']
@@ -104,6 +106,15 @@ def add_player_to_squad(teamid):
         query = "INSERT INTO squad (personid,teamid,position) VALUES (%d, %d ,'%s')" %(playerid, teamid, position)
         executeSQLquery(url, [query])
     return render_template("add_player_to_squad.html",playerList=playerList,team=team)
+
+def delete_player_from_squad(playerid):
+    url = current_app.config['db_url']
+    getTeamIDSQL="SELECT teamid from squad where personid=%d"%playerid
+    teamid=listTable(url,getTeamIDSQL)
+    query = 'DELETE FROM SQUAD WHERE (personid=%d)'%playerid
+    executeSQLquery(url, [query])
+    return team_page(teamid[0])
+
 
 def leagues_page():
 	return render_template("leagues.html")

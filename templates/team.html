@@ -42,6 +42,23 @@
                     </td>
                 </tr>
             </table>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                </tr>
+                {%for player in squad%}
+                <tr>
+                    <td>{{player[0]}}</td>
+                    <td>{{player[1]}}</td>
+                    <td>
+                        <form method="POST" name="delete_player_from_squad{{player[2]}}" action="/teams/delete_player_from_squad_{{player[2]}}">
+                            <input value="DELETE FROM SQUAD" type="submit" id="delete_player_from_squad"/>
+                        </form>
+                    </td>
+                </tr>
+                {%endfor%}
+            </table>
     </article>
 </div>
     
