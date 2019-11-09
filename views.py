@@ -121,9 +121,6 @@ def delete_player_from_squad(playerid):
     return team_page(teamid[0])
 
 
-def leagues_page():
-	return render_template("leagues.html")
-
 def add_person():
     if(request.method=='POST'):
         name=request.form["name"]
@@ -135,6 +132,11 @@ def add_person():
         executeSQLquery(url,statement)
     return render_template("add_person.html")
 
+def leagues_page():
+    url = current_app.config["db_url"]
+    listSQL = "SELECT * FROM LEAGUE "
+    leagues = listTable(url, listSQL)
+    return render_template("leagues.html",leagues=leagues)
 
 def add_league():
     if(request.method=='POST'):
