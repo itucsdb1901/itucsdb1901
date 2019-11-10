@@ -5,25 +5,25 @@
 {% block content %}
     <section class="hero is-primary">
         <div class="hero-body">
-            <div class="container">
+            <div align="center" class="container">
                 <h1 class="subtitle">{{player.name}}</h1>
                 <h3>Age: {{year-player.birthDay}}</h3>
             </div>
-            <div class="container">
+            <div align="center" class="container">
                 <div class="columns">
                     <div class="column">
                         <form method="POST" name ="delete{{player.id}}" action="/player/delete_{{player.id}}">
-                            <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
+                            <input class="button is-danger" type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
                         </form>
                     </div>
                     <div class="column">
                         <form method="GET" name ="add_goal{{player.id}}" action="/player/add_goal_{{player.id}}">
-                            <input type="submit" id="addgoal" name="addgoal" value="ADD GOAL" />
+                            <input class="button is-danger" type="submit" id="addgoal" name="addgoal" value="ADD GOAL" />
                         </form>
                     </div>
                     <div class="column">
                         <form method="GET" name ="add_card_to_player{{player.id}}" action="/player/add_card_to_player_{{player.id}}">
-                            <input type="submit" id="add_card_to_player" name="add_card_to_player" value="ADD CARD" />
+                            <input class="button is-danger" type="submit" id="add_card_to_player" name="add_card_to_player" value="ADD CARD" />
                         </form>
                     </div>
                 </div>
