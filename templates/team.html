@@ -3,63 +3,72 @@
 {% block headerTitle %}{{player[1]}}{% endblock %}
 {% block subTitle %}{{player[0]}}{% endblock %}
 {% block content %}
-<section class="hero is-primary">
-    <div class="hero-body">
-        <div class="container">
-            <h1 class="subtitle">{{team.name}}</h1>
-        </div>
+<button onclick="myFunction('Demo1')" class="w3-button w3-block w3-blue w3-left-align">{{team.name}}</button>
+    <div id="Demo1" class="w3-hide w3-animate-zoom">
+            <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-blue w3-left-align">{{team.name}} Info</button>
+                <div id="Demo2" class="w3-hide w3-animate-zoom">
+                    <table >
+                        <tr>
+                            <th>Country:</th>
+                            <td>{{country}}</td>
+                        </tr>
+                        <tr>
+                            <th>League:</th>
+                            <td>{{team.leagueID}}</td>
+                        </tr>
+                        <tr>
+                            <th>Coach:</th>
+                            <td>{{team.coachID}}</td>
+                        </tr>
+                        <tr>
+                            <th>Stadium</th>
+                            <td>{{team.stadiumID}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <form method="POST" name ="delete{{team.id}}" action="/teams/delete_{{team.id}}">
+                                    <input class="button is-danger" type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
+                                </form>
+                            </td>
+                            <td>
+                                <form method="GET" name ="add_player_to_squad{{team}}" action="/teams/add_player_to_squad_{{team.id}}">
+                                    <input class="button is-danger" type="submit" id="add_player_to_squad" name="add_player_to_squad" value="ADD PLAYER" />
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-blue w3-left-align">Squad of {{team.name}}</button>
+                <div id="Demo3" class="w3-hide w3-animate-zoom">
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                        </tr>
+                        {%for player in squad%}
+                        <tr>
+                            <td>{{player[0]}}</td>
+                            <td>{{player[1]}}</td>
+                            <td>
+                                <form method="POST" name="delete_player_from_squad{{player[2]}}" action="/teams/delete_player_from_squad_{{player[2]}}">
+                                    <input class="button is-danger" value="DELETE FROM SQUAD" type="submit" id="delete_player_from_squad"/>
+                                </form>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </table>
+                </div>
     </div>
-</section>
-<div class="tile is-parent is-vertical">
-    <article class="tile is-child notification is-warning">
-            <table >
-                <tr>
-                    <th>Country:</th>
-                    <td>{{country}}</td>
-                </tr>
-                <tr>
-                    <th>League:</th>
-                    <td>{{team.leagueID}}</td>
-                </tr>
-                <tr>
-                    <th>Coach:</th>
-                    <td>{{team.coachID}}</td>
-                </tr>
-                <tr>
-                    <th>Stadium</th>
-                    <td>{{team.stadiumID}}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <form method="POST" name ="delete{{team.id}}" action="/teams/delete_{{team.id}}">
-                            <input type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
-                        </form>
-                    </td>
-                    <td>
-                        <form method="GET" name ="add_player_to_squad{{team}}" action="/teams/add_player_to_squad_{{team.id}}">
-                            <input type="submit" id="add_player_to_squad" name="add_player_to_squad" value="ADD PLAYER" />
-                        </form>
-                    </td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                </tr>
-                {%for player in squad%}
-                <tr>
-                    <td>{{player[0]}}</td>
-                    <td>{{player[1]}}</td>
-                    <td>
-                        <form method="POST" name="delete_player_from_squad{{player[2]}}" action="/teams/delete_player_from_squad_{{player[2]}}">
-                            <input value="DELETE FROM SQUAD" type="submit" id="delete_player_from_squad"/>
-                        </form>
-                    </td>
-                </tr>
-                {%endfor%}
-            </table>
-    </article>
-</div>
+
+<script>
+    function myFunction(id) {
+    var x = document.getElementById(id);
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else { 
+        x.className = x.className.replace(" w3-show", "");
+    }
+    }
+</script>
     
 {% endblock %}
