@@ -62,10 +62,19 @@ def add_goal(personid):
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
     (teamID, temName) = (result[4], result[5])
     matchesQuery = '''
-    SELECT m.id, t1.name, t2.name, m.homescore, m.awayscore, t1.id, t2.id FROM MATCH m 
-        JOIN TEAM t1 ON (t1.id = m.homeid)
-        JOIN TEAM t2 ON (t2.id = m.awayid)
-        WHERE ( (m.homeid = %d AND m.homescore > 0) OR (m.awayid = %d AND m.awayscore > 0) )'''%(teamID, teamID)
+    select m.id, t1.name, t2.name, m.homescore, m.awayscore from match m 
+	join team t1 on (t1.id = m.homeid)
+	join team t2 on (t2.id = m.awayid)
+	left join (select m.id as matchid, count(g.id) as savedgoals from goal g 
+		left join squad s on (g.playerid = s.personid) 
+		left join team t on (t.id = s.teamid and t.id = %d) 
+		left join match m on ( (m.id = g.matchid) and ( (m.homeid = t.id) or (m.awayid = t.id) ) )
+		group by m.id ) as saved
+		on (m.id = saved.matchid) 
+		where ( (savedgoals < m.homescore and m.homeid = %d) 
+			or (savedgoals < m.awayscore and m.awayid = %d) 
+			or (savedgoals is null and ( (m.homeid = %d and m.homescore > 0) or (m.awayid = %d and m.awayscore > 0) ) ) ) 
+            '''%(teamID, teamID, teamID, teamID, teamID)
     matches = listTable(url, matchesQuery)
     assistPlayerQuery = '''
     SELECT p.* FROM PERSON p JOIN SQUAD s ON (s.personid = p.id AND s.teamid = %d AND p.id <> %d)
