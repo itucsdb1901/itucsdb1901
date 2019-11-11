@@ -26,7 +26,7 @@ def create_app():
     app.add_url_rule("/add_team", methods=["POST", "GET"], view_func=views.add_team)
     app.add_url_rule("/add_league", methods=["POST", "GET"], view_func=views.add_league)
     app.add_url_rule("/add_stadium", methods=["POST", "GET"], view_func=views.add_stadium)
-    app.config['db_url'] = 'postgres://wdsryolq:IN21pt58A0DnjBoBbZU_V_JLon4z82zy@balarama.db.elephantsql.com:5432/wdsryolq'
+    app.config['db_url'] = 'postgres://postgres:docker@localhost:5432/postgres'
     return app
 
 app = create_app()

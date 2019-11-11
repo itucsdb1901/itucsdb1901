@@ -98,5 +98,5 @@ def initialize(url):
 
 
 if __name__ == "__main__":
-    url = "postgres://wdsryolq:IN21pt58A0DnjBoBbZU_V_JLon4z82zy@balarama.db.elephantsql.com:5432/wdsryolq"
+    url = "postgres://postgres:docker@localhost:5432/postgres"
     initialize(url)
