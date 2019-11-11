@@ -77,11 +77,10 @@ def add_goal(personid):
         matchID = int(request.form.get('matchid', False))
         addGoalQuery = "INSERT INTO GOAL (matchid, playerid, minute) VALUES (%d, %d, %d)" %(matchID, personid, minute)
         executeSQLquery(url, [addGoalQuery])
-        findGoalIDSQL = "SELECT id FROM GOAL WHERE (minute=%d AND matchid = %d)" %(minute, matchID)
-        goalID = getOneRowQuery(url, findGoalIDSQL)
-        goalID = goalID[0]
+        findGoalIDSQL = "SELECT max(id) FROM GOAL"
+        goalID = int(getOneRowQuery(url, findGoalIDSQL)[0])
         addAssistQuery = "INSERT INTO ASSIST (playerid, goalid) VALUES (%d, %d)"%(assistPlayerID, goalID)
-        executeSQLquery(url, [assistPlayerQuery])
+        executeSQLquery(url, [addAssistQuery])
     return render_template("add_goal.html", matches=matches, person=person, assistPlayers = assistPlayers)
 
 def add_card_to_player(playerid):
