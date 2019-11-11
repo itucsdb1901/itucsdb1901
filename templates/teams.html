@@ -22,8 +22,8 @@
         {% for team in teams %}
         <tr>
             <td>{{team[0]}}</td>
-            <td><a href="/teams/detail_{{team[0]}}">{{team[1]}}</a></td>
-            <td><a href="#">{{team[2]}}</a></td>
+            <td><a class="has-text-info" href="/teams/detail_{{team[0]}}">{{team[1]}}</a></td>
+            <td><a class="has-text-info" href="#">{{team[2]}}</a></td>
         </tr>
         {% endfor %}
     </table>
