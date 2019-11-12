@@ -21,6 +21,7 @@ def create_app():
     app.add_url_rule("/teams/delete_player_from_squad_<int:playerid>", methods=["POST"], view_func=views.delete_player_from_squad)
     app.add_url_rule("/matches", view_func=views.matches_page)
     app.add_url_rule("/leagues", view_func=views.leagues_page)
+    app.add_url_rule("/league_<int:leagueid>", view_func=views.league)
     app.add_url_rule("/add_data", view_func=views.add_data_page)
     app.add_url_rule("/add_person", methods=["POST", "GET"], view_func=views.add_person)
     app.add_url_rule("/add_match", methods=["POST", "GET"], view_func=views.add_match)
