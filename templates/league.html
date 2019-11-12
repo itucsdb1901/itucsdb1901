@@ -3,6 +3,7 @@
 {% block content %}
 <table class="table is-striped is-narrow is-hoverable is-fullwidth" >
             <tr>   
+                <th>Position</th>
                 <th>Team Name</th>
                 <th>Win</th>
                 <th>Draw</th>
@@ -13,6 +14,7 @@
             </tr>
         {%for s in standing%}
         <tr>
+            <td>{{standing.index(s)+1}}</td>
             <td><a href="/teams/detail_{{s[0]}}">{{s[1]}}</a></td>
             <td>{{s[2]}}</td>
             <td>{{s[3]}}</td>

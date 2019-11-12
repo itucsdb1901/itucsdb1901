@@ -326,7 +326,7 @@ def add_match():
             whoWin = 0
         query = "INSERT INTO match (homeid, awayid, homescore, awayscore, leagueid, stadiumid, matchdate) VALUES (%d, %d, %d, %d, %d, %d, CAST('%s' AS  DATE))" %(homeid, awayid, homescore, awayscore, leagueid, stadiumid, matchdate)
         query2 = "UPDATE standing SET win = (win + %d), draw = (draw + %d), lose = (lose + %d), scoredgoals = (scoredgoals + %d), againstgoals = (againstgoals + % d) WHERE (teamid = %d)" %(1 if whoWin == 1 else 0, 1 if whoWin == 0 else 0, 1 if whoWin == 2 else 0, homescore, awayscore, homeid)
-        query3 = "UPDATE standing SET win = (win + %d), draw = (draw + %d), lose = (lose + %d), scoredgoals = (scoredgoals + %d), againstgoals = (againstgoals + % d) WHERE (teamid = %d)" %(0 if whoWin == 1 else 1, 1 if whoWin == 0 else 0, 0 if whoWin == 2 else 1, awayscore, homescore, awayid)
+        query3 = "UPDATE standing SET win = (win + %d), draw = (draw + %d), lose = (lose + %d), scoredgoals = (scoredgoals + %d), againstgoals = (againstgoals + % d) WHERE (teamid = %d)" %(1 if whoWin == 2 else 0, 1 if whoWin == 0 else 0, 1 if whoWin == 1 else 0, awayscore, homescore, awayid)
         queryList = [query, query2, query3]
         executeSQLquery(url, queryList)
     return render_template("add_match.html", stadiums = stadiums, leagues = leagues, teams = teams)
