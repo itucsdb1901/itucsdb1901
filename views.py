@@ -52,9 +52,28 @@ def delete_player(personid):
 
 
 def home_page():
+    url=current_app.config["db_url"]
     if(current_app.config["signed"]==False):
         return checkSignIn()
-    return render_template("home.html")
+    person_count = "SELECT COUNT(*) FROM PERSON"
+    person_count = (listTable(url, person_count)[0][0])
+    leagues_count  ="SELECT COUNT(*) FROM LEAGUE"
+    leagues_count = (listTable(url,  leagues_count)[0][0])
+    matches_count  ="SELECT COUNT(*) FROM MATCH"
+    matches_count =(listTable(url,  matches_count)[0][0])
+    stadiums_count="SELECT COUNT(*) FROM STADIUM"
+    stadiums_count =(listTable(url, stadiums_count)[0][0])
+    goals_count = "SELECT COUNT(*) FROM GOAL"
+    goals_count =(listTable(url, goals_count)[0][0])
+    arguments = {
+                "person_count": person_count, 
+                "leagues_count": leagues_count,
+                "matches_count":matches_count,
+                "stadiums_count":stadiums_count,
+                "goals_count":goals_count,
+
+                }
+    return render_template("home.html", arguments=arguments)
 
 def matches_page():
     if(current_app.config["signed"]==False):
