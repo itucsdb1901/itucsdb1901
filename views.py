@@ -257,7 +257,7 @@ def leagues_page():
 
 def league(leagueid):
     url=current_app.config["db_url"]
-    query = "select t.id, t.name, s.win, s.draw, s.lose, s.scoredgoals, s.againstgoals, (s.win*3 + s.draw) as point from standing s join team t on (t.id = s.teamid) where (s.leagueid=%d) order by point desc;"%leagueid
+    query = "select t.id, t.name, s.win, s.draw, s.lose, s.scoredgoals, s.againstgoals, (s.win+s.draw+s.lose) as gamesPlayed, (s.scoredgoals-s.againstgoals) as avarage, (s.win*3 + s.draw) as point from standing s join team t on (t.id = s.teamid) where (s.leagueid=%d) order by point desc, avarage desc ;"%leagueid
     getleaguename= "select name from league where (id=%d)"%leagueid
     leaguename= listTable(url,getleaguename)[0][0]
     standing=listTable(url,query)
