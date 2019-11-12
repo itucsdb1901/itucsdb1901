@@ -101,7 +101,7 @@ def add_goal(personid):
     url = current_app.config["db_url"]
     infoQuery = "SELECT p.*, t.id, t.name FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,infoQuery)
-    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
+    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
     teamID = result[4]
     matchesQuery = '''
     select m.id, t1.name, t2.name, m.homescore, m.awayscore from match m 
@@ -240,7 +240,8 @@ def add_person():
         name=request.form["name"]
         birthyear=int(request.form["birthyear"])
         nationality=request.form["nationality"]
-        query="INSERT INTO PERSON (NAME,BIRTHYEAR,NATIONALITY) VALUES ('%s',%d,'%s')"%(name,birthyear,nationality)
+        personphoto=request.form["personphoto"]
+        query="INSERT INTO PERSON (NAME,BIRTHYEAR,NATIONALITY,PERSONPHOTO) VALUES ('%s',%d,'%s','%s')"%(name,birthyear,nationality,personphoto)
         statement=[query]
         url=current_app.config["db_url"]
         executeSQLquery(url,statement)
