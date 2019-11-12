@@ -255,6 +255,14 @@ def leagues_page():
     leagues = listTable(url, listSQL)
     return render_template("leagues.html",leagues=leagues)
 
+def league(leagueid):
+    url=current_app.config["db_url"]
+    query = "select t.id, t.name, s.win, s.draw, s.lose, s.scoredgoals, s.againstgoals, (s.win*3 + s.draw) as point from standing s join team t on (t.id = s.teamid) order by point desc;"
+    getleaguename= "select name from league where (id=%d)"%leagueid
+    leaguename= listTable(url,getleaguename)[0][0]
+    standing=listTable(url,query)
+    return render_template("league.html",leaguename=leaguename,standing=standing)
+
 def add_league():
     if(current_app.config["signed"]==False):
         return checkSignIn()
@@ -283,8 +291,12 @@ def add_team():
         coachid = int(request.form['coach'])
         leagueid = int(request.form['league'])
         stadiumid = int(request.form['stadium'])
-        query = "INSERT INTO team (name, leagueid, stadiumid, coach) VALUES ('%s', %d, %d, %d)" %(name, leagueid, stadiumid, coachid)
-        executeSQLquery(url, [query])
+        query1 = "INSERT INTO team (name, leagueid, stadiumid, coach) VALUES ('%s', %d, %d, %d)" %(name, leagueid, stadiumid, coachid)
+        executeSQLquery(url, [query1])
+        getTeamID = "SELECT MAX(id) FROM TEAM"
+        teamID = int(listTable(url, getTeamID)[0][0])
+        query2 = "insert into standing (teamid, leagueid, win, lose, draw, scoredgoals, againstgoals) values (%d, %d, 0, 0, 0, 0, 0)"%(teamID, leagueid)
+        executeSQLquery(url, [query2])
     return render_template("add_team.html", stadiums = stadiums, leagues = leagues, people = people)
 
 def add_match():
@@ -306,8 +318,17 @@ def add_match():
         stadiumid = int(request.form['stadiumid'])
         matchdate = request.form['matchdate']
         matchdate = datetime.datetime.strptime(matchdate, '%Y-%m-%d').date()
+        if(homescore > awayscore):
+            whoWin = 1
+        elif (awayscore > homescore):
+            whoWin = 2
+        else:
+            whoWin = 0
         query = "INSERT INTO match (homeid, awayid, homescore, awayscore, leagueid, stadiumid, matchdate) VALUES (%d, %d, %d, %d, %d, %d, CAST('%s' AS  DATE))" %(homeid, awayid, homescore, awayscore, leagueid, stadiumid, matchdate)
-        executeSQLquery(url, [query])
+        query2 = "UPDATE standing SET win = (win + %d), draw = (draw + %d), lose = (lose + %d), scoredgoals = (scoredgoals + %d), againstgoals = (againstgoals + % d) WHERE (teamid = %d)" %(1 if whoWin == 1 else 0, 1 if whoWin == 0 else 0, 1 if whoWin == 2 else 0, homescore, awayscore, homeid)
+        query3 = "UPDATE standing SET win = (win + %d), draw = (draw + %d), lose = (lose + %d), scoredgoals = (scoredgoals + %d), againstgoals = (againstgoals + % d) WHERE (teamid = %d)" %(0 if whoWin == 1 else 1, 1 if whoWin == 0 else 0, 0 if whoWin == 2 else 1, awayscore, homescore, awayid)
+        queryList = [query, query2, query3]
+        executeSQLquery(url, queryList)
     return render_template("add_match.html", stadiums = stadiums, leagues = leagues, teams = teams)
 
 def add_stadium():

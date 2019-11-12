@@ -21,51 +21,53 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
             crossorigin="anonymous"></script>
-    
   </head>
   <body>
     <header>
       <nav class="navbar is-primary">
-        <div class="container">
+        
           <div class="navbar-brand">
               <a class="navbar-item" href="{{ url_for('home_page') }}" style="font-weight:bold;">
                   Football Database
               </a>
+              <div class="navbar-burger burger" data-target="main">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+              </div>
           </div>
-        
-        <div id="navMenu" class="navbar-menu">
-          <div class="navbar-start">
-            <a href="{{ url_for('players_page') }}" class="navbar-item">Players</a>
-            <a href="{{ url_for('teams_page') }}" class="navbar-item">Teams</a>
-            <a href="{{ url_for('matches_page') }}" class="navbar-item">Matches</a>
-            <a href="{{ url_for('leagues_page') }}" class="navbar-item">Leagues</a>
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link">
-                Add Data
-              </a>
-          
-              <div class="navbar-dropdown">
-                <a class="navbar-item" href="{{ url_for('add_person') }}">
-                  Add Person
+          <div id="main" class="navbar-menu">
+            <div class="navbar-start">
+              <a href="{{ url_for('players_page') }}" class="navbar-item">Players</a>
+              <a href="{{ url_for('teams_page') }}" class="navbar-item">Teams</a>
+              <a href="{{ url_for('matches_page') }}" class="navbar-item">Matches</a>
+              <a href="{{ url_for('leagues_page') }}" class="navbar-item">Leagues</a>
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                  Add Data
                 </a>
-                <a class="navbar-item" href="{{ url_for('add_team') }}">
-                  Add Team
-                </a>
-                <a class="navbar-item" href="{{ url_for('add_stadium') }}">
-                  Add Stadium
-                </a>
-                <a class="navbar-item" href="{{ url_for('add_league') }}">
-                  Add League
-                </a>
-                <a class="navbar-item" href="{{ url_for('add_match') }}">
-                  Add Match
-                </a>
+            
+                <div class="navbar-dropdown is-boxed">  
+                  <a class="navbar-item" href="{{ url_for('add_person') }}">
+                    Add Person
+                  </a>
+                  <a class="navbar-item" href="{{ url_for('add_team') }}">
+                    Add Team
+                  </a>
+                  <a class="navbar-item" href="{{ url_for('add_stadium') }}">
+                    Add Stadium
+                  </a>
+                  <a class="navbar-item" href="{{ url_for('add_league') }}">
+                    Add League
+                  </a>
+                  <a class="navbar-item" href="{{ url_for('add_match') }}">
+                    Add Match
+                  </a>
+                </div>
               </div>
             </div>
-            </nav>
           </div>
-        </div>
-        </div>
+        
       </nav>
     </header>
 
@@ -82,5 +84,13 @@
         <small>&copy; 2019, itucsdb1901</small>
       </div>
     </footer>
+    <script>
+      $(document).ready(function() {
+      $(".navbar-burger").click(function() {
+          $(".navbar-burger").toggleClass("is-active");
+          $(".navbar-menu").toggleClass("is-active");
+      });
+      });
+    </script>
   </body>
 </html>

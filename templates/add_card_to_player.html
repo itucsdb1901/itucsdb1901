@@ -20,6 +20,7 @@
         <br>
         <div class="select">
             <select name="match">
+                    <option disabled selected value> -- select match -- </option>
                 {%for match in matches%}
                 <option value="{{match[4]}}">{{match[0]}} {{match[1]}} - {{match[2]}} {{match[3]}} </option>
                 {% endfor %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}{{leaguename}}{% endblock %}
+{% block content %}
+<table class="table is-striped is-narrow is-hoverable is-fullwidth" >
+            <tr>   
+                <th>Team Name</th>
+                <th>Win</th>
+                <th>Draw</th>
+                <th>Lose</th>
+                <th>Scored Goals</th>
+                <th>Against Goals</th>
+                <th>Point</th>
+            </tr>
+        {%for s in standing%}
+        <tr>
+            <td><a href="/teams/detail_{{s[0]}}">{{s[1]}}</a></td>
+            <td>{{s[2]}}</td>
+            <td>{{s[3]}}</td>
+            <td>{{s[4]}}</td>
+            <td>{{s[5]}}</td>
+            <td>{{s[6]}}</td>
+            <td>{{s[7]}}</td>
+        </tr>
+        {%endfor%}
+</table>        
+{% endblock %}
