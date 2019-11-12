@@ -7,7 +7,7 @@
                 <div class="control">
                     <div class="select is-primary">
                     <select name="playerbox" id="playerbox">
-                        <option value="---" selected>---</option>
+                        <option disabled selected value> -- select player -- </option>
                         {% for player in playerList %}
                         <option value="{{player[0]}}">{{player[1]}}</option>
                         {%endfor%}

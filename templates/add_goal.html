@@ -10,6 +10,7 @@
                     <div class="control">
                         <div class="select is-primary">
                             <select name="matchid">
+                                <option disabled selected value> -- select match -- </option>
                             {% for match in matches %}
                                 <option value="{{match[0]}}">{{match[1]}} {{match[3]}}-{{match[4]}} {{match[2]}}</option>
                             {%endfor%}
@@ -24,6 +25,7 @@
                     <div class="control">
                         <div class="select is-primary">
                             <select name="assistPlayerid">
+                                <option disabled selected value> -- select assist owner -- </option>
                             {% for player in assistPlayers %}
                                 <option value="{{player[0]}}">{{player[1]}}</option>
                             {%endfor%}

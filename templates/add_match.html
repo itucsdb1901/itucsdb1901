@@ -10,6 +10,7 @@
                     <div class="control">
                         <div class="select is-primary">
                             <select name="hometeamid">
+                                    <option disabled selected value> -- select hometeam -- </option>
                                 {% for team in teams %}
                                     <option value="{{team[0]}}">{{team[1]}}</option>
                                 {%endfor%}
@@ -24,6 +25,7 @@
                     <div class="control">
                         <div class="select is-primary">
                             <select name="awayteamid">
+                                    <option disabled selected value> -- select awayteam -- </option>
                                 {% for team in teams %}
                                     <option value="{{team[0]}}">{{team[1]}}</option>
                                 {%endfor%}
@@ -50,6 +52,7 @@
                     <div class="control">
                         <div class="select is-primary">
                             <select name="stadiumid">
+                                    <option disabled selected value> -- select stadium -- </option>
                                 {% for stadium in stadiums %}
                                     <option value="{{stadium[0]}}">{{stadium[1]}}</option>
                                 {%endfor%}
@@ -64,6 +67,7 @@
                     <div class="control">
                         <div class="select is-primary">
                             <select name="leagueid">
+                                    <option disabled selected value> -- select league -- </option>
                                 {% for league in leagues %}
                                     <option value="{{league[0]}}">{{league[1]}}</option>
                                 {%endfor%}
