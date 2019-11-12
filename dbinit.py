@@ -88,6 +88,11 @@ INIT_STATEMENTS = [
         TEAMID INTEGER REFERENCES TEAM(ID),
         POSITION VARCHAR(3),
         PRIMARY KEY (PERSONID, TEAMID) )''',
+
+    '''CREATE TABLE IF NOT EXISTS ACCOUNT (
+        ID SERIAL PRIMARY KEY,
+        USERNAME VARCHAR(20) UNIQUE,
+        PASSWORD VARCHAR(12))''',
         
 ]
 
@@ -100,5 +105,5 @@ def initialize(url):
 
 
 if __name__ == "__main__":
-    url = "postgres://postgres:docker@localhost:5432/postgres"
+    url =  os.environ.get('DB_URI', None)
     initialize(url)

@@ -5,6 +5,20 @@ import classes
 import datetime
 
 
+def checkSignIn():
+    if (request.method=="POST"):
+        url=current_app.config["db_url"]
+        username = request.form.get("username",False)
+        password = request.form.get("password",False)
+        checkUser="SELECT * FROM ACCOUNT WHERE(username='%s' AND password='%s' )"%(username,password)
+        result=listTable(url,checkUser)
+        if(len(result)==0):
+            return render_template("login.html")
+        else:
+            current_app.config["signed"] = True
+            return home_page()
+    return render_template("login.html")
+
 def executeSQLquery(url, statements):
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
@@ -29,6 +43,8 @@ def getOneRowQuery(url,statement):
     return result
 
 def delete_player(personid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     query = 'DELETE FROM PERSON WHERE (id=%d)'%personid
     executeSQLquery(url, [query])
@@ -36,9 +52,13 @@ def delete_player(personid):
 
 
 def home_page():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     return render_template("home.html")
 
 def matches_page():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid 
                 FROM match m, team t1, team t2, stadium std, league lg
@@ -48,6 +68,8 @@ def matches_page():
     return render_template("matches.html", matches = matches)
 
 def player_page(personid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config["db_url"]
     query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,query)
@@ -56,6 +78,7 @@ def player_page(personid):
     return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position )
 
 def add_goal(personid):
+    checkSignIn()
     url = current_app.config["db_url"]
     infoQuery = "SELECT p.*, t.id, t.name FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,infoQuery)
@@ -93,6 +116,8 @@ def add_goal(personid):
     return render_template("add_goal.html", matches=matches, person=person, assistPlayers = assistPlayers)
 
 def add_card_to_player(playerid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url=current_app.config['db_url']
     getMatchesSQL='''SELECT a.name,match.homescore,match.awayscore,b.name,match.id FROM MATCH,TEAM a,TEAM b,PERSON,SQUAD 
     WHERE(a.id=match.homeid and b.id=match.awayid and person.id=%d and person.id=squad.personid and 
@@ -107,6 +132,8 @@ def add_card_to_player(playerid):
     return render_template("add_card_to_player.html",matches=matches,playerid=playerid)
 
 def search_player():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     search = request.form['search']
     listSQL = "SELECT * FROM PERSON WHERE (name LIKE '%" + search + "%')"
@@ -114,17 +141,23 @@ def search_player():
     return render_template("players.html", players=players)
 
 def players_page():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     listSQL = "SELECT DISTINCT p.* FROM PERSON p JOIN SQUAD s ON (p.id = s.personid)"
     players = listTable(url, listSQL)
     return render_template("players.html", players=players)
     
 def teams_page():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     listSQL = "SELECT t.id, t.name, l.name as leaguename FROM TEAM t LEFT JOIN LEAGUE l ON (t.leagueid = l.id)"
     teams = listTable(url, listSQL)
     return render_template("teams.html", teams=teams)
 def search_team():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     search = request.form['search']
     listSQL = "SELECT * FROM TEAM WHERE (name LIKE '%" + search + "%')"
@@ -132,6 +165,8 @@ def search_team():
     return render_template("teams.html", teams=teams)   
 
 def team_page(teamid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config["db_url"]
     query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
     result=getOneRowQuery(url,query)
@@ -141,12 +176,16 @@ def team_page(teamid):
     return render_template("team.html",team=team,country=result[5],squad=squad)
 
 def delete_team(teamid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     query = 'DELETE FROM TEAM WHERE (id=%d)'%teamid
     executeSQLquery(url, [query])
     return teams_page()
 
 def add_player_to_squad(teamid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     teamSQL = "SELECT id, name FROM team WHERE id=%d" %teamid
     getPlayerListSQL = '''
@@ -165,6 +204,8 @@ def add_player_to_squad(teamid):
     return render_template("add_player_to_squad.html",playerList=playerList,team=team)
 
 def delete_player_from_squad(playerid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     getTeamIDSQL="SELECT teamid from squad where personid=%d"%playerid
     teamid=listTable(url,getTeamIDSQL)
@@ -174,6 +215,8 @@ def delete_player_from_squad(playerid):
 
 
 def add_person():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     if(request.method=='POST'):
         name=request.form["name"]
         birthyear=int(request.form["birthyear"])
@@ -185,12 +228,16 @@ def add_person():
     return render_template("add_person.html")
 
 def leagues_page():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config["db_url"]
     listSQL = "SELECT * FROM LEAGUE "
     leagues = listTable(url, listSQL)
     return render_template("leagues.html",leagues=leagues)
 
 def add_league():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     if(request.method=='POST'):
         name=request.form["name"]
         teamcount=int(request.form["teamcount"])
@@ -202,6 +249,8 @@ def add_league():
     return render_template("add_league.html")
 
 def add_team():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     getPeopleSQL = "SELECT * FROM person"
     getStadiumsSQL = "SELECT * FROM stadium"
@@ -219,6 +268,8 @@ def add_team():
     return render_template("add_team.html", stadiums = stadiums, leagues = leagues, people = people)
 
 def add_match():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     getTeamSQL = "SELECT * FROM team"
     getStadiumsSQL = "SELECT * FROM stadium"
@@ -240,6 +291,8 @@ def add_match():
     return render_template("add_match.html", stadiums = stadiums, leagues = leagues, teams = teams)
 
 def add_stadium():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     url = current_app.config['db_url']
     if(request.method == 'POST'):
         name = request.form['name']
@@ -250,4 +303,6 @@ def add_stadium():
     return render_template("add_stadium.html")
 
 def add_data_page():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
     return render_template("add_data.html")

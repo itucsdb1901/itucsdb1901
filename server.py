@@ -1,11 +1,12 @@
 from flask import Flask
 import views
 import psycopg2 as dbapi2
-
+import os
 
 def create_app():
     app = Flask(__name__)
     app.add_url_rule("/", methods=["POST", "GET"], view_func=views.home_page)
+    app.add_url_rule("/login", methods=["POST", "GET"], view_func=views.checkSignIn)
     app.add_url_rule("/players/detail_<int:personid>", methods=["POST","GET"], view_func=views.player_page)
     app.add_url_rule("/player/add_card_to_player_<int:playerid>", methods=["POST","GET"], view_func=views.add_card_to_player)
     app.add_url_rule("/players/search_player", methods=["POST","GET"], view_func=views.search_player)
@@ -26,7 +27,9 @@ def create_app():
     app.add_url_rule("/add_team", methods=["POST", "GET"], view_func=views.add_team)
     app.add_url_rule("/add_league", methods=["POST", "GET"], view_func=views.add_league)
     app.add_url_rule("/add_stadium", methods=["POST", "GET"], view_func=views.add_stadium)
-    app.config['db_url'] = 'postgres://postgres:docker@localhost:5432/postgres'
+    app.config["signed"] = False
+    db_uri = os.environ.get('DB_URI', None)
+    app.config['db_url'] = db_uri
     return app
 
 app = create_app()
