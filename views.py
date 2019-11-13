@@ -163,7 +163,7 @@ def players_page():
     if(current_app.config["signed"]==False):
         return checkSignIn()
     url = current_app.config['db_url']
-    listSQL = "SELECT DISTINCT p.* FROM PERSON p JOIN SQUAD s ON (p.id = s.personid)"
+    listSQL = "SELECT DISTINCT p.* FROM PERSON p JOIN SQUAD s ON (p.id = s.personid) order by name"
     players = listTable(url, listSQL)
     return render_template("players.html", players=players)
     
