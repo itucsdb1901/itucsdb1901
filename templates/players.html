@@ -103,7 +103,13 @@
     <div class="containifk">
         <div class="rowifk">
             <div class="row__innerifk">
+                
                 {% for player in players %}
+                {%if players.index(player)%5== 0 %}
+                <br>
+                <div><hr></div>
+                
+                {%endif %}
                 <div class="tileifk">
                 <div class="tile__media">
                     <img class="tile__img" src="{{player[4]}}" alt="yok"  />
@@ -117,6 +123,7 @@
                     </form>
                 </div>
                 </div>
+                
                 {% endfor %}
             </div>
         </div>
