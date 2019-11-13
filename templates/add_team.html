@@ -3,18 +3,21 @@
 {% block content %}
     <h1>Add Team</h1>
     <form method="POST">
-            <label>Team Name</label>
-            <input class="input" type="text" name="name" placeholder="Team Name" maxlength="20"/>
+            <div class="field">
+                <div class="control">
+                    <input class="input is-primary" type="text" placeholder="Team name" maxlength="20">
+                </div>
+            </div>
             <label>Stadium</label>
             <div class="field">
                 <div class="control">
                     <div class="select is-primary">
-                    <select name="stadium">
+                        <select name="stadium">
                             <option disabled selected value> -- select stadium -- </option>
-                        {% for stadium in stadiums %}
-                        <option value="{{stadium[0]}}">{{stadium[1]}}</option>
-                        {%endfor%}
-                    </select>
+                            {% for stadium in stadiums %}
+                                <option value="{{stadium[0]}}">{{stadium[1]}}</option>
+                            {%endfor%}
+                        </select>
                     </div>
                 </div>
             </div>
@@ -23,7 +26,7 @@
                 <div class="control">
                     <div class="select is-primary">
                         <select name="league">
-                                <option disabled selected value> -- select league -- </option>
+                            <option disabled selected value> -- select league -- </option>
                             {% for league in leagues %}
                                 <option value="{{league[0]}}">{{league[1]}} - {{league[3]}}</option>
                             {%endfor%}
@@ -33,17 +36,23 @@
             </div>
             <label>Coach</label>
             <div class="field">
-                    <div class="control">
-                        <div class="select is-primary">
-                            <select name="coach">
-                                    <option disabled selected value> -- select coach -- </option>
-                                {% for person in people %}
-                                    <option value="{{person[0]}}">{{person[1]}}</option>
-                                {%endfor%}
-                            </select>
-                        </div>
+                <div class="control">
+                    <div class="select is-primary">
+                        <select name="coach">
+                            <option disabled selected value> -- select coach -- </option>
+                            {% for person in people %}
+                                <option value="{{person[0]}}">{{person[1]}}</option>
+                            {%endfor%}
+                        </select>
                     </div>
                 </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input class="input is-primary" type="text" name="teamLogo" maxlength="200" placeholder="Team logo URL">
+                </div>
+            </div>
+            
             <input class="button is-success" type="submit" title="Save Team" value="Save">
         </form> 
 {% endblock %}
