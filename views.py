@@ -291,7 +291,8 @@ def add_team():
         coachid = int(request.form['coach'])
         leagueid = int(request.form['league'])
         stadiumid = int(request.form['stadium'])
-        query1 = "INSERT INTO team (name, leagueid, stadiumid, coach) VALUES ('%s', %d, %d, %d)" %(name, leagueid, stadiumid, coachid)
+        teamLogo = request.form.get('teamLogo',False)
+        query1 = "INSERT INTO team (name, leagueid, stadiumid, coach, teamlogo) VALUES ('%s', %d, %d, %d,'%s')" %(name, leagueid, stadiumid, coachid, teamLogo)
         executeSQLquery(url, [query1])
         getTeamID = "SELECT MAX(id) FROM TEAM"
         teamID = int(listTable(url, getTeamID)[0][0])
