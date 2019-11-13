@@ -1,17 +1,18 @@
 class Person:
-	def __init__(self, id, name, birthDay, nationality):
+	def __init__(self, id, name, birthDay, nationality, personphoto):
 		self.id = id
 		self.name = name
 		self.birthDay = birthDay
 		self.nationality = nationality
-
+		self.personphoto = personphoto
 class Team:
-	def __init__(self, id, name, leagueID, coachID, stadiumID):
+	def __init__(self, id, name, leagueID, coachID, stadiumID,teamLogo):
 		self.id = id
 		self.name = name
 		self.leagueID = leagueID
 		self.coachID = coachID
 		self.stadiumID = stadiumID
+		self.teamLogo = teamLogo
 
 class Squad:
 	def __init__(self, teamID, personID, position):
