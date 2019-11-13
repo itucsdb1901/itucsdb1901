@@ -92,8 +92,8 @@ def player_page(personid):
     url = current_app.config["db_url"]
     query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,query)
-    (teamID, teamName, position) = (result[4], result[5], result[6])
-    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3])
+    (teamID, teamName, position) = (result[5], result[6], result[7])
+    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
     return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position )
 
 def add_goal(personid):
@@ -187,11 +187,11 @@ def team_page(teamid):
     if(current_app.config["signed"]==False):
         return checkSignIn()
     url = current_app.config["db_url"]
-    query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
+    query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country,teamlogo FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
     result=getOneRowQuery(url,query)
     getSquadSQL="SELECT DISTINCT p.name,s.position,p.id FROM person p,squad s,team t where(p.id=s.personid and s.teamid=%d)"%teamid
     squad=listTable(url,getSquadSQL)
-    team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3])
+    team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3],teamLogo=result[6])
     return render_template("team.html",team=team,country=result[5],squad=squad)
 
 def delete_team(teamid):
