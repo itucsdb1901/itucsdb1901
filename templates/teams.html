@@ -1,6 +1,93 @@
 {% extends "layout.html" %}
 {% block title %}Teams{% endblock %}
 {% block content %}
+<style>
+   
+        * {
+            box-sizing: border-box;
+        }
+        a:link,
+        a:hover,
+        a:active,
+        a:visited {
+            transition: color 150ms;
+            color: #95a5a6;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #7f8c8d;
+            text-decoration: underline;
+        }
+        .containifk {
+            width: 100%;
+        }
+        .rowifk {
+            width: 100%;
+        }
+        .row__innerifk {
+            transition: 450ms transform;
+            font-size: 0;
+            white-space: nowrap;
+            margin: 70px 0;
+            padding-bottom: 10px;
+        }
+        .tileifk {
+            position: relative;
+            display: inline-block;
+            width: 250px;
+            height: 140px;
+            margin-right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 450ms all;
+            transform-origin: center left;
+        }
+        .tile__img {
+            width: 250px;
+            height: 140px;
+            object-fit: cover;
+        }
+        .tile__details {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: 0;
+            font-size: 10px;
+            opacity: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            transition: 450ms opacity;
+        }
+        .tile__details:after,
+        .tile__details:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: #000;
+        }
+        .tileifk:hover .tile__details {
+            opacity: 1;
+        }
+        .tile__title {
+            position: absolute;
+            bottom: 0;
+            padding: 10px;
+        }
+        .row__innerifk:hover {
+            transform: translate3d(-62.5, 0, 0);
+        }
+        .row__innerifk:hover .tileifk {
+            opacity: 0.3;
+        }
+        .row__innerifk:hover .tileifk:hover {
+            transform: scale(1.5);
+            opacity: 1;
+        }
+        .tileifk:hover ~ .tileifk {
+            transform: translate3d(125, 0, 0);
+        }
+    </style>
     <h1>Teams Page</h1>
     <form action="/teams/search_team" method="POST">
         <div class="columns">
@@ -13,19 +100,34 @@
         </div>
     </form>
     {% if teams %}
-    <table class="table is-hoverable">
-        <tr>
-            <th>id</th>
-            <th>Name</th>
-            <th>League</th>
-        </tr>
-        {% for team in teams %}
-        <tr>
-            <td>{{team[0]}}</td>
-            <td><a class="has-text-info" href="/teams/detail_{{team[0]}}">{{team[1]}}</a></td>
-            <td><a class="has-text-info" href="#">{{team[2]}}</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="containifk">
+        <div class="rowifk">
+            <div class="row__innerifk">
+                
+                {% for team in teams %}
+                {%if teams.index(team)%5== 0 %}
+                <br>
+                <div><hr></div>
+                
+                {%endif %}
+                <div class="tileifk">
+                <div class="tile__media">
+                    <img class="tile__img" src="{{team[2]}}" alt="yok"  />
+                </div>
+                <div class="tile__details">
+                    <div class="tile__title">
+                        <kbd>{{team[1]}}</kbd>
+                    </div>
+                    <form method="POST" name ="detail{{team[0]}}" action="/teams/detail_{{team[0]}}">
+                        <button class="button is-danger" action="submit" id="detailButton" name="detailButton" >See Detail</button>
+                    </form>
+                </div>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
     {% endif %}
 {% endblock %}

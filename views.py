@@ -171,7 +171,7 @@ def teams_page():
     if(current_app.config["signed"]==False):
         return checkSignIn()
     url = current_app.config['db_url']
-    listSQL = "SELECT t.id, t.name, l.name as leaguename FROM TEAM t LEFT JOIN LEAGUE l ON (t.leagueid = l.id)"
+    listSQL = "SELECT t.id, t.name, t.teamlogo,l.name as leaguename FROM TEAM t LEFT JOIN LEAGUE l ON (t.leagueid = l.id)"
     teams = listTable(url, listSQL)
     return render_template("teams.html", teams=teams)
 def search_team():
