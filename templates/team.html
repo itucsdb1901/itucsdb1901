@@ -3,10 +3,8 @@
 {% block headerTitle %}{{player[1]}}{% endblock %}
 {% block subTitle %}{{player[0]}}{% endblock %}
 {% block content %}
-<button onclick="myFunction('Demo1')" class="w3-button w3-block w3-blue w3-left-align">{{team.name}}</button>
-    <div id="Demo1" class="w3-hide w3-animate-zoom">
-            <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-blue w3-left-align">{{team.name}} Info</button>
-                <div id="Demo2" class="w3-hide w3-animate-zoom">
+
+<h2>{{team.name}}</h2>            
                     <table >
                         <tr>
                             <th>Country:</th>
@@ -37,7 +35,6 @@
                             </td>
                         </tr>
                     </table>
-                </div>
             <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-blue w3-left-align">Squad of {{team.name}}</button>
                 <div id="Demo3" class="w3-hide w3-animate-zoom">
                     <table>
@@ -58,7 +55,6 @@
                         {%endfor%}
                     </table>
                 </div>
-    </div>
 
 <script>
     function myFunction(id) {
