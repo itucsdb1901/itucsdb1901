@@ -44,7 +44,7 @@
                         </tr>
                         {%for player in squad%}
                         <tr>
-                            <td>{{player[0]}}</td>
+                            <td><a href="/players/detail_{{player[2]}}" class="has-text-info">{{player[0]}} </a></td>
                             <td>{{player[1]}}</td>
                             <td>
                                 <form method="POST" name="delete_player_from_squad{{player[2]}}" action="/teams/delete_player_from_squad_{{player[2]}}">
