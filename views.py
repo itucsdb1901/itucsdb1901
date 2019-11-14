@@ -102,7 +102,7 @@ def add_goal(personid):
     infoQuery = "SELECT p.*, t.id, t.name FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,infoQuery)
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
-    teamID = result[4]
+    teamID = result[5]
     matchesQuery = '''
     select m.id, t1.name, t2.name, m.homescore, m.awayscore from match m 
 	join team t1 on (t1.id = m.homeid)
