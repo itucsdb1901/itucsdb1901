@@ -91,10 +91,13 @@ def player_page(personid):
         return checkSignIn()
     url = current_app.config["db_url"]
     query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
+    goal = " select count(*) from goal left join person on(goal.playerid = person.id) where(person.id=%d)"%personid
     result=getOneRowQuery(url,query)
+    number_goal=getOneRowQuery(url,goal)
+    scoredgoal=number_goal[0]
     (teamID, teamName, position) = (result[5], result[6], result[7])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
-    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position )
+    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal )
 
 def add_goal(personid):
     checkSignIn()
