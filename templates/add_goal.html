@@ -3,8 +3,8 @@
 {% block content %}
     <h1>Add Goal to {{person.name}}</h1>
     <form method="POST">
-        <div class="columns">
-            <div class="column">
+        
+            <div class="column is-4">
                 <label>Select Match</label>
                 <div class="field">
                     <div class="control">
@@ -18,8 +18,8 @@
                         </div>
                     </div>
                 </div>
-            <div/>
-            <div class="column">
+            </div>
+            <div class="column is-4">
                 <label>Select Assist</label>
                 <div class="field">
                     <div class="control">
@@ -34,14 +34,21 @@
                     </div>
                 </div>
             </div>
-            <div class="column">
+            <div class="column is-2">
                 <label>Minute</label>
                 <div class="field">
                     <input class="input" type="number" name="minute"/>
                 </div>
+                
             </div>
-            <input type="submit" value="SAVE GOAL"/>
-        </div>
+            <div class="column is-2">
+                <label>Save</label>
+                <div calss="field">
+                    <input type="submit" value="SAVE GOAL"/>
+                </div>
+                
+            </div>
+       
     </form>
             
             

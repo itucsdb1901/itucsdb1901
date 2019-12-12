@@ -28,6 +28,8 @@ def create_app():
     app.add_url_rule("/add_team", methods=["POST", "GET"], view_func=views.add_team)
     app.add_url_rule("/add_league", methods=["POST", "GET"], view_func=views.add_league)
     app.add_url_rule("/add_stadium", methods=["POST", "GET"], view_func=views.add_stadium)
+    app.add_url_rule("/stadiums", view_func=views.stadiums_page)
+    app.add_url_rule("/stadiums/search_stadium", methods=["POST","GET"], view_func=views.search_stadium)
     app.config["signed"] = False
     db_uri = os.environ.get('DB_URI', None)
     app.config['db_url'] = db_uri
