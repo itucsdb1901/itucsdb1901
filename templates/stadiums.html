@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}Stadiums{% endblock %}
+{% block content %}
+
+    <h1>Stadiums Page</h1>
+    <br>
+    <form action="/stadiums/search_stadium" method="POST">
+        <div class="columns">
+            <div class="column is-one-fifth">
+                <input class="input is-info" type="text" name="search" id="search" placeholder="Search..">
+            </div>
+            <div class="column">
+                <button class="button is-link" action='submit'>Search Stadium</button>
+            </div>
+        </div>
+    </form>
+    <br>
+    <table class="table is-hoverable">
+            <tr>
+                <th>Name</th>
+                <th>Team</th>
+                <th>Capacity</th>
+                <th>City</th>
+            </tr>
+            {%for stadium in stadiums%}
+            <tr>
+                <td >{{stadium[1]}}</td>
+                <td>{{stadium[5]}}</td>
+                <td>{{stadium[2]}}</td>
+                <td>{{stadium[3]}}</td>
+            
+            </tr>
+            {%endfor%}    
+    </table>
+
+
+
+
+{% endblock %}
