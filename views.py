@@ -82,7 +82,7 @@ def matches_page():
     query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid 
                 FROM match m, team t1, team t2, stadium std, league lg
                     WHERE (m.homeid = t1.id AND m.awayid = t2.id 
-                        AND m.stadiumid = std.id AND m.leagueid = lg.id)'''
+                        AND m.stadiumid = std.id AND m.leagueid = lg.id) ORDER BY lg.name ASC'''
     matches = listTable(url, query)
     return render_template("matches.html", matches = matches)
 
@@ -346,6 +346,22 @@ def add_stadium():
         query = "INSERT INTO stadium (name, capacity, city) VALUES ('%s', %d, '%s')" %(name, capacity, city) 
         executeSQLquery(url, [query])
     return render_template("add_stadium.html")
+def stadiums_page():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
+    url = current_app.config["db_url"]
+    listSQL = "select * from stadium join team on stadium.id = team.stadiumid "
+    stadiums = listTable(url, listSQL)
+    return render_template("stadiums.html",stadiums=stadiums)
+def search_stadium():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
+    url = current_app.config['db_url']
+    search = request.form['search']
+    listSQL = "select * from stadium join team on stadium.id = team.stadiumid WHERE (name LIKE '%" + search + "%')"
+    stadiums = listTable(url, listSQL)
+    return render_template("stadiums.html", stadiums=stadiums) 
+    
 
 def add_data_page():
     if(current_app.config["signed"]==False):
