@@ -92,12 +92,18 @@ def player_page(personid):
     url = current_app.config["db_url"]
     query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     goal = " select count(*) from goal left join person on(goal.playerid = person.id) where(person.id=%d)"%personid
+    query2="select * from negotitation where personid=%d"%personid
     result=getOneRowQuery(url,query)
     number_goal=getOneRowQuery(url,goal)
+    negotitation = getOneRowQuery(url,query2)
+    amount=negotitation[4]
+    duration=negotitation[3]
+    startdate=negotitation[5]
+    seasons=startdate+1
     scoredgoal=number_goal[0]
     (teamID, teamName, position) = (result[5], result[6], result[7])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
-    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal )
+    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal,amount=amount,duration=duration,startdate=startdate,seasons=seasons )
 
 def add_goal(personid):
     checkSignIn()
@@ -221,8 +227,13 @@ def add_player_to_squad(teamid):
     if(request.method == 'POST'):
         position = request.form['position']
         playerid = int(request.form['playerbox'])
+        duration = int(request.form['duration'])
+        startdate= int(request.form['startdate'])
+        amount= int(request.form['amount'])
         query = "INSERT INTO squad (personid,teamid,position) VALUES (%d, %d ,'%s')" %(playerid, teamid, position)
+        query2 ="INSERT INTO negotitation (personid,teamid,duration,amount,startdate) VALUES (%d,%d,%d,%d,%d)" %(playerid,teamid,duration,amount,startdate)
         executeSQLquery(url, [query])
+        executeSQLquery(url, [query2])
     return render_template("add_player_to_squad.html",playerList=playerList,team=team)
 
 def delete_player_from_squad(playerid):
@@ -232,7 +243,9 @@ def delete_player_from_squad(playerid):
     getTeamIDSQL="SELECT teamid from squad where personid=%d"%playerid
     teamid=listTable(url,getTeamIDSQL)
     query = 'DELETE FROM SQUAD WHERE (personid=%d)'%playerid
+    query2="delete from negotitation where (personid=%d)"%playerid
     executeSQLquery(url, [query])
+    executeSQLquery(url,[query2])
     return team_page(teamid[0])
 
 
