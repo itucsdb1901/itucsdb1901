@@ -175,7 +175,30 @@ def players_page():
     listSQL = "SELECT DISTINCT p.* FROM PERSON p JOIN SQUAD s ON (p.id = s.personid) order by name"
     players = listTable(url, listSQL)
     return render_template("players.html", players=players)
-    
+def coachs_page():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
+    url = current_app.config['db_url']
+    listSQL = "select * from person join team on person.id=team.coach order by person.name"
+    coachs = listTable(url, listSQL)
+    return render_template("coachs.html", coachs=coachs)    
+def search_coach():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
+    url = current_app.config['db_url']
+    search = request.form['search']
+    listSQL = "select * from person join team on person.id=team.coach  WHERE (person.name LIKE '%" + search + "%')"
+    coachs = listTable(url, listSQL)
+    return render_template("coachs.html", coachs=coachs)
+def coach_page(personid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
+    url = current_app.config["db_url"]
+    query = "select * from person join team on person.id=team.coach WHERE (person.id=%d)"%personid
+    result=getOneRowQuery(url,query)
+    (teamID, teamName, position) = (result[5], result[6], result[7])
+    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
+    return render_template("coach.html",coach=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName )
 def teams_page():
     if(current_app.config["signed"]==False):
         return checkSignIn()

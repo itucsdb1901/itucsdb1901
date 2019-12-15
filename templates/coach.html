@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Coach Profile{% endblock %}
+{% block headerTitle %}{{coach[1]}}{% endblock %}
+{% block subTitle %}{{coach[0]}}{% endblock %}
+{% block content %}
+    <section class="hero is-primary">
+        <div class="hero-body has-background-info">
+            <div align="center" class="container">
+                <h1 class="subtitle">{{coach.name}}</h1>
+                <h3 class="has-text-warning">Age: {{year-coach.birthDay}}</h3>
+            </div>
+
+        </div>
+
+    </section>
+    <div class="tile is-parent is-vertical">
+        <article class="tile is-child notification is-warning">
+                <table >
+                    <tr>
+                        <th>Team</th>
+                        <td>{{teamName}}</td>
+                    </tr>
+                    <tr>
+                        <th>Nationality</th>
+                        <td>{{coach.nationality}}</td>
+                    </tr>
+
+               
+                </table>
+        </article>
+    </div>
+    
+    
+{% endblock %}
