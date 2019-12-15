@@ -5,30 +5,37 @@
 {% block content %}
     <section class="hero is-primary">
         <div class="hero-body has-background-info">
-            <div align="center" class="container">
-                <h1 class="subtitle">{{coach.name}}</h1>
-                <h3 class="has-text-warning">Age: {{year-coach.birthDay}}</h3>
+            <div class="columns">
+                <div class="column is-3"></div>                   
+                <div class="column is-3">
+                    <article class="tile is-child notification is-warning" style="height:100%">
+                        <img class="tile__img" src="{{coach.personphoto}}" alt="yok" style="width: 100%" />
+                        <h1 >{{coach.name}}</h1>
+                        <h3 >Age: {{year-coach.birthDay}}</h3>
+                        
+                    </article>
+                </div>
+                <div class="column is-3" >
+                    <article class="tile is-child notification is-warning" style="height:100%">
+                        <table >
+                            <tr>
+                                <th>Team</th>
+                                <td>{{teamName}}</td>
+                            </tr>
+                            <tr>
+                                <th>Nationality</th>
+                                <td>{{coach.nationality}}</td>
+                            </tr>
+                            
+                        </table>
+                        <br><br><br><br><br><br><br><br>
+                    </article>
+                </div>
             </div>
-
         </div>
 
     </section>
-    <div class="tile is-parent is-vertical">
-        <article class="tile is-child notification is-warning">
-                <table >
-                    <tr>
-                        <th>Team</th>
-                        <td>{{teamName}}</td>
-                    </tr>
-                    <tr>
-                        <th>Nationality</th>
-                        <td>{{coach.nationality}}</td>
-                    </tr>
-
-               
-                </table>
-        </article>
-    </div>
+    
     
     
 {% endblock %}

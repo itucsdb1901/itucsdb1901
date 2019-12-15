@@ -5,26 +5,68 @@
 {% block content %}
     <section class="hero is-primary">
         <div class="hero-body has-background-info">
-            <div align="center" class="container">
-                <h1 class="subtitle">{{player.name}}</h1>
-                <h3 class="has-text-warning">Age: {{year-player.birthDay}}</h3>
-            </div>
-            <div align="center" class="container">
-                <div class="columns">
-                    <div class="column">
-                        <form method="POST" name ="delete{{player.id}}" action="/player/delete_{{player.id}}">
-                            <input class="button is-danger" type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
-                        </form>
+            <div  class="container">
+                <div class="columns"> 
+                    <div class="column is-3"></div>                   
+                    <div class="column is-3"  >
+                        <article class="tile is-child notification is-warning" style="height:100%">
+                            <img class="tile__img" src="{{player.personphoto}}" alt="yok" style="width: 100%;height:40%" />
+                            <h1 >{{player.name}}</h1>
+                            <h3 >Age: {{year-player.birthDay}}</h3>
+                            <br>
+                            <div style="align-self: flex-end;" class="columns">
+                                <div class="column is-5">
+                                    <form method="GET" name ="add_goal{{player.id}}" action="/player/add_goal_{{player.id}}">
+                                        <input class="button is-danger" type="submit" id="addgoal" name="addgoal" value="ADD GOAL" />
+                                    </form>
+                                </div>
+                                <div class="column is-5">
+                                    <form method="GET" name ="add_card_to_player{{player.id}}" action="/player/add_card_to_player_{{player.id}}">
+                                        <input class="button is-danger" type="submit" id="add_card_to_player" name="add_card_to_player" value="ADD CARD" />
+                                    </form>
+                                </div>
+                            </div>    
+                        </article>
                     </div>
-                    <div class="column">
-                        <form method="GET" name ="add_goal{{player.id}}" action="/player/add_goal_{{player.id}}">
-                            <input class="button is-danger" type="submit" id="addgoal" name="addgoal" value="ADD GOAL" />
-                        </form>
-                    </div>
-                    <div class="column">
-                        <form method="GET" name ="add_card_to_player{{player.id}}" action="/player/add_card_to_player_{{player.id}}">
-                            <input class="button is-danger" type="submit" id="add_card_to_player" name="add_card_to_player" value="ADD CARD" />
-                        </form>
+                    <div class="column is-3">
+                        <article class="tile is-child notification is-warning">
+                            
+                            <table >
+                                <tr>
+                                    <th>Team</th>
+                                    <td>{{teamName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nationality</th>
+                                    <td>{{player.nationality}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kit Number</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Position</th>
+                                    <td>{{position}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Scored Goal</th>
+                                    <td>{{scoredgoal}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Start Date</th>
+                                    <td>{{startdate}}-{{seasons}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Duration</th>
+                                    <td>{{duration}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Amount</th>
+                                    <td>{{amount}}$</td>
+                                </tr>
+                            </table>
+                            <br>
+                        </article>
                     </div>
                 </div>
                 
@@ -32,44 +74,7 @@
         </div>
 
     </section>
-    <div class="tile is-parent is-vertical">
-        <article class="tile is-child notification is-warning">
-                <table >
-                    <tr>
-                        <th>Team</th>
-                        <td>{{teamName}}</td>
-                    </tr>
-                    <tr>
-                        <th>Nationality</th>
-                        <td>{{player.nationality}}</td>
-                    </tr>
-                    <tr>
-                        <th>Kit Number</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>Position</th>
-                        <td>{{position}}</td>
-                    </tr>
-                    <tr>
-                        <th>Scored Goal</th>
-                        <td>{{scoredgoal}}</td>
-                    </tr>
-                    <tr>
-                        <th>Start Date</th>
-                        <td>{{startdate}}-{{seasons}}</td>
-                    </tr>
-                    <tr>
-                        <th>Duration</th>
-                        <td>{{duration}}</td>
-                    </tr>
-                    <tr>
-                        <th>Amount</th>
-                        <td>{{amount}}$</td>
-                    </tr>
-                </table>
-        </article>
-    </div>
+    
     
     
 {% endblock %}
