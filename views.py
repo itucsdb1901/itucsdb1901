@@ -154,8 +154,8 @@ def add_card_to_player(playerid):
     if(request.method == 'POST'):
         matchid=int(request.form['match'])
         minute=int(request.form['minute'])
-        red=bool(request.form['cardColor'])
-        query = "INSERT INTO CARD (playerid,red,matchid,minute) VALUES (%d, %r ,%d,%d)" %(playerid, red, matchid,minute)
+        red=str(request.form['cardColor'])
+        query = "INSERT INTO CARD (playerid,red,matchid,minute) VALUES (%d, %s ,%d,%d)" %(playerid, red, matchid,minute)
         executeSQLquery(url, [query])
     return render_template("add_card_to_player.html",matches=matches,playerid=playerid)
 
