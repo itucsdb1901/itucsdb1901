@@ -5,12 +5,13 @@
         <h1>Add Team</h1>
     </div>    
     <section class="hero is-medium is-primary is-bold" >
+        <br><br>
         <div class="columns">
-            <div class="column is-4"></div>
-            <div class="column is-4">
+            
+            <div class="column " style="margin-left: 40%;">
                 <form method="POST" >
                         <label>Team Name</label>
-                        <div class="field" style="width: 50%;">
+                        <div class="field" style="width: 30%;">
                             <div class="control">
                                 <input class="input is-primary" type="text" placeholder="Team name" maxlength="20">
                             </div>
@@ -55,16 +56,17 @@
                             </div>
                         </div>
                         <label>Team Logo</label>
-                        <div class="field" style="width: 50%;">
+                        <div class="field" style="width: 30%;">
                             <div class="control">
                                 <input class="input is-primary" type="text" name="teamLogo" maxlength="200" placeholder="Team logo URL">
                             </div>
                         </div>
                         
                         <input class="button is-danger" type="submit" title="Save Team" value="Save">
+                        <br><br><br>
                 </form> 
             </div>
-            <div class="column is-4"></div>
+            
         </div>    
     </section>
 {% endblock %}
