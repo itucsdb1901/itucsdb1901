@@ -1,16 +1,26 @@
 {% extends "layout.html" %}
 {% block title %}Player Added{% endblock %}
 {% block content %}
-    <h1>Add Stadium</h1>
-    <form method="POST">
-        <label>Stadium Name</label>
-        <input class="input" type="text" name="name" placeholder="Stadium Name" maxlength="20"/>
-        <label>Stadium Capacity</label>
-        <input class="input" type="number" name="capacity" placeholder="Stadium Capacity" maxlength="20"/>
-        <label>Stadium City</label>
-        <input class="input" type="text" name="city" placeholder="Stadium City" maxlength="20"/>
-        <br/>
-        <br/>
-        <input class="button is-success" type="submit" title="Save Stadium" value="Save">
-    </form> 
+        <div style="text-align: center;">
+            <h1>Add Stadium</h1>
+        </div>
+        <section class="hero is-medium is-primary is-bold" >
+        <div class="columns">
+            <div class="column is-4"></div>
+            <div class="column is-4">
+                <form method="POST">
+                    <label>Stadium Name</label>
+                    <input class="input" type="text" name="name" placeholder="Stadium Name" maxlength="20"/>
+                    <label>Stadium Capacity</label>
+                    <input class="input" type="number" name="capacity" placeholder="Stadium Capacity" maxlength="20"/>
+                    <label>Stadium City</label>
+                    <input class="input" type="text" name="city" placeholder="Stadium City" maxlength="20"/>
+                    <br/>
+                    <br/>
+                    <input class="button is-danger" type="submit" title="Save Stadium" value="Save">
+                </form> 
+            </div>
+            <div class="column is-4"></div>
+        </div>
+    </section>
 {% endblock %}

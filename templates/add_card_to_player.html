@@ -1,47 +1,62 @@
 {% extends "layout.html" %}
 {% block title %}Add Card To Player{% endblock %}
 {% block content %}
-
-    <h1>Add Card To Player</h1>
-
-    <form method="POST">
-        <div class="select">
-            <select name="cardColor">
-                <option value="0">Yellow</option>
-                <option value="1">Red</option>
-            </select>
-        </div>
-        <br>
-        <br>
-        <br>
+    <div style="text-align: center;">
+        <h1>Add Card To Player</h1>
+    </div>
+    
+    <section class="hero is-medium is-primary is-bold" >
         <div class="columns">
-            <div class="column is-3">
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-primary" name="minute" type="number" placeholder="Minute">
+            
+            <div class="column" style="margin-left: 40%;">
+
+                <form method="POST">
+                    <br><br>
+                    <div>
+                        <label >Card Color</label>
                     </div>
-                </div>
+                    
+                    <div class="select">
+                        <select name="cardColor">
+                            <option value="0">Yellow</option>
+                            <option value="1">Red</option>
+                        </select>
+                    </div>
+                    <br><br>
+                    <div>
+                        <label >Card Minute</label>
+                    </div>
+                    
+                    <div class="columns">
+                        <div class="column is-3">
+                            <div class="field" style="width: 115%;">
+                                <div class="control">
+                                    <input class="input is-primary" name="minute" type="number" placeholder="Minute">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <label >Match</label>
+                    <div class="columns">
+                        <div class="column" >
+                            <div class="select">
+                                <select name="match">
+                                        <option disabled selected value> -- select match -- </option>
+                                    {%for match in matches%}
+                                    <option value="{{match[4]}}">{{match[0]}} {{match[1]}} - {{match[2]}} {{match[3]}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div> 
+                                
+                    </div>
+                    <div class="columns">
+                        <div class="column is-one-fifth">
+                            <input class="button is-danger" type="submit" value="Add">         
+                        </div>
+                    </div>
+                    <br>
+                    
+                </form>
             </div>
-        </div>
-        <br>
-        <div class="columns">
-            <div class="column" >
-                <div class="select">
-                    <select name="match">
-                            <option disabled selected value> -- select match -- </option>
-                        {%for match in matches%}
-                        <option value="{{match[4]}}">{{match[0]}} {{match[1]}} - {{match[2]}} {{match[3]}} </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div> 
-            <br>         
-        </div>
-        <div class="columns">
-            <div class="column is-one-fifth">
-                <input type="submit" value="Add">         
-            </div>
-        </div>
-        
-    </form>
 {% endblock %}
