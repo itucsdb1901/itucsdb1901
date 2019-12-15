@@ -1,12 +1,28 @@
 from flask import Flask
+from flask_login import LoginManager
 import views
 import psycopg2 as dbapi2
 import os
+
+SECRET_KEY = "15151009163008301724"
+login_manager = LoginManager()
+db_uri = os.environ.get('DB_URI', None)
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Check if user is logged-in on every page load."""
+    if user_id is not None:
+        get_user = "SELECT * FROM ACCOUNT WHERE (username = '%s')" % user_id
+        user = views.getOneRowQuery(db_uri, get_user)
+        return user
+    return None
+
 
 def create_app():
     app = Flask(__name__)
     app.add_url_rule("/", methods=["POST", "GET"], view_func=views.home_page)
     app.add_url_rule("/login", methods=["POST", "GET"], view_func=views.checkSignIn)
+    app.add_url_rule("/signup", methods=["POST", "GET"], view_func=views.signUp)
     app.add_url_rule("/players/detail_<int:personid>", methods=["POST","GET"], view_func=views.player_page)
     app.add_url_rule("/player/add_card_to_player_<int:playerid>", methods=["POST","GET"], view_func=views.add_card_to_player)
     app.add_url_rule("/players/search_player", methods=["POST","GET"], view_func=views.search_player)
@@ -34,8 +50,9 @@ def create_app():
     app.add_url_rule("/stadiums", view_func=views.stadiums_page)
     app.add_url_rule("/stadiums/search_stadium", methods=["POST","GET"], view_func=views.search_stadium)
     app.config["signed"] = False
-    db_uri = os.environ.get('DB_URI', None)
     app.config['db_url'] = db_uri
+    app.config['SECRET_KEY'] = "15151009163008301724"
+    login_manager.init_app(app)
     return app
 
 app = create_app()
