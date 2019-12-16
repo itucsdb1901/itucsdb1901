@@ -164,7 +164,7 @@ def search_player():
         return checkSignIn()
     url = current_app.config['db_url']
     search = request.form['search']
-    listSQL = "SELECT * FROM PERSON WHERE (name LIKE '%" + search + "%')"
+    listSQL = "SELECT DISTINCT p.* FROM PERSON p JOIN SQUAD s ON ((p.id = s.personid) and (lower(p.name) LIKE '%" + search.lower() + "%')) order by p.name"
     players = listTable(url, listSQL)
     return render_template("players.html", players=players)
 
@@ -187,14 +187,14 @@ def search_coach():
         return checkSignIn()
     url = current_app.config['db_url']
     search = request.form['search']
-    listSQL = "select * from person join team on person.id=team.coach  WHERE (person.name LIKE '%" + search + "%')"
+    listSQL = "select * from person join team on person.id=team.coach  WHERE (lower(person.name) LIKE '%" + search + "%')"
     coachs = listTable(url, listSQL)
     return render_template("coachs.html", coachs=coachs)
 def coach_page(personid):
     if(current_app.config["signed"]==False):
         return checkSignIn()
     url = current_app.config["db_url"]
-    query = "select * from person join team on person.id=team.coach WHERE (person.id=%d)"%personid
+    query = "select DISTINCT * from person join team on person.id=team.coach WHERE (person.id=%d)"%personid
     result=getOneRowQuery(url,query)
     (teamID, teamName, position) = (result[5], result[6], result[7])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])

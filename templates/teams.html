@@ -91,10 +91,10 @@
     <form action="/teams/search_team" method="POST">
         <div class="columns">
             <div class="column is-one-fifth">
-                <input class="input is-info" type="text" name="search" id="search" placeholder="Search..">
+                <input class="input is-primary" type="text" name="search" id="search" onkeyup="success()" placeholder="Search..">
             </div>
             <div class="column">
-                <button class="button is-link" action='submit'>Search Teams</button>
+                <button class="button is-primary" action='submit' id="button" disabled>Search Teams</button>
             </div>
         </div>
     </form>

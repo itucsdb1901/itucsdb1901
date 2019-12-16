@@ -92,10 +92,10 @@
     <form action="/players/search_player" method="POST">
         <div class="columns">
             <div class="column is-one-fifth">
-                <input class="input is-info" type="text" name="search" id="search" placeholder="Search..">
+                <input class="input is-primary is-bold" type="text" name="search" id="search" onkeyup="success()" placeholder="Search..">
             </div>
             <div class="column">
-                <button class="button is-link" action='submit'>Search Players</button>
+                <button class="button is-primary is-bold" action='submit' id="button" disabled>Search Players</button>
             </div>
         </div>
     </form>
@@ -130,4 +130,13 @@
         
     </div>
     {% endif %}
+    <script>
+        function success() {
+         if(document.getElementById("search").value==="") { 
+                document.getElementById('button').disabled = true; 
+            } else { 
+                document.getElementById('button').disabled = false;
+            }
+        }
+    </script>
 {% endblock %}
