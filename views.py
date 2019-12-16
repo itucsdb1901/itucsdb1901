@@ -7,6 +7,19 @@ import classes
 from classes import User
 import datetime
 
+def checkSignIn():
+    if (request.method=="POST"):
+        url=current_app.config["db_url"]
+        username = request.form.get("username",False)
+        password = request.form.get("password",False)
+        checkUser="SELECT * FROM ACCOUNT WHERE(username='%s' AND password='%s' )"%(username,password)
+        result=listTable(url,checkUser)
+        if(len(result)==0):
+            return render_template("login.html")
+        else:
+            current_app.config["signed"] = True
+            return home_page()
+    return render_template("login.html")
 
 
 def executeSQLquery(url, statements):
@@ -107,12 +120,26 @@ def home_page():
 
 def matches_page():
     url = current_app.config['db_url']
-    query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid 
+    query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid ,m.id 
                 FROM match m, team t1, team t2, stadium std, league lg
                     WHERE (m.homeid = t1.id AND m.awayid = t2.id 
                         AND m.stadiumid = std.id AND m.leagueid = lg.id) ORDER BY lg.name ASC'''
     matches = listTable(url, query)
     return render_template("matches.html", matches = matches, user=current_user)
+
+def match_detail(matchid):
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
+    url = current_app.config["db_url"]
+    query="SELECT t1.name as home,t2.name as away,m.homescore,m.awayscore FROM MATCH m join team t1 on (t1.id=m.homeid) join team t2 on (t2.id=m.awayid) WHERE (m.id=%d)"%matchid
+    teams = listTable(url,query)
+    query="SELECT p.name,c.red,c.minute FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
+    cards = listTable(url, query)
+    query="SELECT p.name as playername,g.minute,t.name as teamname FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
+    goals = listTable(url,query)
+    query="SELECT p1.name as outname,p2.name as inname,s.minute FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
+    substitutions = listTable(url,query)
+    return render_template("match_detail.html",cards=cards,goals=goals,substitutions=substitutions,teams=teams)
 
 def player_page(personid):
     url = current_app.config["db_url"]
