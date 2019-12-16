@@ -1,19 +1,37 @@
 {% extends "layout.html" %}
 {% block title %}Add Person{% endblock %}
 {% block content %}
-    <h1>Add Person</h1>
-
-    <form method="POST"  >
-        <label>Name: </label>
-        <input class="input" name="name" id="name" type="text" />
-        <label>Birth Year: </label>
-        <input class="input" name="birthyear" id="birthyear" type="number" />
-        <label>Nationality:</label>
-        <input class="input" name="nationality" id="nationality" type= "text" />
-        <label>Person Photo Url:</label>
-        <input class="input" name="personphoto" id="personphoto" type= "text" />
-        <br/>
-        <br/>
-        <input class="button is-success" value="Save" type="submit"/>
-    </form>
+    <div style="text-align: center;">
+        <h1>Add Person</h1>
+    </div>
+    
+    <section class="hero is-medium is-primary is-bold">
+        <br>
+        <div class="columns">
+            <div class="column is-4"></div>
+            <div class="column is-4">
+                <br>
+                <article class="tile is-child notification is-warning" >
+                    <form method="POST"  >
+                        <label>Name: </label>
+                        <input class="input" name="name" id="name" type="text" />
+                        <label>Birth Year: </label>
+                        <input class="input" name="birthyear" id="birthyear" type="number" />
+                        <label>Nationality:</label>
+                        <input class="input" name="nationality" id="nationality" type= "text" />
+                        <label>Person Photo Url:</label>
+                        <input class="input" name="personphoto" id="personphoto" type= "text" />
+                        <br/>
+                        <br/>
+                        <input class="button is-danger" value="Save" type="submit"/>
+                    </form>
+                </article>
+                
+            </div>
+            <br>
+            <div class="column is-4"></div>
+            
+        </div> 
+        <br><br>   
+    </section>        
 {% endblock %}

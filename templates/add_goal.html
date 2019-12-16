@@ -1,55 +1,67 @@
 {% extends "layout.html" %}
 {% block title %}Add Goal{% endblock %}
 {% block content %}
-    <h1>Add Goal to {{person.name}}</h1>
-    <form method="POST">
-        
-            <div class="column is-4">
-                <label>Select Match</label>
-                <div class="field">
-                    <div class="control">
-                        <div class="select is-primary">
-                            <select name="matchid">
-                                <option disabled selected value> -- select match -- </option>
-                            {% for match in matches %}
-                                <option value="{{match[0]}}">{{match[1]}} {{match[3]}}-{{match[4]}} {{match[2]}}</option>
-                            {%endfor%}
-                            </select>
+    <div style="text-align: center;">
+        <h1>Add Goal to {{person.name}}</h1> 
+        <br><br>      
+    </div>
+
+    <section class="hero is-medium is-primary is-bold" >
+        <div class="columns">
+            
+            <div class="column" style="margin-left: 35%;">
+                <form method="POST">
+                    
+                        <div class="column ">
+                            <label>Select Match</label>
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-primary">
+                                        <select name="matchid">
+                                            <option disabled selected value> -- select match -- </option>
+                                        {% for match in matches %}
+                                            <option value="{{match[0]}}">{{match[1]}} {{match[3]}}-{{match[4]}} {{match[2]}}</option>
+                                        {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="column is-4">
-                <label>Select Assist</label>
-                <div class="field">
-                    <div class="control">
-                        <div class="select is-primary">
-                            <select name="assistPlayerid">
-                                <option disabled selected value> -- select assist owner -- </option>
-                            {% for player in assistPlayers %}
-                                <option value="{{player[0]}}">{{player[1]}}</option>
-                            {%endfor%}
-                            </select>
+                        <div class="column">
+                            <label>Select Assist</label>
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-primary">
+                                        <select name="assistPlayerid">
+                                            <option disabled selected value> -- select assist owner -- </option>
+                                        {% for player in assistPlayers %}
+                                            <option value="{{player[0]}}">{{player[1]}}</option>
+                                        {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="column is-2">
-                <label>Minute</label>
-                <div class="field">
-                    <input class="input" type="number" name="minute"/>
-                </div>
+                        <div class="column">
+                            <label>Minute</label>
+                            <div class="field" style="width:27%;">
+                                <input class="input" type="number" name="minute"/>
+                            </div>
+                            
+                        </div>
+                        <div class="column">
+                            
+                            <div calss="field">
+                                <input class="button is-danger" type="submit" value="SAVE GOAL"/>
+                            </div>
+                            <br>
+                            
+                        </div>
                 
+                </form>
             </div>
-            <div class="column is-2">
-                <label>Save</label>
-                <div calss="field">
-                    <input type="submit" value="SAVE GOAL"/>
-                </div>
-                
-            </div>
-       
-    </form>
+        </div>
+    </section>
             
             
 {% endblock %}

@@ -1,58 +1,72 @@
 {% extends "layout.html" %}
 {% block title %}Player Added{% endblock %}
 {% block content %}
-    <h1>Add Team</h1>
-    <form method="POST">
-            <div class="field">
-                <div class="control">
-                    <input class="input is-primary" type="text" placeholder="Team name" maxlength="20">
-                </div>
-            </div>
-            <label>Stadium</label>
-            <div class="field">
-                <div class="control">
-                    <div class="select is-primary">
-                        <select name="stadium">
-                            <option disabled selected value> -- select stadium -- </option>
-                            {% for stadium in stadiums %}
-                                <option value="{{stadium[0]}}">{{stadium[1]}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <label>League</label>
-            <div class="field">
-                <div class="control">
-                    <div class="select is-primary">
-                        <select name="league">
-                            <option disabled selected value> -- select league -- </option>
-                            {% for league in leagues %}
-                                <option value="{{league[0]}}">{{league[1]}} - {{league[3]}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <label>Coach</label>
-            <div class="field">
-                <div class="control">
-                    <div class="select is-primary">
-                        <select name="coach">
-                            <option disabled selected value> -- select coach -- </option>
-                            {% for person in people %}
-                                <option value="{{person[0]}}">{{person[1]}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <input class="input is-primary" type="text" name="teamLogo" maxlength="200" placeholder="Team logo URL">
-                </div>
+    <div style="text-align: center;">
+        <h1>Add Team</h1>
+    </div>    
+    <section class="hero is-medium is-primary is-bold" >
+        <br><br>
+        <div class="columns">
+            
+            <div class="column " style="margin-left: 40%;">
+                <form method="POST" >
+                        <label>Team Name</label>
+                        <div class="field" style="width: 30%;">
+                            <div class="control">
+                                <input class="input is-primary" type="text" placeholder="Team name" maxlength="20">
+                            </div>
+                        </div>
+                        <label>Stadium</label>
+                        <div class="field" >
+                            <div class="control">
+                                <div class="select is-primary" >
+                                    <select name="stadium" >
+                                        <option disabled selected value  > -- select stadium -- </option>
+                                        {% for stadium in stadiums %}
+                                            <option value="{{stadium[0]}}">{{stadium[1]}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <label>League</label>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-primary">
+                                    <select name="league">
+                                        <option disabled selected value> -- select league -- </option>
+                                        {% for league in leagues %}
+                                            <option value="{{league[0]}}">{{league[1]}} - {{league[3]}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <label>Coach</label>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-primary">
+                                    <select name="coach">
+                                        <option disabled selected value> -- select coach -- </option>
+                                        {% for person in people %}
+                                            <option value="{{person[0]}}">{{person[1]}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <label>Team Logo</label>
+                        <div class="field" style="width: 30%;">
+                            <div class="control">
+                                <input class="input is-primary" type="text" name="teamLogo" maxlength="200" placeholder="Team logo URL">
+                            </div>
+                        </div>
+                        
+                        <input class="button is-danger" type="submit" title="Save Team" value="Save">
+                        <br><br><br>
+                </form> 
             </div>
             
-            <input class="button is-success" type="submit" title="Save Team" value="Save">
-        </form> 
+        </div>    
+    </section>
 {% endblock %}

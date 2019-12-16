@@ -1,88 +1,102 @@
 {% extends "layout.html" %}
 {% block title %}Add Match{% endblock %}
 {% block content %}
-    <h1>Add Team</h1>
-    <form method="POST">
-        <div class="columns">
-            <div class="column is-2">
-                <label>Home Team</label>
-                <div class="field">
-                    <div class="control">
-                        <div class="select is-primary">
-                            <select name="hometeamid">
-                                    <option disabled selected value> -- select hometeam -- </option>
-                                {% for team in teams %}
-                                    <option value="{{team[0]}}">{{team[1]}}</option>
-                                {%endfor%}
-                            </select>
+    <div style="text-align: center;">
+        <h1>Add Team</h1>
+    </div>
+    <section class="hero is-medium is-primary is-bold" >
+        <br><br>
+        <div class="columns" style="margin-left: 20%;">
+            
+            <div class="column" >
+                <form method="POST">
+                    <div class="columns">
+                        <div class="column is-2">
+                            <label>Home Team</label>
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-primary">
+                                        <select name="hometeamid">
+                                                <option disabled selected value>select hometeam</option>
+                                            {% for team in teams %}
+                                                <option value="{{team[0]}}">{{team[1]}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-2">
+                            <label>Away Team</label>
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-primary">
+                                        <select name="awayteamid">
+                                                <option disabled selected value>select awayteam</option>
+                                            {% for team in teams %}
+                                                <option value="{{team[0]}}">{{team[1]}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>       
+                    </div>
+                    <div class="columns">
+                        <div class="column is-2">
+                            <label>Home Score</label>
+                            <input class="input" name="homescore" type="number" placeholder="Home Score"/>
+                        </div>
+                        <div class="column is-2">
+                            <label>Away Score</label>
+                            <input class="input" name="awayscore" type="number" placeholder="Home Score"/>
                         </div>
                     </div>
-                </div>
+                    <div class="columns">
+                        <div class="column is-2">
+                            <label>Stadium</label>
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-primary">
+                                        <select name="stadiumid">
+                                                <option disabled selected value>select stadium</option>
+                                            {% for stadium in stadiums %}
+                                                <option value="{{stadium[0]}}">{{stadium[1]}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-2">
+                            <label>League</label>
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-primary">
+                                        <select name="leagueid">
+                                                <option disabled selected value>select league</option>
+                                            {% for league in leagues %}
+                                                <option value="{{league[0]}}">{{league[1]}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>       
+                    </div>
+                    <div>
+                        <label>Match Date</label>
+                    </div>
+                    <input class="input" name="matchdate" type="date" placeholder="Match Date" style="width: 33%;"/>
+                    <br/>
+                    <br/>
+                    <input class="button is-danger" type="submit" value="Save Match" />
+                    <br><br>
+                </form>
             </div>
-            <div class="column is-2">
-                <label>Away Team</label>
-                <div class="field">
-                    <div class="control">
-                        <div class="select is-primary">
-                            <select name="awayteamid">
-                                    <option disabled selected value> -- select awayteam -- </option>
-                                {% for team in teams %}
-                                    <option value="{{team[0]}}">{{team[1]}}</option>
-                                {%endfor%}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>       
+            
         </div>
-        <div class="columns">
-            <div class="column is-2">
-                <label>Home Score</label>
-                <input class="input" name="homescore" type="number" placeholder="Home Score"/>
-            </div>
-            <div class="column is-2">
-                <label>Away Score</label>
-                <input class="input" name="awayscore" type="number" placeholder="Home Score"/>
-            </div>
-        </div>
-        <div class="columns">
-            <div class="column is-2">
-                <label>Stadium</label>
-                <div class="field">
-                    <div class="control">
-                        <div class="select is-primary">
-                            <select name="stadiumid">
-                                    <option disabled selected value> -- select stadium -- </option>
-                                {% for stadium in stadiums %}
-                                    <option value="{{stadium[0]}}">{{stadium[1]}}</option>
-                                {%endfor%}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="column is-2">
-                <label>League</label>
-                <div class="field">
-                    <div class="control">
-                        <div class="select is-primary">
-                            <select name="leagueid">
-                                    <option disabled selected value> -- select league -- </option>
-                                {% for league in leagues %}
-                                    <option value="{{league[0]}}">{{league[1]}}</option>
-                                {%endfor%}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>       
-        </div>
-        <label>Match Date</label>
-        <input class="input" name="matchdate" type="date" placeholder="Match Date"/>
-        <br/>
-        <br/>
-        <input class="button is-danger" type="submit" value="Save Match" />
-    </form>
+    </section>
             
             
 {% endblock %}

@@ -1,18 +1,34 @@
 {% extends "layout.html" %}
 {% block title %}Add League{% endblock %}
 {% block content %}
-    <h1>Add League</h1>
-    <form method="POST" >
-        <label>Name: </label>
-        <input class="input" name="name" id="name" type="text" />
-        <br>
-        <label>Team count: </label>
-        <input class="input" name="teamcount" id="teamcount" type="number" />
-        <br>
-        <label>Country: </label>
-        <input class="input" name="country" id="country" type= "text" />
-        <br/>
-        <br/>
-        <input class="button is-success" value="Save" type="submit"/>
-    </form>
+    <div style="text-align: center;">
+        <h1>Add League</h1>
+    </div>
+
+    <section class="hero is-medium is-primary is-bold">
+        <div class="columns">
+            <div class="column is-4"></div>
+
+            <div class="column is-4">
+                <br><br>
+                <article class="tile is-child notification is-warning" >
+                    <form method="POST" >
+                        <label>Name: </label>
+                        <input class="input" name="name" id="name" type="text" />
+                        <br>
+                        <label>Team count: </label>
+                        <input class="input" name="teamcount" id="teamcount" type="number" />
+                        <br>
+                        <label>Country: </label>
+                        <input class="input" name="country" id="country" type= "text" />
+                        <br/>
+                        <br/>
+                        <input class="button is-danger" value="Save" type="submit"/>
+                    </form>
+                </article>
+                <br><br>
+            </div>
+            <div class="column is-4"></div>
+        </div>    
+    </section>
 {% endblock %}
