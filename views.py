@@ -128,8 +128,6 @@ def matches_page():
     return render_template("matches.html", matches = matches, user=current_user)
 
 def match_detail(matchid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config["db_url"]
     query="SELECT t1.name as home,t2.name as away,m.homescore,m.awayscore FROM MATCH m join team t1 on (t1.id=m.homeid) join team t2 on (t2.id=m.awayid) WHERE (m.id=%d)"%matchid
     teams = listTable(url,query)
