@@ -137,7 +137,7 @@ def match_detail(matchid):
     goals = listTable(url,query)
     query="SELECT p1.name as outname,p2.name as inname,s.minute FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
     substitutions = listTable(url,query)
-    return render_template("match_detail.html",cards=cards,goals=goals,substitutions=substitutions,teams=teams)
+    return render_template("match_detail.html",cards=cards,goals=goals,substitutions=substitutions,teams=teams,user=current_user)
 
 def player_page(personid):
     url = current_app.config["db_url"]
