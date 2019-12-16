@@ -47,22 +47,6 @@ def getOneRowQuery(url,statement):
 
 
 
-
-
-def checkSignIn():
-    if (request.method=="POST"):
-        url=current_app.config["db_url"]
-        username = request.form.get("username",False)
-        password = request.form.get("password",False)
-        checkUser="SELECT * FROM ACCOUNT WHERE(username='%s' AND password='%s' )"%(username,password)
-        result=listTable(url,checkUser)
-        if(len(result)==0):
-            return render_template("login.html")
-        else:
-            current_app.config["signed"] = True
-            return home_page()
-    return render_template("login.html")
-
 def signUp():
     if(request.method == "POST"):
         url=current_app.config["db_url"]
