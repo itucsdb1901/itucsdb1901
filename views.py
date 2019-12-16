@@ -1,7 +1,10 @@
-from flask import render_template, request, current_app
+from flask import render_template, request, current_app, redirect
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_required, logout_user, current_user, login_user
 import sys
 import psycopg2 as dbapi2
 import classes
+from classes import User
 import datetime
 
 def checkSignIn():
@@ -17,6 +20,7 @@ def checkSignIn():
             current_app.config["signed"] = True
             return home_page()
     return render_template("login.html")
+
 
 def executeSQLquery(url, statements):
     with dbapi2.connect(url) as connection:
@@ -40,6 +44,41 @@ def getOneRowQuery(url,statement):
         result= cursor.fetchone()
         cursor.close()
     return result
+
+
+
+
+
+def checkSignIn():
+    if (request.method=="POST"):
+        url=current_app.config["db_url"]
+        username = request.form.get("username",False)
+        password = request.form.get("password",False)
+        checkUser="SELECT * FROM ACCOUNT WHERE(username='%s' AND password='%s' )"%(username,password)
+        result=listTable(url,checkUser)
+        if(len(result)==0):
+            return render_template("login.html")
+        else:
+            current_app.config["signed"] = True
+            return home_page()
+    return render_template("login.html")
+
+def signUp():
+    if(request.method == "POST"):
+        url=current_app.config["db_url"]
+        username = request.form.get("username",False)
+        password = request.form.get("password",False)
+        checkExist = "SELECT username FROM ACCOUNT WHERE (username = '%s')" %(username)
+        checkExist = getOneRowQuery(url, checkExist)
+        if(checkExist is not None):
+            return render_template("signup.html", error=1)
+        password = generate_password_hash(password, method="sha256")
+        saveUser = "INSERT INTO ACCOUNT (username, password) VALUES ('%s', '%s')"%(username, password)
+        executeSQLquery(url, [saveUser])
+        user = User(username=username, password=password)
+        login_user(user, force=False)
+        return redirect('/')
+    return render_template("signup.html", error=0)
 
 def delete_player(personid):
     if(current_app.config["signed"]==False):
