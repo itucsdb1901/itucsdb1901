@@ -7,10 +7,10 @@
     <form action="/stadiums/search_stadium" method="POST">
         <div class="columns">
             <div class="column is-one-fifth">
-                <input class="input is-info" type="text" name="search" id="search" placeholder="Search..">
+                <input class="input is-primary" type="text" name="search" id="search" onkeyup="success()" placeholder="Search..">
             </div>
             <div class="column">
-                <button class="button is-link" action='submit'>Search Stadium</button>
+                <button class="button is-primary" action='submit' id="button" disabled>Search Stadium</button>
             </div>
         </div>
     </form>
@@ -33,7 +33,15 @@
             {%endfor%}    
     </table>
 
-
+<script>
+    function success() {
+	 if(document.getElementById("search").value==="") { 
+            document.getElementById('button').disabled = true; 
+        } else { 
+            document.getElementById('button').disabled = false;
+        }
+    }
+</script>
 
 
 {% endblock %}
