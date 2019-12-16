@@ -90,7 +90,7 @@
 <div class="main">
 <div class="col-md-6 col-sm-12">
     <div class="login-form">
-        <form method="POST" action="/">
+        <form method="POST" action="/login">
             <div class="form-group">
             <label>User Name</label>
             <input type="text" class="form-control" placeholder="User Name" name="username">
@@ -105,6 +105,14 @@
     </div>
 </div>
 </div>
+
+{% if error == 1 %}
+        <script>
+            alert("Password or username is invalid!")
+            location.href = "/login"
+        </script>
+{% endif %}
+
 
 <script type="text/javascript">
     document.getElementById("goSignUp").onclick = function(){

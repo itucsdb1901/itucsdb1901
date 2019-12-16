@@ -68,6 +68,13 @@
                   </a>
                 </div>
               </div>
+              {% if (user.is_active) %}
+                <p class="navbar-item" id="welcome">Welcome! {{user.username}}</p> 
+                <a class="navbar-item" id="session" href="/logout">Log out</a>
+              {%else%}
+              <p class="navbar-item" id="welcome">Welcome Guest!</p> 
+              <a class="navbar-item" id="session" href="/login">Log in</a>
+              {% endif %}
             </div>
           </div>
         
