@@ -20,7 +20,11 @@
             <td><a class="has-text-info" href="/teams/detail_{{match[8]}}">{{match[1]}}</a></td>
             <td>{{match[4]}}</td>
             <td>{{match[5]}}</td>
-            <td><button class="button is-danger">Detail</button></td>
+            <td>
+                <form method="POST" name ="detail{{match[9]}}" action="/match_detail_{{match[9]}}">
+                    <button class="button is-danger" action="submit" id="detailButton" name="detailButton" >See Detail</button>
+                </form>
+            </td>
         </tr>
         {%endfor%}    
     </table>

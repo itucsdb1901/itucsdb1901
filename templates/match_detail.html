@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}Player Profile{% endblock %}
+{% block headerTitle %}{{player[1]}}{% endblock %}
+{% block subTitle %}{{player[0]}}{% endblock %}
+{% block content %}
+    <table class="table is-hoverable">
+        <tr>
+            <th>Name</th>
+            <th>Red</th>
+            <th>Minute</th>
+        </tr>
+        {%for card in cards%}
+        <tr>
+            <td>{{card[0]}}</td>
+            <td>{{card[1]}}</td>
+            <td>{{card[2]}}</td>
+        
+        </tr>
+        {%endfor%}    
+    </table>
+    <table class="table is-hoverable">
+        <tr>
+            <th>Name</th>
+            <th>Minute</th>
+        </tr>
+        {%for goal in goals%}
+        <tr>
+            <td>{{goal[0]}}</td>
+            <td>{{goal[1]}}</td>
+        
+        </tr>
+        {%endfor%}    
+    </table>
+    <table class="table is-hoverable">
+        <tr>
+            <th>Out Player Name</th>
+            <th>In Player Name</th>
+            <th>Minute</th>
+        </tr>
+        {%for substitution in substitutions%}
+        <tr>
+            <td>{{substitution[0]}}</td>
+            <td>{{substitution[1]}}</td>
+            <td>{{substitution[2]}}</td>
+        
+        </tr>
+        {%endfor%}    
+    </table>
+    
+    
+{% endblock %}
