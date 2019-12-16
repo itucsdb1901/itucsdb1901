@@ -93,17 +93,23 @@ def player_page(personid):
     query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     goal = " select count(*) from goal left join person on(goal.playerid = person.id) where(person.id=%d)"%personid
     query2="select * from negotitation where personid=%d"%personid
+    redcard = "select count(*) from card left join person on(card.playerid = person.id) where(person.id=%d) and (card.red=true)"%personid
+    yellowcard = "select count(*) from card left join person on(card.playerid = person.id) where(person.id=%d) and (card.red=false)"%personid
     result=getOneRowQuery(url,query)
     number_goal=getOneRowQuery(url,goal)
     negotitation = getOneRowQuery(url,query2)
+    yellowcardy = getOneRowQuery(url,yellowcard)
+    redcardy = getOneRowQuery(url,redcard)
     amount=negotitation[4]
     duration=negotitation[3]
     startdate=negotitation[5]
     seasons=startdate+1
     scoredgoal=number_goal[0]
+    yellowcardx = yellowcardy[0]
+    redcardx = redcardy[0]
     (teamID, teamName, position) = (result[5], result[6], result[7])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
-    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal,amount=amount,duration=duration,startdate=startdate,seasons=seasons )
+    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal,amount=amount,duration=duration,startdate=startdate,seasons=seasons,redcardx=redcardx,yellowcardx=yellowcardx )
 
 def add_goal(personid):
     checkSignIn()
@@ -213,8 +219,14 @@ def search_team():
     search = request.form['search']
     listSQL = "SELECT * FROM TEAM WHERE (name LIKE '%" + search + "%')"
     teams = listTable(url, listSQL)
-    return render_template("teams.html", teams=teams)   
-
+    return render_template("teams.html", teams=teams)
+def teamsearchx():
+    if(current_app.config["signed"]==False):
+        return checkSignIn()
+    url = current_app.config['db_url']
+    listSQL = "SELECT * FROM TEAM"
+    teams = listTable(url, listSQL)
+    return render_template("players.html", teams=teams)  
 def team_page(teamid):
     if(current_app.config["signed"]==False):
         return checkSignIn()
