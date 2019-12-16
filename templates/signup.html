@@ -109,6 +109,12 @@
 </div>
 </div>
 
+{% if error == 2 %}
+        <script>
+            alert("Please sign up to reach the content!");
+        </script>
+{% endif %}
+
 {% if error == 1 %}
         <script>
             alert("This username is already exist, please sign in!");

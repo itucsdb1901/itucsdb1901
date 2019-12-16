@@ -1,4 +1,4 @@
-from flask import render_template, request, current_app, redirect
+from flask import render_template, request, current_app, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, logout_user, current_user, login_user
 import sys
@@ -34,20 +34,22 @@ def getOneRowQuery(url,statement):
 
 
 
-
-
 def checkSignIn():
     if (request.method=="POST"):
         url=current_app.config["db_url"]
         username = request.form.get("username",False)
         password = request.form.get("password",False)
-        checkUser="SELECT * FROM ACCOUNT WHERE(username='%s' AND password='%s' )"%(username,password)
-        result=listTable(url,checkUser)
-        if(len(result)==0):
-            return render_template("login.html")
+        checkUser="SELECT * FROM ACCOUNT WHERE(username='%s')"%(username)
+        result=getOneRowQuery(url,checkUser)
+        if(result is not None):
+            if check_password_hash(result[2], password):
+                user = User(username, result[2])
+                login_user(user)            
+                return redirect('/')
+            else:
+                return render_template("login.html", error = 1)
         else:
-            current_app.config["signed"] = True
-            return home_page()
+            return render_template("signup.html", error = 2)
     return render_template("login.html")
 
 def signUp():
@@ -58,28 +60,30 @@ def signUp():
         checkExist = "SELECT username FROM ACCOUNT WHERE (username = '%s')" %(username)
         checkExist = getOneRowQuery(url, checkExist)
         if(checkExist is not None):
-            return render_template("signup.html", error=1)
+            return render_template("signup.html", error=1, user = current_user)
         password = generate_password_hash(password, method="sha256")
         saveUser = "INSERT INTO ACCOUNT (username, password) VALUES ('%s', '%s')"%(username, password)
         executeSQLquery(url, [saveUser])
         user = User(username=username, password=password)
-        login_user(user, force=False)
+        login_user(user)
         return redirect('/')
-    return render_template("signup.html", error=0)
+    return render_template("signup.html", error=0, user = current_user)
 
+@login_required
+def logOut():
+    logout_user()
+    return home_page()
+
+
+@login_required
 def delete_player(personid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     query = 'DELETE FROM PERSON WHERE (id=%d)'%personid
     executeSQLquery(url, [query])
     return players_page()
 
-
 def home_page():
     url=current_app.config["db_url"]
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     person_count = "SELECT COUNT(*) FROM PERSON"
     person_count = (listTable(url, person_count)[0][0])
     leagues_count  ="SELECT COUNT(*) FROM LEAGUE"
@@ -96,24 +100,21 @@ def home_page():
                 "matches_count":matches_count,
                 "stadiums_count":stadiums_count,
                 "goals_count":goals_count,
+                "current_user":current_user
 
                 }
-    return render_template("home.html", arguments=arguments)
+    return render_template("home.html", arguments=arguments, user=current_user)
 
 def matches_page():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid 
                 FROM match m, team t1, team t2, stadium std, league lg
                     WHERE (m.homeid = t1.id AND m.awayid = t2.id 
                         AND m.stadiumid = std.id AND m.leagueid = lg.id) ORDER BY lg.name ASC'''
     matches = listTable(url, query)
-    return render_template("matches.html", matches = matches)
+    return render_template("matches.html", matches = matches, user=current_user)
 
 def player_page(personid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config["db_url"]
     query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     goal = " select count(*) from goal left join person on(goal.playerid = person.id) where(person.id=%d)"%personid
@@ -134,10 +135,10 @@ def player_page(personid):
     redcardx = redcardy[0]
     (teamID, teamName, position) = (result[5], result[6], result[7])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
-    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal,amount=amount,duration=duration,startdate=startdate,seasons=seasons,redcardx=redcardx,yellowcardx=yellowcardx )
+    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal,amount=amount,duration=duration,startdate=startdate,seasons=seasons,redcardx=redcardx,yellowcardx=yellowcardx, user=current_user )
 
+@login_required
 def add_goal(personid):
-    checkSignIn()
     url = current_app.config["db_url"]
     infoQuery = "SELECT p.*, t.id, t.name FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,infoQuery)
@@ -172,11 +173,10 @@ def add_goal(personid):
         goalID = int(getOneRowQuery(url, findGoalIDSQL)[0])
         addAssistQuery = "INSERT INTO ASSIST (playerid, goalid) VALUES (%d, %d)"%(assistPlayerID, goalID)
         executeSQLquery(url, [addAssistQuery])
-    return render_template("add_goal.html", matches=matches, person=person, assistPlayers = assistPlayers)
+    return render_template("add_goal.html", matches=matches, person=person, assistPlayers = assistPlayers, user=current_user)
 
+@login_required
 def add_card_to_player(playerid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url=current_app.config['db_url']
     getMatchesSQL='''SELECT a.name,match.homescore,match.awayscore,b.name,match.id FROM MATCH,TEAM a,TEAM b,PERSON,SQUAD 
     WHERE(a.id=match.homeid and b.id=match.awayid and person.id=%d and person.id=squad.personid and 
@@ -188,92 +188,73 @@ def add_card_to_player(playerid):
         red=str(request.form['cardColor'])
         query = "INSERT INTO CARD (playerid,red,matchid,minute) VALUES (%d, %s ,%d,%d)" %(playerid, red, matchid,minute)
         executeSQLquery(url, [query])
-    return render_template("add_card_to_player.html",matches=matches,playerid=playerid)
+    return render_template("add_card_to_player.html",matches=matches,playerid=playerid, user=current_user)
 
 def search_player():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     search = request.form['search']
     listSQL = "SELECT DISTINCT p.* FROM PERSON p JOIN SQUAD s ON ((p.id = s.personid) and (lower(p.name) LIKE '%" + search.lower() + "%')) order by p.name"
     players = listTable(url, listSQL)
-    return render_template("players.html", players=players)
+    return render_template("players.html", players=players, user=current_user)
 
 def players_page():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     listSQL = "SELECT DISTINCT p.* FROM PERSON p JOIN SQUAD s ON (p.id = s.personid) order by name"
     players = listTable(url, listSQL)
-    return render_template("players.html", players=players)
+    return render_template("players.html", players=players, user=current_user)
+
 def coachs_page():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     listSQL = "select * from person join team on person.id=team.coach order by person.name"
     coachs = listTable(url, listSQL)
-    return render_template("coachs.html", coachs=coachs)    
+    return render_template("coachs.html", coachs=coachs, user=current_user)    
+
 def search_coach():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     search = request.form['search']
     listSQL = "select * from person join team on person.id=team.coach  WHERE (lower(person.name) LIKE '%" + search + "%')"
     coachs = listTable(url, listSQL)
-    return render_template("coachs.html", coachs=coachs)
+    return render_template("coachs.html", coachs=coachs, user=current_user)
+
 def coach_page(personid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config["db_url"]
     query = "select DISTINCT * from person join team on person.id=team.coach WHERE (person.id=%d)"%personid
     result=getOneRowQuery(url,query)
     (teamID, teamName, position) = (result[5], result[6], result[7])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
-    return render_template("coach.html",coach=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName )
+    return render_template("coach.html",coach=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, user=current_user)
+
 def teams_page():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     listSQL = "SELECT t.id, t.name, t.teamlogo,l.name as leaguename FROM TEAM t LEFT JOIN LEAGUE l ON (t.leagueid = l.id)"
     teams = listTable(url, listSQL)
-    return render_template("teams.html", teams=teams)
+    return render_template("teams.html", teams=teams, user=current_user)
+
 def search_team():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     search = request.form['search']
     listSQL = "SELECT * FROM TEAM WHERE (name LIKE '%" + search + "%')"
     teams = listTable(url, listSQL)
-    return render_template("teams.html", teams=teams)
-def teamsearchx():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
-    url = current_app.config['db_url']
-    listSQL = "SELECT * FROM TEAM"
-    teams = listTable(url, listSQL)
-    return render_template("players.html", teams=teams)  
+    return render_template("teams.html", teams=teams, user=current_user)
+
 def team_page(teamid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config["db_url"]
     query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country,teamlogo FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
     result=getOneRowQuery(url,query)
     getSquadSQL="SELECT DISTINCT p.name,s.position,p.id FROM person p,squad s,team t where(p.id=s.personid and s.teamid=%d)"%teamid
     squad=listTable(url,getSquadSQL)
     team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3],teamLogo=result[6])
-    return render_template("team.html",team=team,country=result[5],squad=squad)
+    return render_template("team.html",team=team,country=result[5],squad=squad, user=current_user)
 
+@login_required
 def delete_team(teamid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     query = 'DELETE FROM TEAM WHERE (id=%d)'%teamid
     executeSQLquery(url, [query])
     return teams_page()
 
+@login_required
 def add_player_to_squad(teamid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     teamSQL = "SELECT id, name FROM team WHERE id=%d" %teamid
     getPlayerListSQL = '''
@@ -294,11 +275,10 @@ def add_player_to_squad(teamid):
         query2 ="INSERT INTO negotitation (personid,teamid,duration,amount,startdate) VALUES (%d,%d,%d,%d,%d)" %(playerid,teamid,duration,amount,startdate)
         executeSQLquery(url, [query])
         executeSQLquery(url, [query2])
-    return render_template("add_player_to_squad.html",playerList=playerList,team=team)
+    return render_template("add_player_to_squad.html",playerList=playerList,team=team, user=current_user)
 
+@login_required
 def delete_player_from_squad(playerid):
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     getTeamIDSQL="SELECT teamid from squad where personid=%d"%playerid
     teamid=listTable(url,getTeamIDSQL)
@@ -308,10 +288,8 @@ def delete_player_from_squad(playerid):
     executeSQLquery(url,[query2])
     return team_page(teamid[0])
 
-
+@login_required
 def add_person():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     if(request.method=='POST'):
         name=request.form["name"]
         birthyear=int(request.form["birthyear"])
@@ -321,15 +299,13 @@ def add_person():
         statement=[query]
         url=current_app.config["db_url"]
         executeSQLquery(url,statement)
-    return render_template("add_person.html")
+    return render_template("add_person.html", user=current_user)
 
 def leagues_page():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config["db_url"]
     listSQL = "SELECT * FROM LEAGUE "
     leagues = listTable(url, listSQL)
-    return render_template("leagues.html",leagues=leagues)
+    return render_template("leagues.html",leagues=leagues, user=current_user)
 
 def league(leagueid):
     url=current_app.config["db_url"]
@@ -337,11 +313,10 @@ def league(leagueid):
     getleaguename= "select name from league where (id=%d)"%leagueid
     leaguename= listTable(url,getleaguename)[0][0]
     standing=listTable(url,query)
-    return render_template("league.html",leaguename=leaguename,standing=standing)
+    return render_template("league.html",leaguename=leaguename,standing=standing, user=current_user)
 
+@login_required
 def add_league():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     if(request.method=='POST'):
         name=request.form["name"]
         teamcount=int(request.form["teamcount"])
@@ -350,11 +325,10 @@ def add_league():
         statement=[query]
         url=current_app.config["db_url"]
         executeSQLquery(url,statement)
-    return render_template("add_league.html")
+    return render_template("add_league.html", user=current_user)
 
+@login_required
 def add_team():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     getPeopleSQL = "SELECT * FROM person"
     getStadiumsSQL = "SELECT * FROM stadium"
@@ -374,11 +348,10 @@ def add_team():
         teamID = int(listTable(url, getTeamID)[0][0])
         query2 = "insert into standing (teamid, leagueid, win, lose, draw, scoredgoals, againstgoals) values (%d, %d, 0, 0, 0, 0, 0)"%(teamID, leagueid)
         executeSQLquery(url, [query2])
-    return render_template("add_team.html", stadiums = stadiums, leagues = leagues, people = people)
+    return render_template("add_team.html", stadiums = stadiums, leagues = leagues, people = people, user=current_user)
 
+@login_required
 def add_match():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     getTeamSQL = "SELECT * FROM team"
     getStadiumsSQL = "SELECT * FROM stadium"
@@ -406,11 +379,10 @@ def add_match():
         query3 = "UPDATE standing SET win = (win + %d), draw = (draw + %d), lose = (lose + %d), scoredgoals = (scoredgoals + %d), againstgoals = (againstgoals + % d) WHERE (teamid = %d)" %(1 if whoWin == 2 else 0, 1 if whoWin == 0 else 0, 1 if whoWin == 1 else 0, awayscore, homescore, awayid)
         queryList = [query, query2, query3]
         executeSQLquery(url, queryList)
-    return render_template("add_match.html", stadiums = stadiums, leagues = leagues, teams = teams)
+    return render_template("add_match.html", stadiums = stadiums, leagues = leagues, teams = teams, user=current_user)
 
+@login_required
 def add_stadium():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     if(request.method == 'POST'):
         name = request.form['name']
@@ -418,25 +390,21 @@ def add_stadium():
         city = request.form['city']
         query = "INSERT INTO stadium (name, capacity, city) VALUES ('%s', %d, '%s')" %(name, capacity, city) 
         executeSQLquery(url, [query])
-    return render_template("add_stadium.html")
+    return render_template("add_stadium.html", user=current_user)
+
 def stadiums_page():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config["db_url"]
     listSQL = "select * from stadium join team on stadium.id = team.stadiumid "
     stadiums = listTable(url, listSQL)
-    return render_template("stadiums.html",stadiums=stadiums)
+    return render_template("stadiums.html",stadiums=stadiums, user=current_user)
+
 def search_stadium():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
     url = current_app.config['db_url']
     search = request.form['search']
     listSQL = "select * from stadium join team on stadium.id = team.stadiumid WHERE (name LIKE '%" + search + "%')"
     stadiums = listTable(url, listSQL)
-    return render_template("stadiums.html", stadiums=stadiums) 
-    
+    return render_template("stadiums.html", stadiums=stadiums, user=current_user) 
 
+@login_required
 def add_data_page():
-    if(current_app.config["signed"]==False):
-        return checkSignIn()
-    return render_template("add_data.html")
+    return render_template("add_data.html", user=current_user)
