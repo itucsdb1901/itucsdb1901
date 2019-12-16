@@ -3,6 +3,8 @@
 {% block headerTitle %}{{player[1]}}{% endblock %}
 {% block subTitle %}{{player[0]}}{% endblock %}
 {% block content %}
+
+    <h1>{{teams[0][0]}} {{teams[0][2]}} - {{teams[0][3]}} {{teams[0][1]}}</h1>
     <table class="table is-hoverable">
         <tr>
             <th>Name</th>
@@ -22,11 +24,13 @@
         <tr>
             <th>Name</th>
             <th>Minute</th>
+            <th>Goal owner team</th>
         </tr>
         {%for goal in goals%}
         <tr>
             <td>{{goal[0]}}</td>
             <td>{{goal[1]}}</td>
+            <td>{{goal[2]}}</td>
         
         </tr>
         {%endfor%}    
