@@ -123,11 +123,11 @@ def match_detail(matchid):
     url = current_app.config["db_url"]
     query="SELECT t1.name as home,t2.name as away,m.homescore,m.awayscore FROM MATCH m join team t1 on (t1.id=m.homeid) join team t2 on (t2.id=m.awayid) WHERE (m.id=%d)"%matchid
     teams = listTable(url,query)
-    query="SELECT p.name,c.red,c.minute FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
+    query="SELECT p.name,c.red,c.minute,c.id FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
     cards = listTable(url, query)
-    query="SELECT p.name as playername,g.minute,t.name as teamname FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
+    query="SELECT p.name as playername,g.minute,t.name,g.id as teamname FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
     goals = listTable(url,query)
-    query="SELECT p1.name as outname,p2.name as inname,s.minute FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
+    query="SELECT p1.name as outname,p2.name as inname,s.minute,s.id FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
     substitutions = listTable(url,query)
     return render_template("match_detail.html",cards=cards,goals=goals,substitutions=substitutions,teams=teams,user=current_user)
 
