@@ -415,7 +415,9 @@ def add_league():
         name=request.form["name"]
         teamcount=int(request.form["teamcount"])
         country=request.form["country"]
-        query="INSERT INTO LEAGUE (NAME,TEAMCOUNT,COUNTRY) VALUES ('%s',%d,'%s')"%(name,teamcount,country)
+        establishyear=int(request.form["establishyear"])
+        division=int(request.form["division"])
+        query="INSERT INTO LEAGUE (NAME,TEAMCOUNT,COUNTRY, ESTABLISHYEAR, DIVISION) VALUES ('%s',%d,'%s', %d, %d)"%(name,teamcount,country, establishyear, division)
         statement=[query]
         url=current_app.config["db_url"]
         executeSQLquery(url,statement)
