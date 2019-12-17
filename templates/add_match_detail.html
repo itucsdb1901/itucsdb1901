@@ -41,7 +41,7 @@
                     </div>
                     <div class="column is-2">
                         <label >Minute</label>
-                        <input class="input" name="minute" type="number" placeholder="Minute"/>
+                        <input class="input" name="minute" onkeyup="minutecontrol()" id="minutebutton" type="number" placeholder="Minute"/>
                         
                     </div>     
                 </div>
@@ -50,7 +50,7 @@
                     <div class="column is-2"></div>
                     <div class="column">
                         <form method="GET" name ="add_detail{{matchid}}" action="/add_match_detail_{{matchid}}">
-                            <button class="button is-danger" action="submit" id="add_detailButton" name="add_detailButton" >Add Detail</button>
+                            <button class="button is-danger" action="submit"  id="add_detailButton" name="add_detailButton" disabled>Add Detail</button>
                         </form>
                     </div>
                     <div class="column is-2"></div>
@@ -63,5 +63,19 @@
     </div>
 
 </section>
+{%if user.is_active%}
+<script>
+    document.getElementById('add_detailButton').disabled = false;
+</script>
+{%endif%}
+<script>
+    function minutecontrol() {
+            if(document.getElementById("minutebutton").value <= 0 || document.getElementById("minutebutton").value >= 120) { 
+                    document.getElementById('add_detailButton').disabled = true; 
+                } else { 
+                    document.getElementById('add_detailButton').disabled = false;
+                }
+            }
+</script>
 
 {% endblock %}
