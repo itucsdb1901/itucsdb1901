@@ -442,7 +442,7 @@ def match_detail(matchid):
     cards = listTable(url, query)
     query="SELECT p.name as playername,g.minute,t.name as teamname,g.id as goalid FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
     goals = listTable(url,query)
-    query="SELECT p1.name as outname,p2.name as inname,s.minute,s.id as subid FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
+    query="SELECT p1.name as outname,p2.name as inname,s.minute,s.aftercorner,s.afteroffside,s.aftergoal,s.afterout,s.id as subid FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
     substitutions = listTable(url,query)
     return render_template("match_detail.html",cards=cards,goals=goals,substitutions=substitutions,teams=teams,user=current_user)
 
@@ -478,8 +478,8 @@ def add_goal(personid):
     url = current_app.config["db_url"]
     infoQuery = "SELECT p.*, t.id, t.name FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid
     result=getOneRowQuery(url,infoQuery)
-    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
-    teamID = result[5]
+    person=classes.Person(int(result[0]),result[1],int(result[2]),result[3],result[4],int(result[5]),int(result[6]),)
+    teamID = result[7]
     matchesQuery = '''
     select m.id, t1.name, t2.name, m.homescore, m.awayscore from match m 
 	join team t1 on (t1.id = m.homeid)
@@ -506,18 +506,18 @@ def add_goal(personid):
         distance = int(request.form.get('distance', False))
         isfreekickgoal = request.form.get('isfreekickgoal', False)
         goalrating = int(request.form.get('goalrating', False))
-        assistPlayerID = int(request.form.get('assistPlayerid', False))
-        passdistance = int(request.form.get('passdistance', False))
-        iscross = request.form.get('iscross', False)
-        assisttype = int(request.form.get('assisttype', False))
-        isfreekickassist = request.form.get('isfreekickassist', False)
-        assistrating = int(request.form.get('assistrating', False))
         addGoalQuery = "INSERT INTO GOAL (matchid, playerid, minute, goaltype, distance, isfreekick, rating) VALUES (%d, %d, %d, %d, %d, '%s', %d)" %(matchID, personid, minute, goaltype, distance, isfreekickgoal, goalrating)
         executeSQLquery(url, [addGoalQuery])
         findGoalIDSQL = "SELECT max(id) FROM GOAL"
         goalID = int(getOneRowQuery(url, findGoalIDSQL)[0])
-        addAssistQuery = "INSERT INTO ASSIST (playerid, goalid, passdistance, assisttype, isfreekick, iscross, rating) VALUES (%d, %d, %d, %d, '%s', '%s', %d)"%(assistPlayerID, goalID, passdistance, assisttype, isfreekickassist, iscross, assistrating)
+        assistPlayerID = int(request.form.get('assistPlayerid', False))
         if(assistPlayerID != False):
+            passdistance = int(request.form.get('passdistance', False))
+            iscross = request.form.get('iscross', False)
+            assisttype = int(request.form.get('assisttype', False))
+            isfreekickassist = request.form.get('isfreekickassist', False)
+            assistrating = int(request.form.get('assistrating', False))
+            addAssistQuery = "INSERT INTO ASSIST (playerid, goalid, passdistance, assisttype, isfreekick, iscross, rating) VALUES (%d, %d, %d, %d, '%s', '%s', %d)"%(assistPlayerID, goalID, passdistance, assisttype, isfreekickassist, iscross, assistrating)
             executeSQLquery(url, [addAssistQuery])
     return render_template("add_goal.html", matches=matches, person=person, assistPlayers = assistPlayers, user=current_user)
 

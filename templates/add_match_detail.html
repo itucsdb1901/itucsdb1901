@@ -1,123 +1,116 @@
 {% extends "layout.html" %}
 {% block title %}Add Match Detail{% endblock %}
 {% block content %}
-<h1 style="text-align: center;">Add Detail to </h1>
+<h1 style="text-align: center;">Add Detail to Match </h1>
 <section class="hero is-medium is-primary is-bold" >
-    <br><br><br>
-    <div class="columns" style="margin-left: 20%;">
-        <div class="column" >
-            <form method="POST">
-                <div class="columns">
-                    <div class="column is-2"></div>
-                    <div class="column is-2">
-                        <label>Out Player</label>
-                        <div class="field">
-                            <div class="control">
-                                <div class="select is-primary">
-                                    <select name="outplayerid">
-                                            <option disabled selected value>select outplayer</option>
-                                        {% for player in players %}
-                                            <option value="{{player[0]}}">{{player[1]}}</option>
-                                        {%endfor%}
-                                    </select>
-                                </div>
+    <br>
+    <form method="POST">
+        <div class="columns" style="margin-left: 23%;">
+            <div class="column is-4">
+                <article class="tile is-child notification is-warning" style="height: 100%;" >
+                    <label>Out Player</label>
+                    <div class="field">
+                        <div class="control">
+                            <div class="select is-primary">
+                                <select name="outplayerid">
+                                        <option disabled selected value>select outplayer</option>
+                                    {% for player in players %}
+                                        <option value="{{player[0]}}">{{player[1]}}</option>
+                                    {%endfor%}
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="column is-2">
-                        <label>In Player</label>
-                        <div class="field">
-                            <div class="control">
-                                <div class="select is-primary">
-                                    <select name="inplayerid">
-                                            <option disabled selected value>select inplayer</option>
-                                        {% for player in players %}
-                                            <option value="{{player[0]}}">{{player[1]}}</option>
-                                        {%endfor%}
-                                    </select>
-                                </div>
+                    <br><br>
+                    <label>In Player</label>
+                    <div class="field">
+                        <div class="control">
+                            <div class="select is-primary">
+                                <select name="inplayerid">
+                                        <option disabled selected value>select inplayer</option>
+                                    {% for player in players %}
+                                        <option value="{{player[0]}}">{{player[1]}}</option>
+                                    {%endfor%}
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="column is-2">
-                        <label >Minute</label>
-                        <input class="input" name="minute" onkeyup="minutecontrol()" id="minutebutton" type="number" placeholder="Minute"/>
-                        
-                    </div>     
-                </div>
-                <div class="columns">
-                    <div class="column is-2"></div>
-                    <div class="column is-2">
+                    <br><br>
+                    <label >Minute</label>
+                    <input class="input" name="minute" onkeyup="minutecontrol()" id="minutebutton" type="number" placeholder="Minute"/>                 
+                </article>
+            </div>
+            <div class="column is-4">
+                <article class="tile is-child notification is-warning" style="height: 100%;width: 100%;" >
+                    <article class="tile is-child notification is-dark is-bold"style="margin-left:5%;margin-right:5%;text-align:center" >
                         <div>
                             <label >After Corner</label>
                         </div>
                         <div class="form-check-inline">
                             <label class="form-check-label" style="margin-right:20px">
-                              <input type="radio" class="form-check-input" name="afterCorner" value="false" >No
+                            <input type="radio" class="form-check-input" name="afterCorner" value="false" >No
                             </label>
                             <label class="form-check-label" value="true">
                                 <input type="radio" class="form-check-input" name="afterCorner" value="true" >Yes
                             </label>
                         </div>
-                    </div>
-                    <div class="column is-2">
+                    </article>
+                    <br>
+                    <article class="tile is-child notification is-dark is-bold" style="margin-left:5%;margin-right:5%;text-align:center">
                         <div>
                             <label >After Offside</label>
                         </div>
                         <div class="form-check-inline">
                             <label class="form-check-label" style="margin-right:20px">
-                              <input type="radio" class="form-check-input" name="afterOffside" value="false" >No
+                            <input type="radio" class="form-check-input" name="afterOffside" value="false" >No
                             </label>
                             <label class="form-check-label" value="true">
                                 <input type="radio" class="form-check-input" name="afterOffside" value="true" >Yes
                             </label>
                         </div>
-                    </div>
-                    <div class="column is-2">
+                    </article>
+                    <br>
+                    <article class="tile is-child notification is-dark is-bold" style="margin-left:5%;margin-right:5%;text-align:center">
                         <div>
                             <label >After Goal</label>
                         </div>
                         <div class="form-check-inline">
                             <label class="form-check-label" style="margin-right:20px">
-                              <input type="radio" class="form-check-input" name="afterGoal" value="false" >No
+                            <input type="radio" class="form-check-input" name="afterGoal" value="false" >No
                             </label>
                             <label class="form-check-label" value="true">
                                 <input type="radio" class="form-check-input" name="afterGoal" value="true" >Yes
                             </label>
                         </div>                        
-                    </div>
-                    <div class="column is-2">
+                        <div>
+                    </article>
+                    <br>
+                    <article class="tile is-child notification is-dark is-bold" style="margin-left:5%;margin-right:5%;text-align:center">
                         <div>
                             <label >After Out</label>
                         </div>
                         <div class="form-check-inline">
                             <label class="form-check-label" style="margin-right:20px">
-                              <input type="radio" class="form-check-input" name="afterOut" value="false" >No
+                            <input type="radio" class="form-check-input" name="afterOut" value="false" >No
                             </label>
                             <label class="form-check-label" value="true">
                                 <input type="radio" class="form-check-input" name="afterOut" value="true" >Yes
                             </label>
-                        </div>                        
-                    </div>                   
-
-                </div>
-                <div class="columns is-centered">
-                    <div class="column is-2"></div>
-                    <div class="column is-2"></div>
-                    <div class="column">
-                        <form method="GET" name ="add_detail{{matchid}}" action="/add_match_detail_{{matchid}}">
-                            <button class="button is-danger" action="submit"  id="add_detailButton" name="add_detailButton" disabled>Add Detail</button>
-                        </form>
-                    </div>
-                    <div class="column is-2"></div>
-                    <div class="column is-2"></div>
-                    </div>
-                </div>    
-            </form>
+                        </div> 
+                    </article>                                       
+                </article>
+                <br>
+            </div>  
+            <br><br>
         </div>
-        <br><br>
-    </div>
-
+        <div style="text-align: center;">
+            <div class="column">
+                <form method="GET" name ="add_detail{{matchid}}" action="/add_match_detail_{{matchid}}">
+                    <button class="button is-danger" action="submit"  id="add_detailButton" name="add_detailButton" disabled>Add Detail</button>
+                </form>
+            </div>
+        </div>  
+    </form>
 </section>
 {%if user.is_active%}
 <script>
