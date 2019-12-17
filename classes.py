@@ -8,13 +8,16 @@ class Person:
 		self.height = height
 		self.weight = weight
 class Team:
-	def __init__(self, id, name, leagueID, coachID, stadiumID,teamLogo):
+	def __init__(self, id, name, leagueID, coachID, stadiumID,teamLogo,city,country,fancount):
 		self.id = id
 		self.name = name
 		self.leagueID = leagueID
 		self.coachID = coachID
 		self.stadiumID = stadiumID
 		self.teamLogo = teamLogo
+		self.city =city
+		self.country= country
+		self.fancount=fancount
 
 class Squad:
 	def __init__(self, teamID, personID, position):

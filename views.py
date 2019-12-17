@@ -319,12 +319,12 @@ def search_team():
 
 def team_page(teamid):
     url = current_app.config["db_url"]
-    query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country,teamlogo FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
+    query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country,teamlogo,t.city ,t.fancount FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
     result=getOneRowQuery(url,query)
     getSquadSQL="SELECT DISTINCT p.name,s.position,p.id FROM person p,squad s,team t where(p.id=s.personid and s.teamid=%d)"%teamid
     squad=listTable(url,getSquadSQL)
-    team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3],teamLogo=result[6])
-    return render_template("team.html",team=team,country=result[5],squad=squad, user=current_user)
+    team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3],teamLogo=result[6],city=result[7],country=result[5],fancount=result[8])
+    return render_template("team.html",team=team,squad=squad, user=current_user)
 
 @login_required
 def delete_team(teamid):
