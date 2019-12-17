@@ -51,6 +51,11 @@
                         <td>{{goal[0]}}</td>
                         <td>{{goal[1]}}</td>
                         <td>{{goal[2]}}</td>
+                        <td>                        
+                            <form method="GET" name ="delete_goal{{goalid}}" action="/player/delete_goal_{{goalid}}">
+                                <button class="button is-danger" action="submit" id="delete_goalButton" name="delete_goalButton" >Delete Goal</button>
+                            </form>
+                         </td>
                     
                     </tr>
                     {%endfor%}    
