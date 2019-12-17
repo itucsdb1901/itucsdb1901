@@ -139,6 +139,20 @@ def match_detail(matchid):
     substitutions = listTable(url,query)
     return render_template("match_detail.html",cards=cards,goals=goals,substitutions=substitutions,teams=teams,user=current_user)
 
+@login_required
+def add_match_detail(matchid):
+    url = current_app.config["db_url"]
+    query1="select p.id,p.name,s.teamid from match m join squad s on (s.teamid=m.homeid or s.teamid=m.awayid) join person p on(p.id=s.personid) where(m.id=%d)"%matchid
+    players=listTable(url,query1)
+    if(request.method=='POST'):
+        outplayerid=int(request.form["outplayerid"])
+        inplayerid=int(request.form["inplayerid"])
+        minute=int(request.form["minute"])
+        query="INSERT INTO substitution (outplayerid,inplayerid,matchid,minute) VALUES (%d,%d,%d,%d)"%(outplayerid,inplayerid,matchid,minute)
+        executeSQLquery(url,[query])
+
+    return render_template("add_match_detail.html", user=current_user, players=players,matchid=matchid)
+
 def player_page(personid):
     url = current_app.config["db_url"]
     query = "SELECT p.*, t.id, t.name, s.position FROM PERSON p LEFT JOIN SQUAD s ON (s.personid = p.id) LEFT JOIN TEAM t ON (s.teamid = t.id) WHERE (p.id=%d)"%personid

@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block title %}Add Match Detail{% endblock %}
+{% block content %}
+<h1 style="text-align: center;">Add Detail to </h1>
+<section class="hero is-medium is-primary is-bold" >
+    <br><br><br>
+    <div class="columns" style="margin-left: 20%;">
+        <div class="column" >
+            <form method="POST">
+                <div class="columns">
+                    <div class="column is-2"></div>
+                    <div class="column is-2">
+                        <label>Out Player</label>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-primary">
+                                    <select name="outplayerid">
+                                            <option disabled selected value>select outplayer</option>
+                                        {% for player in players %}
+                                            <option value="{{player[0]}}">{{player[1]}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-2">
+                        <label>In Player</label>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-primary">
+                                    <select name="inplayerid">
+                                            <option disabled selected value>select inplayer</option>
+                                        {% for player in players %}
+                                            <option value="{{player[0]}}">{{player[1]}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-2">
+                        <label >Minute</label>
+                        <input class="input" name="minute" type="number" placeholder="Minute"/>
+                        
+                    </div>     
+                </div>
+                <div class="columns is-centered">
+                    <div class="column is-2"></div>
+                    <div class="column is-2"></div>
+                    <div class="column">
+                        <form method="GET" name ="add_detail{{matchid}}" action="/add_match_detail_{{matchid}}">
+                            <button class="button is-danger" action="submit" id="add_detailButton" name="add_detailButton" >Add Detail</button>
+                        </form>
+                    </div>
+                    <div class="column is-2"></div>
+                    <div class="column is-2"></div>
+                    </div>
+                </div>    
+            </form>
+        </div>
+        <br><br>
+    </div>
+
+</section>
+
+{% endblock %}
