@@ -220,8 +220,14 @@ def add_card_to_player(playerid):
     if(request.method == 'POST'):
         matchid=int(request.form['match'])
         minute=int(request.form['minute'])
-        red=str(request.form['cardColor'])
-        query = "INSERT INTO CARD (playerid,red,matchid,minute) VALUES (%d, %s ,%d,%d)" %(playerid, red, matchid,minute)
+        red=request.form['cardColor']
+        yellow1st=request.form['firstyellow']
+        if(yellow1st == 'true'):
+            yellow2st='false'
+        else:
+            yellow2st='true'
+        banduration=int(request.form['banduration'])
+        query = "INSERT INTO CARD (playerid,red,matchid,minute) VALUES (%d, '%s', %d ,%d ,'%s' ,'%s' ,%d)" %(playerid, red, matchid, minute, yellow1st, yellow2st, banduration)
         executeSQLquery(url, [query])
     return render_template("add_card_to_player.html",matches=matches,playerid=playerid, user=current_user)
 
@@ -425,8 +431,11 @@ def add_team():
         coachid = int(request.form['coach'])
         leagueid = int(request.form['league'])
         stadiumid = int(request.form['stadium'])
+        fancount = int(request.form['fancount'])
+        teamcity = request.form['teamcity']
+        establish_year = int(request.form['establish year'])
         teamLogo = request.form.get('teamLogo',False)
-        query1 = "INSERT INTO team (name, leagueid, stadiumid, coach, teamlogo) VALUES ('%s', %d, %d, %d,'%s')" %(name, leagueid, stadiumid, coachid, teamLogo)
+        query1 = "INSERT INTO team (name, leagueid, stadiumid, coach, teamlogo, fancount, city, establishyear) VALUES ('%s', %d, %d, %d,'%s', %d, '%s', %d)" %(name, leagueid, stadiumid, coachid, teamLogo, fancount, teamcity, establish_year)
         executeSQLquery(url, [query1])
         getTeamID = "SELECT MAX(id) FROM TEAM"
         teamID = int(listTable(url, getTeamID)[0][0])
