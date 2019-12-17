@@ -7,7 +7,7 @@
 <h1 style="text-align: center;">{{teams[0][0]}} {{teams[0][2]}} - {{teams[0][3]}} {{teams[0][1]}}</h1>
 <section class="hero is-medium is-primary is-bold" >
     <div class="columns" style="margin: 3%;">
-        <div class="column is-4">
+        <div class="column is-6">
             <article class="tile is-child notification is-warning" style="height: 100%;" >
                 <div>
                     <h3 style="text-align: center;">Cards</h3>
@@ -35,7 +35,7 @@
                 </table>
             </article>    
         </div>
-        <div class="column is-4" >
+        <div class="column is-6" >
             <article class="tile is-child notification is-warning" style="height: 100%;" >
                 <div>
                     <h3 style="text-align: center;">Goals</h3>
@@ -63,7 +63,8 @@
                
             </article>
         </div>
-        <div class="column is-4">
+    </div>
+        <div class="columns" style="margin: 3%;">
             <article class="tile is-child notification is-warning" style="height: 100%;" >
                 <div>
                     <h3 style="text-align: center;">Substitutions</h3>
@@ -73,19 +74,27 @@
                         <th>Out Player Name</th>
                         <th>In Player Name</th>
                         <th>Minute</th>
+                        <th>After Corner</th>
+                        <th>After Offside</th>
+                        <th>After Goal</th>
+                        <th>After Out</th>
                     </tr>
                     {%for substitution in substitutions%}
                     <tr>
                         <td>{{substitution[0]}}</td>
                         <td>{{substitution[1]}}</td>
                         <td>{{substitution[2]}}</td>
+                        <td>{{substitution[3]}}</td>
+                        <td>{{substitution[4]}}</td>
+                        <td>{{substitution[5]}}</td>
+                        <td>{{substitution[6]}}</td>
                     
                     </tr>
                     {%endfor%}    
                 </table>
             </article>
         </div>
-    </div>
+    
 </section>
     
     
