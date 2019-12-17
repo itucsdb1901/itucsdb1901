@@ -328,11 +328,16 @@ def add_player_to_squad(teamid):
     team = getOneRowQuery(url, teamSQL)
     if(request.method == 'POST'):
         position = request.form['position']
+        secondposition = request.form['secondposition']
+        foot = request.form['foot']
         playerid = int(request.form['playerbox'])
+        kitnumber = int(request.form['kitnumber'])
+        injurymonth = int(request.form['injurymonth'])
+        amount= int(request.form['amount'])
         duration = int(request.form['duration'])
         startdate= int(request.form['startdate'])
         amount= int(request.form['amount'])
-        query = "INSERT INTO squad (personid,teamid,position) VALUES (%d, %d ,'%s')" %(playerid, teamid, position)
+        query = "INSERT INTO squad (personid,teamid,position, secondposition, foot, kitnumber, injurymonth) VALUES (%d, %d ,'%s', '%s', '%s', %d, %d)" %(playerid, teamid, position, secondposition, foot, kitnumber, injurymonth)
         query2 ="INSERT INTO negotitation (personid,teamid,duration,amount,startdate) VALUES (%d,%d,%d,%d,%d)" %(playerid,teamid,duration,amount,startdate)
         executeSQLquery(url, [query])
         executeSQLquery(url, [query2])
