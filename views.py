@@ -42,7 +42,7 @@ def checkSignIn():
         result=getOneRowQuery(url,checkUser)
         if(result is not None):
             if check_password_hash(result[2], password):
-                user = User(username, result[2])
+                user = User(username, result[2], name, email, age)
                 remember = request.form.get("remember",False)
                 if remember is not None:
                     current_app.config['USE_SESSION_FOR_NEXT'] = True
@@ -62,6 +62,9 @@ def signUp():
         url=current_app.config["db_url"]
         username = request.form.get("username",False)
         password = request.form.get("password",False)
+        name = request.form.get("name",False)
+        email = request.form.get("email",False)
+        age = request.form.get("age",False)
         checkExist = "SELECT username FROM ACCOUNT WHERE (username = '%s')" %(username)
         checkExist = getOneRowQuery(url, checkExist)
         if(checkExist is not None):
@@ -69,7 +72,7 @@ def signUp():
         password = generate_password_hash(password, method="sha256")
         saveUser = "INSERT INTO ACCOUNT (username, password) VALUES ('%s', '%s')"%(username, password)
         executeSQLquery(url, [saveUser])
-        user = User(username=username, password=password)
+        user = User(username, password)
         login_user(user, remember=True)
         return redirect('/')
     return render_template("signup.html", error=0, user = current_user)
@@ -123,11 +126,11 @@ def match_detail(matchid):
     url = current_app.config["db_url"]
     query="SELECT t1.name as home,t2.name as away,m.homescore,m.awayscore FROM MATCH m join team t1 on (t1.id=m.homeid) join team t2 on (t2.id=m.awayid) WHERE (m.id=%d)"%matchid
     teams = listTable(url,query)
-    query="SELECT p.name,c.red,c.minute,c.id FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
+    query="SELECT p.name,c.red,c.minute,c.id as cardid FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
     cards = listTable(url, query)
-    query="SELECT p.name as playername,g.minute,t.name,g.id as teamname FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
+    query="SELECT p.name as playername,g.minute,t.name as teamname,g.id as goalid FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
     goals = listTable(url,query)
-    query="SELECT p1.name as outname,p2.name as inname,s.minute,s.id FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
+    query="SELECT p1.name as outname,p2.name as inname,s.minute,s.id as subid FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
     substitutions = listTable(url,query)
     return render_template("match_detail.html",cards=cards,goals=goals,substitutions=substitutions,teams=teams,user=current_user)
 
@@ -233,7 +236,7 @@ def delete_card(cardid):
 def delete_goal(goalid):
     url=current_app.config['db_url']
     query="select a.id from assist a where(a.goalid=%d)"%goalid
-    assistID=int(listTable(url,query))
+    assistID=listTable(url,query) 
     query="delete from assist where id=%d"%assistID
     executeSQLquery(url,[query])
     query="delete from goal where id = %d"%goalid
