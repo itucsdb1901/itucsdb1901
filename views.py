@@ -86,6 +86,8 @@ def logOut():
 #########Home Page Function############
 def home_page():
     url=current_app.config["db_url"]
+    team_count = "SELECT COUNT(*) FROM TEAM"
+    team_count = (listTable(url, team_count)[0][0])
     person_count = "SELECT COUNT(*) FROM PERSON"
     person_count = (listTable(url, person_count)[0][0])
     leagues_count  ="SELECT COUNT(*) FROM LEAGUE"
@@ -102,7 +104,8 @@ def home_page():
                 "matches_count":matches_count,
                 "stadiums_count":stadiums_count,
                 "goals_count":goals_count,
-                "current_user":current_user
+                "current_user":current_user,
+                "teams_count":team_count
 
                 }
     return render_template("home.html", arguments=arguments, user=current_user)
