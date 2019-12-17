@@ -203,7 +203,8 @@ def add_goal(personid):
         findGoalIDSQL = "SELECT max(id) FROM GOAL"
         goalID = int(getOneRowQuery(url, findGoalIDSQL)[0])
         addAssistQuery = "INSERT INTO ASSIST (playerid, goalid) VALUES (%d, %d)"%(assistPlayerID, goalID)
-        executeSQLquery(url, [addAssistQuery])
+        if(assistPlayerID != False):
+            executeSQLquery(url, [addAssistQuery])
     return render_template("add_goal.html", matches=matches, person=person, assistPlayers = assistPlayers, user=current_user)
 
 @login_required
