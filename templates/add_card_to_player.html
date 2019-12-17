@@ -26,6 +26,31 @@
                     </div>
                     <br><br>
                     <div>
+                        <label>Ban Duration</label>
+                    </div>
+                    
+                    <div class="columns">
+                        <div class="column is-3">
+                            <div class="field" style="width: 115%;">
+                                <div class="control">
+                                    <input class="input is-primary" min="1" name="banduration" type="number" placeholder="Ban Duration">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label >Yellow Type</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label" style="margin-right:20px">
+                          <input type="radio" class="form-check-input" name="firstyellow" value="false" >1st Yellow
+                        </label>
+                        <label class="form-check-label" value="true">
+                            <input type="radio" class="form-check-input" name="firstyellow" value="true" >2nd Yellow
+                        </label>
+                    </div>
+                    <br><br>
+                    <div>
                         <label >Card Minute</label>
                     </div>
                     
@@ -33,7 +58,7 @@
                         <div class="column is-3">
                             <div class="field" style="width: 115%;">
                                 <div class="control">
-                                    <input class="input is-primary" name="minute" type="number" placeholder="Minute">
+                                    <input class="input is-primary" name="minute" type="number" max="120" placeholder="Minute">
                                 </div>
                             </div>
                         </div>
