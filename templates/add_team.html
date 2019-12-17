@@ -29,6 +29,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            <label>Fan Count</label>
+                        </div>
+                        
+                        <div class="columns">
+                            <div class="column is-3">
+                                <div class="field" style="width: 115%;">
+                                    <div class="control">
+                                        <input class="input is-primary" name="fancount" type="number" placeholder="Fan Count">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <label>League</label>
                         <div class="field">
                             <div class="control">
@@ -42,6 +55,12 @@
                                 </div>
                             </div>
                         </div>
+                        <label>City</label>
+                        <div class="field" style="width: 30%;">
+                            <div class="control">
+                                <input class="input is-primary" type="text" placeholder="Team city" maxlength="20">
+                            </div>
+                        </div>
                         <label>Coach</label>
                         <div class="field">
                             <div class="control">
@@ -52,6 +71,19 @@
                                             <option value="{{person[0]}}">{{person[1]}}</option>
                                         {%endfor%}
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Establish Year</label>
+                        </div>
+                        
+                        <div class="columns">
+                            <div class="column is-3">
+                                <div class="field" style="width: 115%;">
+                                    <div class="control">
+                                        <input class="input is-primary" name="establish year" type="number" placeholder="Establish Year" max="2019">
+                                    </div>
                                 </div>
                             </div>
                         </div>
