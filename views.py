@@ -164,16 +164,16 @@ def player_page(personid):
     negotitation = getOneRowQuery(url,query2)
     yellowcardy = getOneRowQuery(url,yellowcard)
     redcardy = getOneRowQuery(url,redcard)
-    amount=negotitation[4]
+    amount=negotitation[5]
     duration=negotitation[3]
-    startdate=negotitation[5]
-    seasons=startdate+1
+    startdate=negotitation[4]
     scoredgoal=number_goal[0]
     yellowcardx = yellowcardy[0]
     redcardx = redcardy[0]
-    (teamID, teamName, position) = (result[5], result[6], result[7])
-    person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
-    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal,amount=amount,duration=duration,startdate=startdate,seasons=seasons,redcardx=redcardx,yellowcardx=yellowcardx, user=current_user )
+    (teamID, teamName, position) = (result[7], result[8], result[9])
+    (playerID, name, birthDay, nationality, photo, height, weight) = (result[0], result[1], result[2], result[3], result[4], result[5], result[6])
+    person=classes.Person(playerID, name, birthDay, nationality, photo, height, weight)
+    return render_template("player.html",player=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, position = position,scoredgoal=scoredgoal,amount=amount,duration=duration,startdate=startdate,redcardx=redcardx,yellowcardx=yellowcardx, user=current_user )
 
 @login_required
 def add_goal(personid):
