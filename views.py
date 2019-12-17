@@ -143,7 +143,11 @@ def add_match_detail(matchid):
         outplayerid=int(request.form["outplayerid"])
         inplayerid=int(request.form["inplayerid"])
         minute=int(request.form["minute"])
-        query="INSERT INTO substitution (outplayerid,inplayerid,matchid,minute) VALUES (%d,%d,%d,%d)"%(outplayerid,inplayerid,matchid,minute)
+        aftercorner=str(request.form["afterCorner"])
+        afteroffside=str(request.form["afterOffside"])
+        aftergoal=str(request.form["afterGoal"])
+        afterout=str(request.form["afterOut"])
+        query="INSERT INTO substitution (outplayerid,inplayerid,matchid,minute,aftercorner,afteroffside,aftergoal,afterout) VALUES (%d,%d,%d,%d,'%s','%s','%s','%s')"%(outplayerid,inplayerid,matchid,minute,aftercorner,afteroffside,aftergoal,afterout)
         executeSQLquery(url,[query])
 
     return render_template("add_match_detail.html", user=current_user, players=players,matchid=matchid)
@@ -334,14 +338,20 @@ def add_player_to_squad(teamid):
     team = getOneRowQuery(url, teamSQL)
     if(request.method == 'POST'):
         position = request.form['position']
+        secondposition = request.form['secondposition']
+        foot = request.form['foot']
         playerid = int(request.form['playerbox'])
+        kitnumber = int(request.form['kitnumber'])
+        injurymonth = int(request.form['injurymonth'])
+        amount= int(request.form['amount'])
         duration = int(request.form['duration'])
         startdate= int(request.form['startdate'])
         amount= int(request.form['amount'])
-        query = "INSERT INTO squad (personid,teamid,position) VALUES (%d, %d ,'%s')" %(playerid, teamid, position)
-        query2 ="INSERT INTO negotitation (personid,teamid,duration,amount,startdate) VALUES (%d,%d,%d,%d,%d)" %(playerid,teamid,duration,amount,startdate)
-        executeSQLquery(url, [query])
-        executeSQLquery(url, [query2])
+        releasecost=int(request.form['releasecost'])
+        isrent=str(request.form['isRent'])
+        query = "INSERT INTO squad (personid,teamid,position, secondposition, foot, kitnumber, injurymonth) VALUES (%d, %d ,'%s', '%s', '%s', %d, %d)" %(playerid, teamid, position, secondposition, foot, kitnumber, injurymonth)
+        query2 ="INSERT INTO negotitation (personid,teamid,duration,amount,startdate,releasecost,isrent) VALUES (%d,%d,%d,%d,%d,%d,'%s')" %(playerid,teamid,duration,amount,startdate,releasecost,isrent)
+        executeSQLquery(url, [query, query2])
     return render_template("add_player_to_squad.html",playerList=playerList,team=team, user=current_user)
 
 @login_required
@@ -457,6 +467,8 @@ def add_match():
         awayid = int(request.form['awayteamid'])
         homescore = int(request.form['homescore'])
         awayscore = int(request.form['awayscore'])
+        extratime1 = int(request.form['extratime1'])
+        extratime2 = int(request.form['extratime2'])
         leagueid = int(request.form['leagueid'])
         stadiumid = int(request.form['stadiumid'])
         matchdate = request.form['matchdate']
@@ -467,7 +479,7 @@ def add_match():
             whoWin = 2
         else:
             whoWin = 0
-        query = "INSERT INTO match (homeid, awayid, homescore, awayscore, leagueid, stadiumid, matchdate) VALUES (%d, %d, %d, %d, %d, %d, CAST('%s' AS  DATE))" %(homeid, awayid, homescore, awayscore, leagueid, stadiumid, matchdate)
+        query = "INSERT INTO match (homeid, awayid, homescore, awayscore, extratime1, extratime2, leagueid, stadiumid, matchdate) VALUES (%d, %d, %d, %d, %d, %d, %d, %d, CAST('%s' AS  DATE))" %(homeid, awayid, homescore, awayscore, extratime1, extratime2, leagueid, stadiumid, matchdate)
         query2 = "UPDATE standing SET win = (win + %d), draw = (draw + %d), lose = (lose + %d), scoredgoals = (scoredgoals + %d), againstgoals = (againstgoals + % d) WHERE (teamid = %d)" %(1 if whoWin == 1 else 0, 1 if whoWin == 0 else 0, 1 if whoWin == 2 else 0, homescore, awayscore, homeid)
         query3 = "UPDATE standing SET win = (win + %d), draw = (draw + %d), lose = (lose + %d), scoredgoals = (scoredgoals + %d), againstgoals = (againstgoals + % d) WHERE (teamid = %d)" %(1 if whoWin == 2 else 0, 1 if whoWin == 0 else 0, 1 if whoWin == 1 else 0, awayscore, homescore, awayid)
         queryList = [query, query2, query3]
@@ -481,13 +493,15 @@ def add_stadium():
         name = request.form['name']
         capacity = int(request.form['capacity'])
         city = request.form['city']
-        query = "INSERT INTO stadium (name, capacity, city) VALUES ('%s', %d, '%s')" %(name, capacity, city) 
+        establishyear = request.form['establishyear']
+        budget = request.form['budget']
+        query = "INSERT INTO stadium (name, capacity, city, establishyear, budget) VALUES ('%s', %d, '%s', %d, %d)" %(name, capacity, city, establishyear, budget) 
         executeSQLquery(url, [query])
     return render_template("add_stadium.html", user=current_user)
 
 def stadiums_page():
     url = current_app.config["db_url"]
-    listSQL = "select * from stadium join team on stadium.id = team.stadiumid "
+    listSQL = "select s.name, team.name, s.capacity, s.capacity, s.capacity, s.capacity from stadium s join team on s.id = team.stadiumid "
     stadiums = listTable(url, listSQL)
     return render_template("stadiums.html",stadiums=stadiums, user=current_user)
 
