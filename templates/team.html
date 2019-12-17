@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Player Profile{% endblock %}
+{% block title %}Team | {{team.name}}{% endblock %}
 {% block headerTitle %}{{player[1]}}{% endblock %}
 {% block subTitle %}{{player[0]}}{% endblock %}
 {% block content %}
@@ -8,7 +8,7 @@
                     <table >
                         <tr>
                             <th>Country:</th>
-                            <td>{{team.country}}</td>
+                            <td>{{country}}</td>
                         </tr>
                         <tr>
                             <th>City:</th>
@@ -16,15 +16,15 @@
                         </tr>
                         <tr>
                             <th>League:</th>
-                            <td>{{team.leagueID}}</td>
+                            <td>{{leagueName}}</td>
                         </tr>
                         <tr>
                             <th>Coach:</th>
-                            <td>{{team.coachID}}</td>
+                            <td>{{coachName}}</td>
                         </tr>
                         <tr>
                             <th>Stadium</th>
-                            <td>{{team.stadiumID}}</td>
+                            <td>{{stadiumName}}</td>
                         </tr>
                         <tr>
                             <th>Fan Count</th>
@@ -32,9 +32,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <form method="POST" name ="delete{{team.id}}" action="/teams/delete_{{team.id}}">
-                                    <input class="button is-danger" type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
-                                </form>
+                                <a class="button is-danger" type="submit" id="updateButton" name="updateButton" href="/teams/update_{{team.id}}">UPDATE</a> 
                             </td>
                             <td>
                                 <form method="GET" name ="add_player_to_squad{{team}}" action="/teams/add_player_to_squad_{{team.id}}">
