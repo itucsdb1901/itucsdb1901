@@ -95,12 +95,12 @@ class Negotiation:
 		self.amount = amount
 
 class User:
-	def __init__(self, username, password):
+	def __init__(self, username, password, name, email, age):
 		self.username = username
 		self.password = password
-		self.name = ""
-		self.email = ""
-		self.age = ""
+		self.name = name
+		self.email = email
+		self.age = age
 	def is_authenticated(self):
 		return True
 	def is_active(self):

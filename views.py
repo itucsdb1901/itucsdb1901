@@ -38,11 +38,11 @@ def checkSignIn():
         url=current_app.config["db_url"]
         username = request.form.get("username",False)
         password = request.form.get("password",False)
-        checkUser="SELECT * FROM ACCOUNT WHERE(username='%s')"%(username)
+        checkUser="SELECT a.username, a.password, a.name, a.age, a.email FROM ACCOUNT a WHERE(a.username='%s')"%(username)
         result=getOneRowQuery(url,checkUser)
         if(result is not None):
-            if check_password_hash(result[2], password):
-                user = User(username, result[2], name, email, age)
+            if check_password_hash(result[1], password):
+                user = User(username, result[1], result[2], result[3], result[4])
                 remember = request.form.get("remember",False)
                 if remember is not None:
                     current_app.config['USE_SESSION_FOR_NEXT'] = True
@@ -64,15 +64,15 @@ def signUp():
         password = request.form.get("password",False)
         name = request.form.get("name",False)
         email = request.form.get("email",False)
-        age = request.form.get("age",False)
+        age = int(request.form.get("age",False))
         checkExist = "SELECT username FROM ACCOUNT WHERE (username = '%s')" %(username)
         checkExist = getOneRowQuery(url, checkExist)
         if(checkExist is not None):
             return render_template("signup.html", error=1, user = current_user)
         password = generate_password_hash(password, method="sha256")
-        saveUser = "INSERT INTO ACCOUNT (username, password) VALUES ('%s', '%s')"%(username, password)
+        saveUser = "INSERT INTO ACCOUNT (username, password, name, email, age) VALUES ('%s', '%s', '%s', '%s', %d)"%(username, password, name, email, age)
         executeSQLquery(url, [saveUser])
-        user = User(username, password)
+        user = User(username, password, name, email, age)
         login_user(user, remember=True)
         return redirect('/')
     return render_template("signup.html", error=0, user = current_user)
@@ -514,7 +514,7 @@ def add_stadium():
 
 def stadiums_page():
     url = current_app.config["db_url"]
-    listSQL = "select s.name, team.name, s.capacity, s.capacity, s.capacity, s.capacity from stadium s join team on s.id = team.stadiumid "
+    listSQL = "select s.name, team.name, s.capacity, s.city, s.year, s.budget from stadium s join team on s.id = team.stadiumid "
     stadiums = listTable(url, listSQL)
     return render_template("stadiums.html",stadiums=stadiums, user=current_user)
 

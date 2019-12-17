@@ -13,9 +13,9 @@ db_uri = os.environ.get('DB_URI', None)
 @login_manager.user_loader
 def load_user(user_id):
     if user_id is not None:
-        get_user = "SELECT * FROM ACCOUNT WHERE (username = '%s')" % user_id
+        get_user = "SELECT a.username, a.password, a.name, a.age, a.email FROM ACCOUNT a WHERE(a.username='%s')"%(user_id)
         user = views.getOneRowQuery(db_uri, get_user)
-        user = User(user[1], user[2])
+        user = User(user[0], user[1], user[2], user[3], user[4])
         return user
     return None
 
