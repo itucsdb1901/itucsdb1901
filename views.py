@@ -359,7 +359,7 @@ def add_player_to_squad(teamid):
         releasecost=int(request.form['releasecost'])
         isrent=str(request.form['isRent'])
         query = "INSERT INTO squad (personid,teamid,position, secondposition, foot, kitnumber, injurymonth) VALUES (%d, %d ,'%s', '%s', '%s', %d, %d)" %(playerid, teamid, position, secondposition, foot, kitnumber, injurymonth)
-        query2 ="INSERT INTO negotitation (personid,teamid,duration,amount,startdate,releasecost,isrent) VALUES (%d,%d,%d,%d,%d,%d,'%s')" %(playerid,teamid,duration,amount,startdate,releasecost,isrent)
+        query2 ="INSERT INTO negotitation (personid,teamid,duration,startdate,amount,releasecost,isrent) VALUES (%d,%d,%d,%d,%d,%d,'%s')" %(playerid,teamid,duration,startdate,amount,releasecost,isrent)
         executeSQLquery(url, [query, query2])
     return render_template("add_player_to_squad.html",playerList=playerList,team=team, user=current_user)
 
@@ -380,8 +380,10 @@ def add_person():
         name=request.form["name"]
         birthyear=int(request.form["birthyear"])
         nationality=request.form["nationality"]
+        weight=int(request.form["weight"])
+        height=int(request.form["height"])
         personphoto=request.form["personphoto"]
-        query="INSERT INTO PERSON (NAME,BIRTHYEAR,NATIONALITY,PERSONPHOTO) VALUES ('%s',%d,'%s','%s')"%(name,birthyear,nationality,personphoto)
+        query="INSERT INTO PERSON (NAME,BIRTHYEAR,NATIONALITY,PERSONPHOTO,height,weight) VALUES ('%s',%d,'%s','%s'%d,%d)"%(name,birthyear,nationality,personphoto,height,weight)
         statement=[query]
         url=current_app.config["db_url"]
         executeSQLquery(url,statement)
