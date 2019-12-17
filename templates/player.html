@@ -17,12 +17,12 @@
                             <div style="align-self: flex-end;" class="columns">
                                 <div class="column is-5">
                                     <form method="GET" name ="add_goal{{player.id}}" action="/player/add_goal_{{player.id}}">
-                                        <input class="button is-danger" type="submit" id="addgoal" name="addgoal" value="ADD GOAL" />
+                                        <input class="button is-danger" type="submit" id="addgoal" name="addgoal" value="ADD GOAL" disabled/>
                                     </form>
                                 </div>
                                 <div class="column is-5">
                                     <form method="GET" name ="add_card_to_player{{player.id}}" action="/player/add_card_to_player_{{player.id}}">
-                                        <input class="button is-danger" type="submit" id="add_card_to_player" name="add_card_to_player" value="ADD CARD" />
+                                        <input class="button is-danger" type="submit" id="add_card_to_player" name="add_card_to_player" value="ADD CARD" disabled/>
                                     </form>
                                 </div>
                             </div>    
@@ -75,7 +75,12 @@
         </div>
 
     </section>
-    
+    {%if user.is_active%}
+    <script>
+        document.getElementById('add_card_to_player').disabled = false;
+        document.getElementById('addgoal').disabled = false; 
+    </script>
+    {%endif%}
     
     
 {% endblock %}
