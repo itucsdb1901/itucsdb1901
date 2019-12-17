@@ -17,6 +17,9 @@
                         <th>Name</th>
                         <th>Red/Yellow</th>
                         <th>Minute</th>
+                        <th>First/Second Yellow</th>
+                        <th>Ban Duration</th>
+                        <th>Delete Card</th>
                     </tr>
                     {%for card in cards%}
                     <tr>
@@ -24,11 +27,27 @@
                         <td>
                             {%if card[1] %}
                                 Red
-                            {%else%}
+                            {%else %}
                                 Yellow
                             {%endif%}
                         </td>
                         <td>{{card[2]}}</td>
+                        <td>
+                            {%if card[1]%}
+                                -
+                            {%elif card[4]==1%}
+                                First Yellow
+                            {%else %}
+                                Second Yellow
+                            {%endif%}
+                        </td>
+                        <td>
+                            {%if card[1]%}
+                                {{card[6]}}
+                            {%else%}
+                                -
+                            {%endif%}
+                        </td>
                         <td>                        
                             <form method="POST" name ="card{{card[3]}}" action="/player/delete_card_{{card[3]}}">
                                 <button class="button is-danger" action="submit" id="delete_cardButton" name="delete_cardButton" >Delete Card</button>

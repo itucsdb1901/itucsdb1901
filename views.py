@@ -478,7 +478,7 @@ def match_detail(matchid):
     url = current_app.config["db_url"]
     query="SELECT t1.name as home,t2.name as away,m.homescore,m.awayscore FROM MATCH m join team t1 on (t1.id=m.homeid) join team t2 on (t2.id=m.awayid) WHERE (m.id=%d)"%matchid
     teams = listTable(url,query)
-    query="SELECT p.name,c.red,c.minute,c.id as cardid FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
+    query="SELECT p.name,c.red,c.minute,c.id as cardid,c.yellow1,c.yellow2,c.banduration FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
     cards = listTable(url, query)
     query="SELECT p.name as playername,g.minute,t.name as teamname,g.id as goalid FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
     goals = listTable(url,query)
