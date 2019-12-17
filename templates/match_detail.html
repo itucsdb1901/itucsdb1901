@@ -71,6 +71,7 @@
                         <th>Goal Type</th>
                         <th>Distance</th>
                         <th>Rating</th>
+                        <th>Delete</th>
                     </tr>
                     {%for goal in goals%}
                     <tr>
@@ -90,6 +91,11 @@
                         </td>
                         <td>{{goal[5]}}</td>
                         <td>{{goal[6]}}</td>
+                        <td>
+                            <form method="POST" name ="delete_gaol{{goal[3]}}" action="/player/delete_goal_{{goal[3]}}">
+                                <button class="button is-danger" action="submit" id="delete_goalButton" name="delete_goalButton" >Delete Goal</button>
+                            </form>
+                        </td>
                     
                     </tr>
                     {%endfor%}    
@@ -112,6 +118,7 @@
                         <th>After Offside</th>
                         <th>After Goal</th>
                         <th>After Out</th>
+                        <th>Delete</th>
                     </tr>
                     {%for substitution in substitutions%}
                     <tr>
@@ -122,7 +129,11 @@
                         <td>{{substitution[4]}}</td>
                         <td>{{substitution[5]}}</td>
                         <td>{{substitution[6]}}</td>
-                    
+                        <td>
+                            <form method="POST" name ="deletesub{{substitution[7]}}" action="/player/delete_substitution_{{substitution[7]}}">
+                                <button class="button is-danger" action="submit" id="delete_subButton" name="delete_subButton" >Delete Card</button>
+                            </form>
+                        </td>
                     </tr>
                     {%endfor%}    
                 </table>
