@@ -12,15 +12,28 @@
                     <label>Stadium Name</label>
                     <input class="input" type="text" name="name" placeholder="Stadium Name" maxlength="20"/>
                     <label>Stadium Capacity</label>
-                    <input class="input" type="number" name="capacity" placeholder="Stadium Capacity" maxlength="20"/>
+                    <input class="input" onkeyup="capacitycontrol()" id="capacity" type="number" name="capacity" placeholder="Stadium Capacity" maxlength="20"/>
                     <label>Stadium City</label>
-                    <input class="input" type="text" name="city" placeholder="Stadium City" maxlength="20"/>
+                    <input class="input" type="text" id="city" onkeyup="success()" name="city" placeholder="Stadium City" maxlength="20"/>
+                    <label>Establish Year</label>
+                    <input class="input" type="number" id="city" onkeyup="success()" name="establishyear" placeholder="Establish Year" min="1860"/>
+                    <label>Budget</label>
+                    <input class="input" type="number" id="city" onkeyup="success()" name="budget" placeholder="Cost" min="0"/>
                     <br/>
                     <br/>
-                    <input class="button is-danger" type="submit" title="Save Stadium" value="Save">
+                    <input class="button is-danger" id="save" type="submit" title="Save Stadium" value="Save" disabled>
                 </form> 
             </div>
             <div class="column is-4"></div>
         </div>
     </section>
+    <script>
+        function success() {
+	        if(document.getElementById("city").value==="") { 
+                document.getElementById('save').disabled = true; 
+            } else { 
+                document.getElementById('save').disabled = false;
+            }
+        }
+    </script>
 {% endblock %}

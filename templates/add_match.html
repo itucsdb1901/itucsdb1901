@@ -2,7 +2,7 @@
 {% block title %}Add Match{% endblock %}
 {% block content %}
     <div style="text-align: center;">
-        <h1>Add Team</h1>
+        <h1>Add Match</h1>
     </div>
     <section class="hero is-medium is-primary is-bold" >
         <br><br>
@@ -45,13 +45,23 @@
                     <div class="columns">
                         <div class="column is-2">
                             <label>Home Score</label>
-                            <input class="input" name="homescore" type="number" placeholder="Home Score"/>
+                            <input class="input" onkeyup="scorecontrol()" id="homescore" name="homescore" type="number" placeholder="Home Score"/>
                         </div>
                         <div class="column is-2">
                             <label>Away Score</label>
-                            <input class="input" name="awayscore" type="number" placeholder="Home Score"/>
+                            <input class="input" onkeyup="scorecontrol()"  id="awayscore" name="awayscore" type="number" placeholder="Home Score"/>
                         </div>
                     </div>
+                    <div class="columns">
+                            <div class="column is-2">
+                                <label>Extra Time for First Half</label>
+                                <input class="input" id="extratime1" name="extratime1" type="number" placeholder="ET 1st Half"/>
+                            </div>
+                            <div class="column is-2">
+                                <label>Extra Time for Second Half</label>
+                                <input class="input" id="extratime2" name="extratime2" type="number" placeholder="ET 2nd Half"/>
+                            </div>
+                        </div>
                     <div class="columns">
                         <div class="column is-2">
                             <label>Stadium</label>
@@ -90,13 +100,22 @@
                     <input class="input" name="matchdate" type="date" placeholder="Match Date" style="width: 33%;"/>
                     <br/>
                     <br/>
-                    <input class="button is-danger" type="submit" value="Save Match" />
+                    <input class="button is-danger" id="submit" type="submit" value="Save Match" />
                     <br><br>
                 </form>
             </div>
             
         </div>
     </section>
-            
+    <script>
+        function scorecontrol(){
+            if(document.getElementById("homescore").value < 0 || document.getElementById("homescore").value >= 15 || document.getElementById("awayscore").value < 0 || document.getElementById("awayscore").value >= 15){
+                document.getElementById('submit').disabled = true; 
+            }else { 
+                document.getElementById('submit').disabled = false;
+            }
+
+        }
+    </script>
             
 {% endblock %}

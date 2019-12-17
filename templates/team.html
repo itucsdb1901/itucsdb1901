@@ -25,12 +25,12 @@
                         <tr>
                             <td>
                                 <form method="POST" name ="delete{{team.id}}" action="/teams/delete_{{team.id}}">
-                                    <input class="button is-danger" type="submit" id="deleteButton" name="deleteButton" value="DELETE" disabled/>
+                                    <input class="button is-danger" type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
                                 </form>
                             </td>
                             <td>
                                 <form method="GET" name ="add_player_to_squad{{team}}" action="/teams/add_player_to_squad_{{team.id}}">
-                                    <input class="button is-danger" type="submit" id="add_player_to_squad" name="add_player_to_squad" value="ADD PLAYER" disabled />
+                                    <input class="button is-danger" type="submit" id="add_player_to_squad" name="add_player_to_squad" value="ADD PLAYER" />
                                 </form>
                             </td>
                         </tr>
@@ -56,15 +56,7 @@
                     </table>
                 </div>
 
-{%if user.is_active%}
-<script>
-    
-        document.getElementById('delete_player_from_squad').disabled = false;
-        document.getElementById('add_player_to_squad').disabled = false;
-        document.getElementById('deleteButton').disabled = false;
-    
-</script>
-{%endif%}
+
 
 <script>
     function myFunction(id) {
