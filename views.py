@@ -221,6 +221,32 @@ def add_card_to_player(playerid):
         executeSQLquery(url, [query])
     return render_template("add_card_to_player.html",matches=matches,playerid=playerid, user=current_user)
 
+@login_required
+def delete_card(cardid):
+    url=current_app.config['db_url']
+    query="DELETE FROM CARD c WHERE c.id=%d"%cardid
+    executeSQLquery(url,[query])
+    return matches_page()
+
+@login_required
+def delete_goal(goalid):
+    url=current_app.config['db_url']
+    query="select a.id from assist a where(a.goalid=%d)"%goalid
+    assistID=int(listTable(url,query))
+    query="delete from assist where id=%d"%assistID
+    executeSQLquery(url,[query])
+    query="delete from goal where id = %d"%goalid
+    executeSQLquery(url,[query])
+    return matches_page()
+
+@login_required
+def delete_substitution(subid):
+    url=current_app.config["db_url"]
+    query="delete from substitution where id =%d"%subid
+    executeSQLquery(url,[query])
+    return matches_page()
+
+
 def search_player():
     url = current_app.config['db_url']
     search = request.form['search']
