@@ -4,52 +4,84 @@
 {% block subTitle %}{{player[0]}}{% endblock %}
 {% block content %}
 
-    <h1>{{teams[0][0]}} {{teams[0][2]}} - {{teams[0][3]}} {{teams[0][1]}}</h1>
-    <table class="table is-hoverable">
-        <tr>
-            <th>Name</th>
-            <th>Red</th>
-            <th>Minute</th>
-        </tr>
-        {%for card in cards%}
-        <tr>
-            <td>{{card[0]}}</td>
-            <td>{{card[1]}}</td>
-            <td>{{card[2]}}</td>
-        
-        </tr>
-        {%endfor%}    
-    </table>
-    <table class="table is-hoverable">
-        <tr>
-            <th>Name</th>
-            <th>Minute</th>
-            <th>Goal owner team</th>
-        </tr>
-        {%for goal in goals%}
-        <tr>
-            <td>{{goal[0]}}</td>
-            <td>{{goal[1]}}</td>
-            <td>{{goal[2]}}</td>
-        
-        </tr>
-        {%endfor%}    
-    </table>
-    <table class="table is-hoverable">
-        <tr>
-            <th>Out Player Name</th>
-            <th>In Player Name</th>
-            <th>Minute</th>
-        </tr>
-        {%for substitution in substitutions%}
-        <tr>
-            <td>{{substitution[0]}}</td>
-            <td>{{substitution[1]}}</td>
-            <td>{{substitution[2]}}</td>
-        
-        </tr>
-        {%endfor%}    
-    </table>
+<h1 style="text-align: center;">{{teams[0][0]}} {{teams[0][2]}} - {{teams[0][3]}} {{teams[0][1]}}</h1>
+<section class="hero is-medium is-primary is-bold" >
+    <div class="columns" style="margin: 3%;">
+        <div class="column is-4">
+            <article class="tile is-child notification is-warning" style="height: 100%;" >
+                <div>
+                    <h3 style="text-align: center;">Cards</h3>
+                </div>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Red/Yellow</th>
+                        <th>Minute</th>
+                    </tr>
+                    {%for card in cards%}
+                    <tr>
+                        <td>{{card[0]}}</td>
+                        <td>
+                            {%if card[1] %}
+                                Red
+                            {%else%}
+                                Yellow
+                            {%endif%}
+                        </td>
+                        <td>{{card[2]}}</td>
+                    
+                    </tr>
+                    {%endfor%}    
+                </table>
+            </article>    
+        </div>
+        <div class="column is-4" >
+            <article class="tile is-child notification is-warning" style="height: 100%;" >
+                <div>
+                    <h3 style="text-align: center;">Goals</h3>
+                </div>
+                <table >
+                    <tr>
+                        <th>Name</th>
+                        <th>Minute</th>
+                        <th>Goal owner team</th>
+                    </tr>
+                    {%for goal in goals%}
+                    <tr>
+                        <td>{{goal[0]}}</td>
+                        <td>{{goal[1]}}</td>
+                        <td>{{goal[2]}}</td>
+                    
+                    </tr>
+                    {%endfor%}    
+                </table>
+               
+            </article>
+        </div>
+        <div class="column is-4">
+            <article class="tile is-child notification is-warning" style="height: 100%;" >
+                <div>
+                    <h3 style="text-align: center;">Substitutions</h3>
+                </div>    
+                <table >
+                    <tr>
+                        <th>Out Player Name</th>
+                        <th>In Player Name</th>
+                        <th>Minute</th>
+                    </tr>
+                    {%for substitution in substitutions%}
+                    <tr>
+                        <td>{{substitution[0]}}</td>
+                        <td>{{substitution[1]}}</td>
+                        <td>{{substitution[2]}}</td>
+                    
+                    </tr>
+                    {%endfor%}    
+                </table>
+            </article>
+        </div>
+    </div>
+</section>
     
     
 {% endblock %}
