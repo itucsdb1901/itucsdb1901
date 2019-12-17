@@ -334,11 +334,34 @@ def leagues_page():
 
 def league(leagueid):
     url=current_app.config["db_url"]
+    scoredgoals= "none"
+    againstgoals="none"
+    gamesplayed="none"
+    scored=False
+    against=False
+    played=False
+    if(request.method=='POST'):
+        scoredgoals=request.form.get("scoredgoals",False) 
+        againstgoals=request.form.get("againstgoals", False)
+        gamesplayed=request.form.get("gamesplayed", False)
+    if(scoredgoals == "filterscored"):
+        scored=True
+        if(againstgoals == "filteragainst"):
+            against=True
+        if(againstgoals == "filteragainst" and gamesplayed == "filterplayed"):
+            against=True
+            played=True
+    elif(againstgoals == "filteragainst"):
+        against=True
+        if(gamesplayed == "filterplayed"):
+            played=True
+    elif(gamesplayed == "filterplayed"):
+        played=True
     query = "select t.id, t.name, s.win, s.draw, s.lose, s.scoredgoals, s.againstgoals, (s.win+s.draw+s.lose) as gamesPlayed, (s.scoredgoals-s.againstgoals) as avarage, (s.win*3 + s.draw) as point from standing s join team t on (t.id = s.teamid) where (s.leagueid=%d) order by point desc, avarage desc ;"%leagueid
     getleaguename= "select name from league where (id=%d)"%leagueid
     leaguename= listTable(url,getleaguename)[0][0]
     standing=listTable(url,query)
-    return render_template("league.html",leaguename=leaguename,standing=standing, user=current_user)
+    return render_template("league.html",leaguename=leaguename,standing=standing, user=current_user, scored=scored, against=against, played=played)
 
 @login_required
 def add_league():
