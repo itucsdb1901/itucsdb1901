@@ -300,7 +300,7 @@ def coach_page(personid):
     url = current_app.config["db_url"]
     query = "select DISTINCT * from person join team on person.id=team.coach WHERE (person.id=%d)"%personid
     result=getOneRowQuery(url,query)
-    (teamID, teamName, position) = (result[5], result[6], result[7])
+    (teamID, teamName, position) = (result[5], result[8], result[7])
     person=classes.Person(id=int(result[0]),name=result[1],birthDay=int(result[2]),nationality=result[3],personphoto=result[4])
     return render_template("coach.html",coach=person, year = int(datetime.datetime.now().year), teamID = teamID, teamName = teamName, user=current_user)
 
