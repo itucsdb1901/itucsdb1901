@@ -4,6 +4,7 @@ import views
 import psycopg2 as dbapi2
 import os
 from classes import User
+from datetime import timedelta
 
 SECRET_KEY = "15151009163008301724"
 login_manager = LoginManager()
@@ -48,7 +49,7 @@ def create_app():
     app.add_url_rule("/match_detail_<int:matchid>", methods=["POST","GET"], view_func=views.match_detail)
     app.add_url_rule("/add_match_detail_<int:matchid>", methods=["POST","GET"], view_func=views.add_match_detail)
     app.add_url_rule("/leagues", view_func=views.leagues_page)
-    app.add_url_rule("/league_<int:leagueid>", view_func=views.league)
+    app.add_url_rule("/league_<int:leagueid>", methods=["POST","GET"], view_func=views.league)
     app.add_url_rule("/add_data", view_func=views.add_data_page)
     app.add_url_rule("/add_person", methods=["POST", "GET"], view_func=views.add_person)
     app.add_url_rule("/add_match", methods=["POST", "GET"], view_func=views.add_match)
@@ -57,8 +58,10 @@ def create_app():
     app.add_url_rule("/add_stadium", methods=["POST", "GET"], view_func=views.add_stadium)
     app.add_url_rule("/stadiums", view_func=views.stadiums_page)
     app.add_url_rule("/stadiums/search_stadium", methods=["POST","GET"], view_func=views.search_stadium)
+    app.add_url_rule("/stadiums/order_by_<int:ordertype>", methods=["POST","GET"], view_func=views.order_stadium)
     app.config['db_url'] = db_uri
     app.config['SECRET_KEY'] = "15151009163008301724"
+    app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(seconds=5)
     login_manager.init_app(app)
     return app
 

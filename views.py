@@ -7,20 +7,6 @@ import classes
 from classes import User
 import datetime
 
-def checkSignIn():
-    if (request.method=="POST"):
-        url=current_app.config["db_url"]
-        username = request.form.get("username",False)
-        password = request.form.get("password",False)
-        checkUser="SELECT * FROM ACCOUNT WHERE(username='%s' AND password='%s' )"%(username,password)
-        result=listTable(url,checkUser)
-        if(len(result)==0):
-            return render_template("login.html")
-        else:
-            current_app.config["signed"] = True
-            return home_page()
-    return render_template("login.html")
-
 
 def executeSQLquery(url, statements):
     with dbapi2.connect(url) as connection:
@@ -57,7 +43,13 @@ def checkSignIn():
         if(result is not None):
             if check_password_hash(result[2], password):
                 user = User(username, result[2])
-                login_user(user)            
+                remember = request.form.get("remember",False)
+                if remember is not None:
+                    current_app.config['USE_SESSION_FOR_NEXT'] = True
+                    login_user(user, remember=True)
+                else:
+                    current_app.config['USE_SESSION_FOR_NEXT'] = False
+                    login_user(user, remember=False)            
                 return redirect('/')
             else:
                 return render_template("login.html", error = 1)
@@ -78,7 +70,7 @@ def signUp():
         saveUser = "INSERT INTO ACCOUNT (username, password) VALUES ('%s', '%s')"%(username, password)
         executeSQLquery(url, [saveUser])
         user = User(username=username, password=password)
-        login_user(user)
+        login_user(user, remember=True)
         return redirect('/')
     return render_template("signup.html", error=0, user = current_user)
 
@@ -348,11 +340,34 @@ def leagues_page():
 
 def league(leagueid):
     url=current_app.config["db_url"]
+    scoredgoals= "none"
+    againstgoals="none"
+    gamesplayed="none"
+    scored=False
+    against=False
+    played=False
+    if(request.method=='POST'):
+        scoredgoals=request.form.get("scoredgoals",False) 
+        againstgoals=request.form.get("againstgoals", False)
+        gamesplayed=request.form.get("gamesplayed", False)
+    if(scoredgoals == "filterscored"):
+        scored=True
+        if(againstgoals == "filteragainst"):
+            against=True
+        if(againstgoals == "filteragainst" and gamesplayed == "filterplayed"):
+            against=True
+            played=True
+    elif(againstgoals == "filteragainst"):
+        against=True
+        if(gamesplayed == "filterplayed"):
+            played=True
+    elif(gamesplayed == "filterplayed"):
+        played=True
     query = "select t.id, t.name, s.win, s.draw, s.lose, s.scoredgoals, s.againstgoals, (s.win+s.draw+s.lose) as gamesPlayed, (s.scoredgoals-s.againstgoals) as avarage, (s.win*3 + s.draw) as point from standing s join team t on (t.id = s.teamid) where (s.leagueid=%d) order by point desc, avarage desc ;"%leagueid
     getleaguename= "select name from league where (id=%d)"%leagueid
     leaguename= listTable(url,getleaguename)[0][0]
     standing=listTable(url,query)
-    return render_template("league.html",leaguename=leaguename,standing=standing, user=current_user)
+    return render_template("league.html",leaguename=leaguename,standing=standing, user=current_user, scored=scored, against=against, played=played)
 
 @login_required
 def add_league():
@@ -441,6 +456,21 @@ def search_stadium():
     url = current_app.config['db_url']
     search = request.form['search']
     listSQL = "select * from stadium join team on stadium.id = team.stadiumid WHERE (name LIKE '%" + search + "%')"
+    stadiums = listTable(url, listSQL)
+    return render_template("stadiums.html", stadiums=stadiums, user=current_user) 
+
+def order_stadium(ordertype):
+    url = current_app.config['db_url']
+    listSQL = "select * from stadium join team on stadium.id = team.stadiumid "
+    if ordertype == 0:
+        order = "order by stadium.name"
+    elif ordertype == 1:
+        order = "order by team.name"
+    elif ordertype == 2:
+        order = "order by stadium.capacity desc"
+    else:
+        order = "order by stadium.city"
+    listSQL = listSQL + order
     stadiums = listTable(url, listSQL)
     return render_template("stadiums.html", stadiums=stadiums, user=current_user) 
 
