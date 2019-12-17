@@ -68,13 +68,28 @@
                         <th>Name</th>
                         <th>Minute</th>
                         <th>Goal owner team</th>
+                        <th>Goal Type</th>
+                        <th>Distance</th>
+                        <th>Rating</th>
                     </tr>
                     {%for goal in goals%}
                     <tr>
                         <td>{{goal[0]}}</td>
                         <td>{{goal[1]}}</td>
                         <td>{{goal[2]}}</td>
-                        
+                        <td>
+                            {%if goal[4]==1%}
+                                Foot
+                            {%elif goal[4]==2%}
+                                Head
+                            {%elif goal[4]==3%}
+                                Other
+                            {%else%}
+                                -
+                            {%endif%}
+                        </td>
+                        <td>{{goal[5]}}</td>
+                        <td>{{goal[6]}}</td>
                     
                     </tr>
                     {%endfor%}    
