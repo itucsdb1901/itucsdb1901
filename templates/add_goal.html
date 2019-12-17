@@ -7,14 +7,14 @@
     </div>
 
     <section class="hero is-medium is-primary is-bold" >
-        <div class="columns">
-            
-            <div class="column" style="margin-left: 35%;">
+        <br><br>    
+            <div class="columns" style="margin-left: 29%;">
                 <form method="POST">
                     <div class="columns">
-                        <div class="column ">
-                            <label>Select Match</label>
-                            <div class="field">
+                        <div class="column is-5 ">
+                            <article class="tile is-child notification is-warning" style="height:100%">
+                                <label>Select Match</label>
+                                <div class="field">
                                 <div class="control">
                                     <div class="select is-primary">
                                         <select name="matchid">
@@ -25,96 +25,99 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <label>Minute</label>
-                            <div class="field">
-                                <input class="input" id="minutebutton" onkeyup="minutecontrol()" type="number" name="minute"/>
-                            </div>
-                            <label>Goal Type</label>
-                            <div class="field">
-                                <input class="input" id="goaltype" onkeyup="minutecontrol()" type="number" name="goaltype"/>
-                            </div>
-                            <label>Distance</label>
-                            <div class="field">
-                                <input class="input" id="distance" onkeyup="minutecontrol()" type="number" name="distance"/>
-                            </div>
-                            <label >Is Freekick</label>
-                            <br>
-                            <div class="form-check-inline">
+                                </div>
+                                <label>Minute</label>
+                                <div class="field">
+                                    <input class="input" id="minutebutton" onkeyup="minutecontrol()" type="number" name="minute"/>
+                                </div>
+                                <label>Goal Type</label>
+                                <div class="field">
+                                    <input class="input" id="goaltype" onkeyup="minutecontrol()" type="number" name="goaltype"/>
+                                </div>
+                                <label>Distance</label>
+                                <div class="field">
+                                    <input class="input" id="distance" onkeyup="minutecontrol()" type="number" name="distance"/>
+                                </div>
+                                <label >Is Freekick</label>
+                                <br>
+                                <div class="form-check-inline">
                                 <label class="form-check-label" style="margin-right:20px">
                                     <input type="radio" class="form-check-input" name="isfreekickgoal" value="true" >Yes
                                 </label>
                                 <label class="form-check-label">
                                     <input type="radio" class="form-check-input" name="isfreekickgoal" value="false" >No
                                 </label>
-                            </div>
-                            <label>Goal Rating</label>
-                            <div class="field">
+                                </div>
+                                <label>Goal Rating</label>
+                                <div class="field">
                                 <input class="input" id="goalrating" type="number" name="goalrating"/>
-                            </div>
+                                </div>
+                            </article>
                         </div>
-                        <div class="column">
-                            <label>Select Assist</label>
-                            <div class="field">
-                                <div class="control">
-                                    <div class="select is-primary">
-                                        <select name="assistPlayerid">
-                                            <option disabled selected value> -- select assist owner -- </option>
-                                        {% for player in assistPlayers %}
-                                            <option value="{{player[0]}}">{{player[1]}}</option>
-                                        {%endfor%}
-                                        </select>
+                        <div class="column is-5">
+                            <article class="tile is-child notification is-warning" style="height:100%">
+                                <label>Select Assist</label>
+                                <div class="field">
+                                    <div class="control">
+                                        <div class="select is-primary">
+                                            <select name="assistPlayerid">
+                                                <option disabled selected value> -- select assist owner -- </option>
+                                            {% for player in assistPlayers %}
+                                                <option value="{{player[0]}}">{{player[1]}}</option>
+                                            {%endfor%}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="field" >
-                                <div class="control" >
-                                    <label>Pass Distance</label>
-                                    <input class="input is-primary" min="1" name="passdistance" max="160" type="number" placeholder="Pass Distance">
+                                <div class="field" >
+                                    <div class="control" >
+                                        <label>Pass Distance</label>
+                                        <input class="input is-primary" min="1" name="passdistance" max="160" type="number" placeholder="Pass Distance">
+                                    </div>
                                 </div>
-                            </div>
-                            <label>Is Cross</label>
-                            <br>
-                            <div class="form-check-inline">
-                                <label class="form-check-label" style="margin-right:20px">
-                                    <input type="radio" class="form-check-input" name="iscross" value="true" >Yes
-                                </label>
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="iscross" value="false" >No
-                                </label>
-                            </div>
-                            <br>
-                            <div>
-                                <label>Assist Type</label>
-                                <input class="input" name="assisttype" id="assisttype" type="number""/>
-                            </div>
-                            <label >Is Freekick</label>
-                            <br>
-                            <div class="form-check-inline">
-                                <label class="form-check-label" style="margin-right:20px">
-                                    <input type="radio" class="form-check-input" name="isfreekickassist" value="false" >Yes
-                                </label>
-                                <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="isfreekickassist" value="true" >No
-                                </label>
-                            </div>
-                            <div class="column">
-                                <label>Assist Rating</label>
-                                <div class="field">
-                                    <input class="input" id="assistrating" min="0" max="10" type="number" name="assistrating"/>
+                                <label>Is Cross</label>
+                                <br>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label" style="margin-right:20px">
+                                        <input type="radio" class="form-check-input" name="iscross" value="true" >Yes
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="iscross" value="false" >No
+                                    </label>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div calss="field">
-                                <input class="button is-danger" type="submit" id="save" disabled value="SAVE GOAL"/>
-                            </div>
-                            <br>
+                                <br>
+                                <div>
+                                    <label>Assist Type</label>
+                                    <input class="input" name="assisttype" id="assisttype" type="number""/>
+                                </div>
+                                <label >Is Freekick</label>
+                                <br>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label" style="margin-right:20px">
+                                        <input type="radio" class="form-check-input" name="isfreekickassist" value="false" >Yes
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="isfreekickassist" value="true" >No
+                                    </label>
+                                </div>
+                                <div class="column">
+                                    <label>Assist Rating</label>
+                                    <div class="field">
+                                        <input class="input" id="assistrating" min="0" max="10" type="number" name="assistrating"/>
+                                    </div>
+                                </div>
+                            </article>
                         </div>
                     </div>
+                    <div>
+                        <div calss="field" style="margin-left: 35%;">
+                            <input class="button is-danger" type="submit" id="save" disabled value="SAVE GOAL"/>
+                        </div>
+                        <br>
+                    </div>
+                    <br>
                 </form>
             </div>
-        </div>
     </section>
     <script>
         function minutecontrol() {
