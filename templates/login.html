@@ -99,16 +99,32 @@
             <label>Password</label>
             <input type="password" class="form-control" placeholder="Password" name="password">
             </div>
-            <button type="submit" class="btn btn-black">Login</button>
+            <div class="columns">
+                <div class="row">
+                    <div class="col-sm">
+                        <p>Remember</p>
+                    </div>
+                    <div class="col-sm">
+                        <input type="checkbox" name="remember" value="1">    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <button class="btn btn-black" id="goSignUp">Sign Up</button>
+                    </div>
+                    <div class="col-sm">
+                        <button type="submit" class="btn btn-black">Login</button>
+                    </div>
+                </div>
+            </div>    
         </form>
-        <button type="submit" class="btn btn-black" id="goSignUp">Sign Up</button>
     </div>
 </div>
 </div>
 
 {% if error == 1 %}
         <script>
-            alert("Password or username is invalid!")
+            alert("Password is invalid! Try again...")
             location.href = "/login"
         </script>
 {% endif %}

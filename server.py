@@ -4,6 +4,7 @@ import views
 import psycopg2 as dbapi2
 import os
 from classes import User
+from datetime import timedelta
 
 SECRET_KEY = "15151009163008301724"
 login_manager = LoginManager()
@@ -56,8 +57,10 @@ def create_app():
     app.add_url_rule("/add_stadium", methods=["POST", "GET"], view_func=views.add_stadium)
     app.add_url_rule("/stadiums", view_func=views.stadiums_page)
     app.add_url_rule("/stadiums/search_stadium", methods=["POST","GET"], view_func=views.search_stadium)
+    app.add_url_rule("/stadiums/order_by_<int:ordertype>", methods=["POST","GET"], view_func=views.order_stadium)
     app.config['db_url'] = db_uri
     app.config['SECRET_KEY'] = "15151009163008301724"
+    app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(seconds=5)
     login_manager.init_app(app)
     return app
 
