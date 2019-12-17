@@ -456,7 +456,7 @@ def add_team():
         stadiumid = int(request.form['stadium'])
         fancount = int(request.form['fancount'])
         teamcity = request.form['teamcity']
-        establish_year = int(request.form['establish year'])
+        establish_year = int(request.form['establish_year'])
         teamLogo = request.form.get('teamLogo',False)
         query1 = "INSERT INTO team (name, leagueid, stadiumid, coach, teamlogo, fancount, city, establishyear) VALUES ('%s', %d, %d, %d,'%s', %d, '%s', %d)" %(name, leagueid, stadiumid, coachid, teamLogo, fancount, teamcity, establish_year)
         executeSQLquery(url, [query1])
