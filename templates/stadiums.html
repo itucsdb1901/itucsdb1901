@@ -21,14 +21,17 @@
                 <th><a href="/stadiums/order_by_1">Team</a></th>
                 <th><a href="/stadiums/order_by_2">Capacity</a></th>
                 <th><a href="/stadiums/order_by_3">City</a></th>
+                <th><a href="/stadiums/order_by_3">Year</a></th>
+                <th><a href="/stadiums/order_by_3">Budget</a></th>
             </tr>
             {%for stadium in stadiums%}
             <tr>
-                <td >{{stadium[1]}}</td>
-                <td>{{stadium[5]}}</td>
+                <td >{{stadium[0]}}</td>
+                <td>{{stadium[1]}}</td>
                 <td>{{stadium[2]}}</td>
                 <td>{{stadium[3]}}</td>
-            
+                <td>{{stadium[4]}}</td>
+                <td>{{stadium[5]}}</td>
             </tr>
             {%endfor%}    
     </table>
