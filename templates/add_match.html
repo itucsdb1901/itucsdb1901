@@ -45,11 +45,11 @@
                     <div class="columns">
                         <div class="column is-2">
                             <label>Home Score</label>
-                            <input class="input" name="homescore" type="number" placeholder="Home Score"/>
+                            <input class="input" onkeyup="scorecontrol()" id="homescore" name="homescore" type="number" placeholder="Home Score"/>
                         </div>
                         <div class="column is-2">
                             <label>Away Score</label>
-                            <input class="input" name="awayscore" type="number" placeholder="Home Score"/>
+                            <input class="input" onkeyup="scorecontrol()"  id="awayscore" name="awayscore" type="number" placeholder="Home Score"/>
                         </div>
                     </div>
                     <div class="columns">
@@ -90,13 +90,22 @@
                     <input class="input" name="matchdate" type="date" placeholder="Match Date" style="width: 33%;"/>
                     <br/>
                     <br/>
-                    <input class="button is-danger" type="submit" value="Save Match" />
+                    <input class="button is-danger" id="submit" type="submit" value="Save Match" />
                     <br><br>
                 </form>
             </div>
             
         </div>
     </section>
-            
+    <script>
+        function scorecontrol(){
+            if(document.getElementById("homescore").value < 0 || document.getElementById("homescore").value >= 15 || document.getElementById("awayscore").value < 0 || document.getElementById("awayscore").value >= 15){
+                document.getElementById('submit').disabled = true; 
+            }else { 
+                document.getElementById('submit').disabled = false;
+            }
+
+        }
+    </script>
             
 {% endblock %}

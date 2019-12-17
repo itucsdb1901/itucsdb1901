@@ -16,14 +16,14 @@
                         <label>Name: </label>
                         <input class="input" name="name" id="name" type="text" />
                         <label>Birth Year: </label>
-                        <input class="input" name="birthyear" id="birthyear" type="number" />
+                        <input class="input" onkeyup="birthyearcontrol()"name="birthyear" id="birthyear" type="number" />
                         <label>Nationality:</label>
                         <input class="input" name="nationality" id="nationality" type= "text" />
                         <label>Person Photo Url:</label>
                         <input class="input" name="personphoto" id="personphoto" type= "text" />
                         <br/>
                         <br/>
-                        <input class="button is-danger" value="Save" type="submit"/>
+                        <input class="button is-danger" value="Save" id="save" type="submit"/>
                     </form>
                 </article>
                 
@@ -34,4 +34,15 @@
         </div> 
         <br><br>   
     </section>        
+    {%if user.is_active%}
+    <script>
+        function birthyearcontrol(id){
+            if(document.getElementById("birthyear").value < 1951 || document.getElementById("birthyear").value > 2019) { 
+                document.getElementById('save').disabled = true; 
+            } else { 
+                document.getElementById('save').disabled = false;
+            }
+        }
+    </script>
+    {%endif%}
 {% endblock %}
