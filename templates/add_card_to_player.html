@@ -16,12 +16,12 @@
                         <label >Card Color</label>
                     </div>
                     
-                    <div class="form-check-inline">
-                        <label class="form-check-label" style="margin-right:20px">
-                          <input type="radio" class="form-check-input" name="cardColor" value="false" >Yellow
+                    <div class="form-check-inline" id="card">
+                        <label class="form-check-label" id="check1" style="margin-right:20px">
+                          <input type="radio" class="form-check-input" name="cardColor" onclick="run()" value="false"  >Yellow
                         </label>
-                        <label class="form-check-label" value="true">
-                            <input type="radio" class="form-check-input" name="cardColor" value="true" >Red
+                        <label class="form-check-label" id="check2" value="true">
+                            <input type="radio" class="form-check-input" name="cardColor" onclick="run()" value="true" >Red
                         </label>
                     </div>
                     <br><br>
@@ -33,7 +33,7 @@
                         <div class="column is-3">
                             <div class="field" style="width: 115%;">
                                 <div class="control">
-                                    <input class="input is-primary" min="1" name="banduration" type="number" placeholder="Ban Duration">
+                                    <input class="input is-primary" min="1" name="banduration" id="myText" type="number" value="0" placeholder="Ban Duration">
                                 </div>
                             </div>
                         </div>
@@ -43,10 +43,10 @@
                     </div>
                     <div class="form-check-inline">
                         <label class="form-check-label" style="margin-right:20px">
-                          <input type="radio" class="form-check-input" name="firstyellow" value="false" >1st Yellow
+                          <input type="radio" class="form-check-input" name="firstyellow" id="first" value="true" >1st Yellow
                         </label>
                         <label class="form-check-label" value="true">
-                            <input type="radio" class="form-check-input" name="firstyellow" value="true" >2nd Yellow
+                            <input type="radio" class="form-check-input" name="secondyellow" value="false" >2nd Yellow
                         </label>
                     </div>
                     <br><br>
@@ -86,4 +86,18 @@
                     
                 </form>
             </div>
+        </div>
+    </section>
+    <script>
+        function run() {
+            var a =document.querySelector('input[name="cardColor"]:checked').value
+            if(a=="true") { 
+                    document.getElementById("first").disabled = true;
+                    document.getElementById("myText").disabled = false;
+            } else { 
+                    document.getElementById("myText").disabled = true;
+                    document.getElementById("first").disabled = false;
+            }
+            }  
+    </script>
 {% endblock %}
