@@ -292,7 +292,7 @@ def coachs_page():
 def search_coach():
     url = current_app.config['db_url']
     search = request.form['search']
-    listSQL = "select * from person join team on person.id=team.coach  WHERE (lower(person.name) LIKE '%" + search + "%')"
+    listSQL = "select * from person join team on person.id=team.coach  WHERE (lower(person.name) LIKE '%" + search.lower() + "%')"
     coachs = listTable(url, listSQL)
     return render_template("coachs.html", coachs=coachs, user=current_user)
 
@@ -515,31 +515,56 @@ def add_stadium():
 
 def stadiums_page():
     url = current_app.config["db_url"]
-    listSQL = "select s.name, team.name, s.capacity, s.city, s.establishyear, s.budget from stadium s join team on s.id = team.stadiumid "
+    listSQL = "select s.name, team.name, s.capacity, s.city, s.establishyear, s.budget, s.id from stadium s join team on s.id = team.stadiumid "
     stadiums = listTable(url, listSQL)
     return render_template("stadiums.html",stadiums=stadiums, user=current_user)
 
 def search_stadium():
     url = current_app.config['db_url']
     search = request.form['search']
-    listSQL = "select * from stadium join team on stadium.id = team.stadiumid WHERE (name LIKE '%" + search + "%')"
+    listSQL = "select s.name, team.name, s.capacity, s.city, s.establishyear, s.budget, s.id from stadium s join team on s.id = team.stadiumid "
+    listSQL = listSQL + "WHERE (lower(s.name) LIKE '%" + search.lower() + "%')"
     stadiums = listTable(url, listSQL)
     return render_template("stadiums.html", stadiums=stadiums, user=current_user) 
 
 def order_stadium(ordertype):
     url = current_app.config['db_url']
-    listSQL = "select * from stadium join team on stadium.id = team.stadiumid "
+    listSQL = "select s.name, team.name, s.capacity, s.city, s.establishyear, s.budget, s.id from stadium s join team on s.id = team.stadiumid "
     if ordertype == 0:
-        order = "order by stadium.name"
+        order = "order by s.name"
     elif ordertype == 1:
         order = "order by team.name"
     elif ordertype == 2:
-        order = "order by stadium.capacity desc"
+        order = "order by s.capacity desc"
+    elif ordertype == 3:
+        order = "order by s.city"
+    elif ordertype == 4:
+        order = "order by s.establishyear desc"
     else:
-        order = "order by stadium.city"
+        order = "order by s.budget desc"
     listSQL = listSQL + order
     stadiums = listTable(url, listSQL)
     return render_template("stadiums.html", stadiums=stadiums, user=current_user) 
+
+@login_required
+def update_stadium(stadiumid):
+    url = current_app.config['db_url']
+    stadium = "select * from stadium s where s.id = %d " %stadiumid
+    stadium = getOneRowQuery(url, stadium)
+    stadium = classes.Stadium(stadium[0], stadium[1], stadium[2], stadium[3], stadium[4], stadium[5])
+    update = True
+    if(request.method == 'POST'):
+        name = request.form['name']
+        capacity = int(request.form['capacity'])
+        city = request.form['city']
+        establishyear = int(request.form['establishyear'])
+        budget = int(request.form['budget'])
+        query = "UPDATE stadium SET name = '%s', capacity = %d, city = '%s', establishyear = %d, budget = %d WHERE id = %d" %(name, capacity, city, establishyear, budget, stadiumid) 
+        executeSQLquery(url, [query])
+        return redirect(url_for('stadiums_page'))    
+    return render_template("add_stadium.html", stadium=stadium, user=current_user, update=update) 
+
+
 
 @login_required
 def add_data_page():

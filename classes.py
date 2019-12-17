@@ -23,11 +23,13 @@ class Squad:
 		self.position = position
 
 class Stadium:
-	def __init__(self, id, name, capacity, city):
+	def __init__(self, id, name, capacity, city, year, budget):
 		self.id = id
 		self.name = name
 		self.capacity = capacity
 		self.city = city
+		self.establishyear = year
+		self.budget = budget
 
 class League:
 	def __init__(self, id, name, teamcount, country):

@@ -2,7 +2,7 @@
 {% block title %}Player Added{% endblock %}
 {% block content %}
         <div style="text-align: center;">
-            <h1>Add Stadium</h1>
+            <h1 id="header">{{'Update ' + stadium.name if update else 'Add Stadium'}}</h1>
         </div>
         <section class="hero is-medium is-primary is-bold" >
         <div class="columns">
@@ -10,15 +10,15 @@
             <div class="column is-4">
                 <form method="POST">
                     <label>Stadium Name</label>
-                    <input class="input" type="text" name="name" placeholder="Stadium Name" maxlength="20"/>
+                    <input class="input" type="text" onkeyup="success()" name="name" placeholder="Stadium Name" maxlength="20" value="{{stadium.name if update else ''}}"/>
                     <label>Stadium Capacity</label>
-                    <input class="input" onkeyup="capacitycontrol()" id="capacity" type="number" name="capacity" placeholder="Stadium Capacity" maxlength="20"/>
+                    <input class="input" onkeyup="success()" id="capacity" type="number" name="capacity" placeholder="Stadium Capacity" maxlength="20" value="{{stadium.capacity if update else 0}}"/>
                     <label>Stadium City</label>
-                    <input class="input" type="text" id="city" onkeyup="success()" name="city" placeholder="Stadium City" maxlength="20"/>
+                    <input class="input" type="text" id="city" onkeyup="success()" name="city" placeholder="Stadium City" maxlength="20" value="{{stadium.city if update else ''}}"/>
                     <label>Establish Year</label>
-                    <input class="input" type="number" id="city" onkeyup="success()" name="establishyear" placeholder="Establish Year" min="1860"/>
+                    <input class="input" type="number" id="establishyear" onkeyup="success()" name="establishyear" placeholder="Establish Year" min="1860" value="{{stadium.establishyear if update else 1860}}"/>
                     <label>Budget</label>
-                    <input class="input" type="number" id="city" onkeyup="success()" name="budget" placeholder="Cost" min="0"/>
+                    <input class="input" type="number" id="budget" onkeyup="success()" name="budget" placeholder="Cost" min="0" value="{{stadium.budget if update else 0}}"/>
                     <br/>
                     <br/>
                     <input class="button is-danger" id="save" type="submit" title="Save Stadium" value="Save" disabled>
