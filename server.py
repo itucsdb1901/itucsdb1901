@@ -52,6 +52,7 @@ def create_app():
     app.add_url_rule("/matches", view_func=views.matches_page)
     app.add_url_rule("/match_detail_<int:matchid>", methods=["POST","GET"], view_func=views.match_detail)
     app.add_url_rule("/add_match_detail_<int:matchid>", methods=["POST","GET"], view_func=views.add_match_detail)
+    app.add_url_rule("/delete_match_<int:matchid>", methods=["POST","GET"], view_func=views.delete_match)
     app.add_url_rule("/leagues", view_func=views.leagues_page)
     app.add_url_rule("/league_<int:leagueid>", methods=["POST","GET"], view_func=views.league)
     app.add_url_rule("/add_data", view_func=views.add_data_page)

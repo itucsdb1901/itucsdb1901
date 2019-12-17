@@ -26,6 +26,11 @@
                     <button class="button is-danger" action="submit" id="detailButton" name="detailButton" >See Detail</button>
                 </form>
             </td>
+            <td>
+                <form method="POST" name ="delete_{{match[9]}}" action="/delete_match_{{match[9]}}">
+                    <button class="button is-danger" action="submit" id="delete_match" name="delete_match" >Delete Match</button>
+                </form>
+            </td>
             <td>                
                 <form method="GET" name ="add_detail{{match[9]}}" action="/add_match_detail_{{match[9]}}">
                     <button class="button is-danger" action="submit" id="add_detailButton" name="add_detailButton" >Add Detail</button>

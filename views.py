@@ -428,6 +428,21 @@ def add_match():
         executeSQLquery(url, queryList)
     return render_template("add_match.html", stadiums = stadiums, leagues = leagues, teams = teams, user=current_user)
 
+@login_required
+def delete_match(matchid):
+    url = current_app.config['db_url']
+    query = "delete from card c where (c.matchid=%d)"%matchid
+    executeSQLquery(url,[query])
+    query = "delete from substitution s where s.matchid=%d"%matchid
+    executeSQLquery(url,[query])
+    query = "delete from assist a where (a.goalid in (select id from goal g where matchid=%d)) "%matchid
+    executeSQLquery(url,[query])
+    query = "delete from goal g where (g.matchid=%d)"%matchid
+    executeSQLquery(url,[query])
+    query = "delete from match m where (m.id=%d)"%matchid
+    executeSQLquery(url,[query])
+    return matches_page()
+
 def matches_page():
     url = current_app.config['db_url']
     query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid ,m.id 
@@ -527,9 +542,7 @@ def add_goal(personid):
 @login_required
 def delete_goal(goalid):
     url=current_app.config['db_url']
-    query="select a.id from assist a where(a.goalid=%d)"%goalid
-    assistID=listTable(url,query) 
-    query="delete from assist where id=%d"%assistID
+    query="delete from assist a where a.goalid=%d "%goalid
     executeSQLquery(url,[query])
     query="delete from goal where id = %d"%goalid
     executeSQLquery(url,[query])
