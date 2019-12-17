@@ -86,6 +86,8 @@ def logOut():
 #########Home Page Function############
 def home_page():
     url=current_app.config["db_url"]
+    team_count = "SELECT COUNT(*) FROM TEAM"
+    team_count = (listTable(url, team_count)[0][0])
     person_count = "SELECT COUNT(*) FROM PERSON"
     person_count = (listTable(url, person_count)[0][0])
     leagues_count  ="SELECT COUNT(*) FROM LEAGUE"
@@ -102,7 +104,8 @@ def home_page():
                 "matches_count":matches_count,
                 "stadiums_count":stadiums_count,
                 "goals_count":goals_count,
-                "current_user":current_user
+                "current_user":current_user,
+                "teams_count":team_count
 
                 }
     return render_template("home.html", arguments=arguments, user=current_user)
@@ -231,19 +234,14 @@ def search_team():
 
 def team_page(teamid):
     url = current_app.config["db_url"]
-    query = "SELECT t.id,t.name,l.name, p.name, s.name,l.country,teamlogo,t.city ,t.fancount FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
+    query = "SELECT t.id, t.name, t.leagueid, t.stadiumid, t.coach, t.teamlogo, t.fancount, t.city, t.establishyear, l.name, l.country, p.name, s.name FROM TEAM t,LEAGUE l,PERSON p, STADIUM s WHERE (l.id=t.leagueid AND p.id=t.coach AND s.id=t.stadiumid AND t.id=%d)"%teamid
     result=getOneRowQuery(url,query)
+    (id, name, leagueID, stadiumID, coach, teamLogo, fancount, city, establishyear) = (result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8])
+    (leagueName, country, coachName, stadiumName) = (result[9], result[10], result[11], result[12])
+    team=classes.Team(id, name, leagueID, stadiumID, coach, teamLogo, fancount, city, establishyear)
     getSquadSQL="SELECT DISTINCT p.name,s.position,p.id FROM person p,squad s,team t where(p.id=s.personid and s.teamid=%d)"%teamid
     squad=listTable(url,getSquadSQL)
-    team=classes.Team(id=int(result[0]),name=result[1],leagueID=result[2],stadiumID=result[4],coachID=result[3],teamLogo=result[6],city=result[7],country=result[5],fancount=result[8])
-    return render_template("team.html",team=team,squad=squad, user=current_user)
-
-@login_required
-def delete_team(teamid):
-    url = current_app.config['db_url']
-    query = 'DELETE FROM TEAM WHERE (id=%d)'%teamid
-    executeSQLquery(url, [query])
-    return teams_page()
+    return render_template("team.html",team=team,squad=squad, leagueName = leagueName, coachName = coachName, stadiumName = stadiumName, user=current_user)
 
 @login_required
 def add_team():
@@ -270,6 +268,33 @@ def add_team():
         query2 = "insert into standing (teamid, leagueid, win, lose, draw, scoredgoals, againstgoals) values (%d, %d, 0, 0, 0, 0, 0)"%(teamID, leagueid)
         executeSQLquery(url, [query2])
     return render_template("add_team.html", stadiums = stadiums, leagues = leagues, people = people, user=current_user)
+
+def update_team(teamid):
+    url = current_app.config['db_url']
+    update = True
+    getTeamSQL = "SELECT t.id, t.name, t.leagueid, t.stadiumid, t.coach, t.teamlogo, t.fancount, t.city, t.establishyear FROM team t where t.id = %d" %teamid
+    team = listTable(url, getTeamSQL)[0]
+    team = classes.Team(team[0], team[1], team[2], team[3], team[4], team[5], team[6], team[7], team[8])
+    getPeopleSQL = "SELECT * FROM person"
+    getStadiumsSQL = "SELECT * FROM stadium"
+    getLeaguesSQL = "SELECT * FROM league"
+    people = listTable(url, getPeopleSQL)
+    leagues = listTable(url, getLeaguesSQL)
+    stadiums = listTable(url, getStadiumsSQL)
+    if(request.method == 'POST'):
+        name = request.form.get('name', False)
+        coachid = int(request.form['coach'])
+        leagueid = int(request.form['league'])
+        stadiumid = int(request.form['stadium'])
+        fancount = int(request.form['fancount'])
+        teamcity = request.form['teamcity']
+        establish_year = int(request.form['establish_year'])
+        teamLogo = request.form.get('teamLogo',False)
+        query1 = "UPDATE team SET name='%s', leagueid=%d, stadiumid=%d, coach=%d, teamlogo='%s', fancount=%d, city='%s', establishyear=%d WHERE id = %d" %(name, leagueid, stadiumid, coachid, teamLogo, fancount, teamcity, establish_year, teamid)
+        query2 = "UPDATE standing SET leagueid = %d WHERE teamid = %d"%(leagueid, teamid)
+        executeSQLquery(url, [query1, query2])
+        return redirect(url_for("teams_page"))
+    return render_template("add_team.html", team = team, stadiums = stadiums, leagues = leagues, people = people, user=current_user, update=update)
 
 
 #####League Related Functions####
@@ -425,6 +450,21 @@ def add_match():
         executeSQLquery(url, queryList)
     return render_template("add_match.html", stadiums = stadiums, leagues = leagues, teams = teams, user=current_user)
 
+@login_required
+def delete_match(matchid):
+    url = current_app.config['db_url']
+    query = "delete from card c where (c.matchid=%d)"%matchid
+    executeSQLquery(url,[query])
+    query = "delete from substitution s where s.matchid=%d"%matchid
+    executeSQLquery(url,[query])
+    query = "delete from assist a where (a.goalid in (select id from goal g where matchid=%d)) "%matchid
+    executeSQLquery(url,[query])
+    query = "delete from goal g where (g.matchid=%d)"%matchid
+    executeSQLquery(url,[query])
+    query = "delete from match m where (m.id=%d)"%matchid
+    executeSQLquery(url,[query])
+    return matches_page()
+
 def matches_page():
     url = current_app.config['db_url']
     query = '''SELECT t1.name, t2.name, m.homescore, m.awayscore, std.name, lg.name, m.matchdate, m.homeid, m.awayid ,m.id 
@@ -524,9 +564,7 @@ def add_goal(personid):
 @login_required
 def delete_goal(goalid):
     url=current_app.config['db_url']
-    query="select a.id from assist a where(a.goalid=%d)"%goalid
-    assistID=listTable(url,query) 
-    query="delete from assist where id=%d"%assistID
+    query="delete from assist a where a.goalid=%d "%goalid
     executeSQLquery(url,[query])
     query="delete from goal where id = %d"%goalid
     executeSQLquery(url,[query])
