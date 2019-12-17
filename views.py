@@ -354,12 +354,13 @@ def add_player_to_squad(teamid):
         injurymonth = int(request.form['injurymonth'])
         amount= int(request.form['amount'])
         duration = int(request.form['duration'])
-        startdate= int(request.form['startdate'])
+        startdate= request.form['startdate']
+        startdate = datetime.datetime.strptime(startdate, '%Y').date()
         amount= int(request.form['amount'])
         releasecost=int(request.form['releasecost'])
         isrent=str(request.form['isRent'])
         query = "INSERT INTO squad (personid,teamid,position, secondposition, foot, kitnumber, injurymonth) VALUES (%d, %d ,'%s', '%s', '%s', %d, %d)" %(playerid, teamid, position, secondposition, foot, kitnumber, injurymonth)
-        query2 ="INSERT INTO negotitation (personid,teamid,duration,startdate,amount,releasecost,isrent) VALUES (%d,%d,%d,%d,%d,%d,'%s')" %(playerid,teamid,duration,startdate,amount,releasecost,isrent)
+        query2 ="INSERT INTO negotitation (personid,teamid,duration,startdate,amount,relasecost,isrent) VALUES (%d,%d,%d,CAST('%s' AS  DATE),%d,%d,'%s')" %(playerid,teamid,duration,startdate,amount,releasecost,isrent)
         executeSQLquery(url, [query, query2])
     return render_template("add_player_to_squad.html",playerList=playerList,team=team, user=current_user)
 
@@ -383,7 +384,7 @@ def add_person():
         weight=int(request.form["weight"])
         height=int(request.form["height"])
         personphoto=request.form["personphoto"]
-        query="INSERT INTO PERSON (NAME,BIRTHYEAR,NATIONALITY,PERSONPHOTO,height,weight) VALUES ('%s',%d,'%s','%s'%d,%d)"%(name,birthyear,nationality,personphoto,height,weight)
+        query="INSERT INTO PERSON (NAME,BIRTHYEAR,NATIONALITY,PERSONPHOTO,height,weight) VALUES ('%s',%d,'%s','%s', %d,%d)"%(name,birthyear,nationality,personphoto,height,weight)
         statement=[query]
         url=current_app.config["db_url"]
         executeSQLquery(url,statement)
@@ -450,7 +451,7 @@ def add_team():
     leagues = listTable(url, getLeaguesSQL)
     stadiums = listTable(url, getStadiumsSQL)
     if(request.method == 'POST'):
-        name = request.form['name']
+        name = request.form.get('name', False)
         coachid = int(request.form['coach'])
         leagueid = int(request.form['league'])
         stadiumid = int(request.form['stadium'])
@@ -506,15 +507,15 @@ def add_stadium():
         name = request.form['name']
         capacity = int(request.form['capacity'])
         city = request.form['city']
-        establishyear = request.form['establishyear']
-        budget = request.form['budget']
+        establishyear = int(request.form['establishyear'])
+        budget = int(request.form['budget'])
         query = "INSERT INTO stadium (name, capacity, city, establishyear, budget) VALUES ('%s', %d, '%s', %d, %d)" %(name, capacity, city, establishyear, budget) 
         executeSQLquery(url, [query])
     return render_template("add_stadium.html", user=current_user)
 
 def stadiums_page():
     url = current_app.config["db_url"]
-    listSQL = "select s.name, team.name, s.capacity, s.city, s.year, s.budget from stadium s join team on s.id = team.stadiumid "
+    listSQL = "select s.name, team.name, s.capacity, s.city, s.establishyear, s.budget from stadium s join team on s.id = team.stadiumid "
     stadiums = listTable(url, listSQL)
     return render_template("stadiums.html",stadiums=stadiums, user=current_user)
 
