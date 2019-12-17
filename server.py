@@ -38,6 +38,7 @@ def create_app():
     app.add_url_rule("/players/search_player", methods=["POST","GET"], view_func=views.search_player)
     app.add_url_rule("/player/delete_<int:personid>", methods=["POST"], view_func=views.delete_player)
     app.add_url_rule("/player/add_goal_<int:personid>", methods=["GET","POST"], view_func=views.add_goal)
+    app.add_url_rule("/person/update_<int:personid>", methods=["GET","POST"], view_func=views.update_person)
     app.add_url_rule("/players", methods=["POST", "GET"], view_func=views.players_page)
     app.add_url_rule("/coachs", methods=["POST", "GET"], view_func=views.coachs_page)
     app.add_url_rule("/coachs/search_coach", methods=["POST","GET"], view_func=views.search_coach)

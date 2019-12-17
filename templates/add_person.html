@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
-{% block title %}Add Person{% endblock %}
+{% block title %}{{'Update ' + person.name if update else 'Add Person'}}{% endblock %}
 {% block content %}
     <div style="text-align: center;">
-        <h1>Add Person</h1>
+        <h1>{{'Update ' + person.name if update else 'Add Person'}}</h1>
     </div>
     
     <section class="hero is-medium is-primary is-bold">
@@ -14,17 +14,17 @@
                 <article class="tile is-child notification is-warning" >
                     <form method="POST"  >
                         <label>Name: </label>
-                        <input class="input" name="name" id="name" type="text" />
+                        <input class="input" name="name" id="name" type="text" value="{{person.name if update else ''}}"/>
                         <label>Birth Year: </label>
-                        <input class="input" onkeyup="birthyearcontrol()"name="birthyear" id="birthyear" type="number" />
+                        <input class="input" onkeyup="birthyearcontrol()"name="birthyear" id="birthyear" type="number" value="{{person.birthDay if update else 1951}}"/>
                         <label>Nationality:</label>
-                        <input class="input" name="nationality" id="nationality" type= "text" />
+                        <input class="input" name="nationality" id="nationality" type= "text" value="{{person.nationality if update else ''}}"/>
                         <label>Weight:</label>
-                        <input class="input" name="weight" id="weight" type= "text" />
+                        <input class="input" name="weight" id="weight" type= "number" value="{{person.weight if update else 0}}"/>
                         <label>Height:</label>
-                        <input class="input" name="height" id="height" type= "text" />
+                        <input class="input" name="height" id="height" type= "number" value="{{person.height if update else 0}}"/>
                         <label>Person Photo Url:</label>
-                        <input class="input" name="personphoto" id="personphoto" type= "text" />
+                        <input class="input" name="personphoto" id="personphoto" type= "text" value="{{person.personphoto if update else personphoto}}"/>
                         <br/>
                         <br/>
                         <input class="button is-danger" value="Save" id="save" type="submit"/>
