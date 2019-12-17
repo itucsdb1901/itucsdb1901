@@ -98,6 +98,9 @@ class User:
 	def __init__(self, username, password):
 		self.username = username
 		self.password = password
+		self.name = ""
+		self.email = ""
+		self.age = ""
 	def is_authenticated(self):
 		return True
 	def is_active(self):

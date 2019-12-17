@@ -42,7 +42,7 @@ def checkSignIn():
         result=getOneRowQuery(url,checkUser)
         if(result is not None):
             if check_password_hash(result[2], password):
-                user = User(username, result[2])
+                user = User(username, result[2], name, email, age)
                 remember = request.form.get("remember",False)
                 if remember is not None:
                     current_app.config['USE_SESSION_FOR_NEXT'] = True
@@ -62,6 +62,9 @@ def signUp():
         url=current_app.config["db_url"]
         username = request.form.get("username",False)
         password = request.form.get("password",False)
+        name = request.form.get("name",False)
+        email = request.form.get("email",False)
+        age = request.form.get("age",False)
         checkExist = "SELECT username FROM ACCOUNT WHERE (username = '%s')" %(username)
         checkExist = getOneRowQuery(url, checkExist)
         if(checkExist is not None):
@@ -69,7 +72,7 @@ def signUp():
         password = generate_password_hash(password, method="sha256")
         saveUser = "INSERT INTO ACCOUNT (username, password) VALUES ('%s', '%s')"%(username, password)
         executeSQLquery(url, [saveUser])
-        user = User(username=username, password=password)
+        user = User(username, password)
         login_user(user, remember=True)
         return redirect('/')
     return render_template("signup.html", error=0, user = current_user)

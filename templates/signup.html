@@ -94,17 +94,36 @@
     <div class="login-form">
         <form method="POST" action="/signup" name="signForm" id="signForm">
             <div class="form-group">
-            <label>User Name</label>
-            <input type="text" class="form-control" placeholder="User Name" name="username" required>
+                <label>User Name</label>
+                <input type="text" class="form-control" placeholder="Username" name="username" required>
             </div>
             <div class="form-group">
-            <label>Password</label>
-            <input type="password" class="form-control" placeholder="Password" name="password" required>
-            <label>Password Again</label>
-            <input type="password" class="form-control" placeholder="Password Again" name="password_again" required>
+                <label>Password</label>
+                <input type="password" class="form-control" placeholder="Password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label>Password Again</label>
+                <input type="password" class="form-control" placeholder="Password Again" name="password_again" required>
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" placeholder="Name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" class="form-control" placeholder="Age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" class="form-control" placeholder="Email" name="email" required>
             </div>
             <button class="btn btn-black" id="signup">Sign Up</button>
         </form>
+        <div class="row">
+            <div class="col-sm">
+                <button class="btn btn-black" id="goLogIn" onclick="toLogIn()">Log In</button>
+            </div>
+        </div>
     </div>
 </div>
 </div>
@@ -124,15 +143,37 @@
 
 
 <script type="text/javascript">
-    
+    function toLogIn(){
+        location.href = "/login";
+    }
     document.getElementById("signup").onclick = function(){
         return validateForm();
     }
+    function validateEmail(mail){
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+            return (true)
+        }
+        return (false)
+    }
     function validateForm(){
+        var username = document.forms["signForm"]["username"].value;
         var pw = document.forms["signForm"]["password"].value;
         var pw2 = document.forms["signForm"]["password_again"].value;
+        var name = document.forms["signForm"]["name"].value;
+        var email = document.forms["signForm"]["email"].value;
+        var age = document.forms["signForm"]["age"].value;
         if(pw != pw2){
             alert("Passwords should match!");
+            document.getElementById("signForm").reset();
+            return false;
+        }
+        else if(!validateEmail(email)){
+            alert("You have entered an invalid email address!");
+            document.getElementById("signForm").reset();
+            return false;
+        }
+        else if(pw.length < 6 || username.length < 6 || age <= 0){
+            alert("Username and password values must be longer than 6 characters and age must be a positive integer!");
             document.getElementById("signForm").reset();
             return false;
         }
