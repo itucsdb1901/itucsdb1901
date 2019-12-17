@@ -1,10 +1,12 @@
 class Person:
-	def __init__(self, id, name, birthDay, nationality, personphoto):
+	def __init__(self, id, name, birthDay, nationality, personphoto, height, weight):
 		self.id = id
 		self.name = name
 		self.birthDay = birthDay
 		self.nationality = nationality
 		self.personphoto = personphoto
+		self.height = height
+		self.weight = weight
 class Team:
 	def __init__(self, id, name, leagueID, coachID, stadiumID,teamLogo):
 		self.id = id
