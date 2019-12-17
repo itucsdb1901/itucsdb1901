@@ -126,13 +126,27 @@ def match_detail(matchid):
     url = current_app.config["db_url"]
     query="SELECT t1.name as home,t2.name as away,m.homescore,m.awayscore FROM MATCH m join team t1 on (t1.id=m.homeid) join team t2 on (t2.id=m.awayid) WHERE (m.id=%d)"%matchid
     teams = listTable(url,query)
-    query="SELECT p.name,c.red,c.minute FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
+    query="SELECT p.name,c.red,c.minute,c.id as cardid FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
     cards = listTable(url, query)
-    query="SELECT p.name as playername,g.minute,t.name as teamname FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
+    query="SELECT p.name as playername,g.minute,t.name as teamname,g.id as goalid FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
     goals = listTable(url,query)
-    query="SELECT p1.name as outname,p2.name as inname,s.minute FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
+    query="SELECT p1.name as outname,p2.name as inname,s.minute,s.id as subid FROM MATCH m LEFT JOIN SUBSTITUTION s ON (s.matchid=m.id) JOIN person p1 on (p1.id=s.outplayerid) JOIN person p2 on (p2.id=s.inplayerid)  where m.id=%d order by s.minute ASC"%matchid
     substitutions = listTable(url,query)
     return render_template("match_detail.html",cards=cards,goals=goals,substitutions=substitutions,teams=teams,user=current_user)
+
+@login_required
+def add_match_detail(matchid):
+    url = current_app.config["db_url"]
+    query1="select p.id,p.name,s.teamid from match m join squad s on (s.teamid=m.homeid or s.teamid=m.awayid) join person p on(p.id=s.personid) where(m.id=%d)"%matchid
+    players=listTable(url,query1)
+    if(request.method=='POST'):
+        outplayerid=int(request.form["outplayerid"])
+        inplayerid=int(request.form["inplayerid"])
+        minute=int(request.form["minute"])
+        query="INSERT INTO substitution (outplayerid,inplayerid,matchid,minute) VALUES (%d,%d,%d,%d)"%(outplayerid,inplayerid,matchid,minute)
+        executeSQLquery(url,[query])
+
+    return render_template("add_match_detail.html", user=current_user, players=players,matchid=matchid)
 
 def player_page(personid):
     url = current_app.config["db_url"]
@@ -192,7 +206,8 @@ def add_goal(personid):
         findGoalIDSQL = "SELECT max(id) FROM GOAL"
         goalID = int(getOneRowQuery(url, findGoalIDSQL)[0])
         addAssistQuery = "INSERT INTO ASSIST (playerid, goalid) VALUES (%d, %d)"%(assistPlayerID, goalID)
-        executeSQLquery(url, [addAssistQuery])
+        if(assistPlayerID != False):
+            executeSQLquery(url, [addAssistQuery])
     return render_template("add_goal.html", matches=matches, person=person, assistPlayers = assistPlayers, user=current_user)
 
 @login_required
@@ -209,6 +224,32 @@ def add_card_to_player(playerid):
         query = "INSERT INTO CARD (playerid,red,matchid,minute) VALUES (%d, %s ,%d,%d)" %(playerid, red, matchid,minute)
         executeSQLquery(url, [query])
     return render_template("add_card_to_player.html",matches=matches,playerid=playerid, user=current_user)
+
+@login_required
+def delete_card(cardid):
+    url=current_app.config['db_url']
+    query="DELETE FROM CARD c WHERE c.id=%d"%cardid
+    executeSQLquery(url,[query])
+    return matches_page()
+
+@login_required
+def delete_goal(goalid):
+    url=current_app.config['db_url']
+    query="select a.id from assist a where(a.goalid=%d)"%goalid
+    assistID=listTable(url,query) 
+    query="delete from assist where id=%d"%assistID
+    executeSQLquery(url,[query])
+    query="delete from goal where id = %d"%goalid
+    executeSQLquery(url,[query])
+    return matches_page()
+
+@login_required
+def delete_substitution(subid):
+    url=current_app.config["db_url"]
+    query="delete from substitution where id =%d"%subid
+    executeSQLquery(url,[query])
+    return matches_page()
+
 
 def search_player():
     url = current_app.config['db_url']
@@ -329,11 +370,34 @@ def leagues_page():
 
 def league(leagueid):
     url=current_app.config["db_url"]
+    scoredgoals= "none"
+    againstgoals="none"
+    gamesplayed="none"
+    scored=False
+    against=False
+    played=False
+    if(request.method=='POST'):
+        scoredgoals=request.form.get("scoredgoals",False) 
+        againstgoals=request.form.get("againstgoals", False)
+        gamesplayed=request.form.get("gamesplayed", False)
+    if(scoredgoals == "filterscored"):
+        scored=True
+        if(againstgoals == "filteragainst"):
+            against=True
+        if(againstgoals == "filteragainst" and gamesplayed == "filterplayed"):
+            against=True
+            played=True
+    elif(againstgoals == "filteragainst"):
+        against=True
+        if(gamesplayed == "filterplayed"):
+            played=True
+    elif(gamesplayed == "filterplayed"):
+        played=True
     query = "select t.id, t.name, s.win, s.draw, s.lose, s.scoredgoals, s.againstgoals, (s.win+s.draw+s.lose) as gamesPlayed, (s.scoredgoals-s.againstgoals) as avarage, (s.win*3 + s.draw) as point from standing s join team t on (t.id = s.teamid) where (s.leagueid=%d) order by point desc, avarage desc ;"%leagueid
     getleaguename= "select name from league where (id=%d)"%leagueid
     leaguename= listTable(url,getleaguename)[0][0]
     standing=listTable(url,query)
-    return render_template("league.html",leaguename=leaguename,standing=standing, user=current_user)
+    return render_template("league.html",leaguename=leaguename,standing=standing, user=current_user, scored=scored, against=against, played=played)
 
 @login_required
 def add_league():

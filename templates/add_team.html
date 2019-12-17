@@ -58,15 +58,24 @@
                         <label>Team Logo</label>
                         <div class="field" style="width: 30%;">
                             <div class="control">
-                                <input class="input is-primary" type="text" name="teamLogo" maxlength="200" placeholder="Team logo URL">
+                                <input class="input is-primary" onkeyup="success()" id="photourl" type="text" name="teamLogo" maxlength="200" placeholder="Team logo URL">
                             </div>
                         </div>
                         
-                        <input class="button is-danger" type="submit" title="Save Team" value="Save">
+                        <input class="button is-danger" id="save" type="submit" title="Save Team" value="Save" disabled>
                         <br><br><br>
                 </form> 
             </div>
             
         </div>    
     </section>
+    <script>
+        function success() {
+	        if(document.getElementById("photourl").value==="") { 
+                document.getElementById('save').disabled = true; 
+            } else { 
+                document.getElementById('save').disabled = false;
+            }
+        }
+    </script>
 {% endblock %}

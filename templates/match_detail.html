@@ -29,7 +29,11 @@
                             {%endif%}
                         </td>
                         <td>{{card[2]}}</td>
-                    
+                        <td>                        
+                            <form method="POST" name ="card{{card[3]}}" action="/player/delete_card_{{card[3]}}">
+                                <button class="button is-danger" action="submit" id="delete_cardButton" name="delete_cardButton" >Delete Card</button>
+                            </form>
+                         </td>
                     </tr>
                     {%endfor%}    
                 </table>
@@ -51,6 +55,7 @@
                         <td>{{goal[0]}}</td>
                         <td>{{goal[1]}}</td>
                         <td>{{goal[2]}}</td>
+                        
                     
                     </tr>
                     {%endfor%}    

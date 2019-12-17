@@ -25,12 +25,12 @@
                         <tr>
                             <td>
                                 <form method="POST" name ="delete{{team.id}}" action="/teams/delete_{{team.id}}">
-                                    <input class="button is-danger" type="submit" id="deleteButton" name="deleteButton" value="DELETE" />
+                                    <input class="button is-danger" type="submit" id="deleteButton" name="deleteButton" value="DELETE" disabled/>
                                 </form>
                             </td>
                             <td>
                                 <form method="GET" name ="add_player_to_squad{{team}}" action="/teams/add_player_to_squad_{{team.id}}">
-                                    <input class="button is-danger" type="submit" id="add_player_to_squad" name="add_player_to_squad" value="ADD PLAYER" />
+                                    <input class="button is-danger" type="submit" id="add_player_to_squad" name="add_player_to_squad" value="ADD PLAYER" disabled />
                                 </form>
                             </td>
                         </tr>
@@ -48,13 +48,23 @@
                             <td>{{player[1]}}</td>
                             <td>
                                 <form method="POST" name="delete_player_from_squad{{player[2]}}" action="/teams/delete_player_from_squad_{{player[2]}}">
-                                    <input class="button is-danger" value="DELETE FROM SQUAD" type="submit" id="delete_player_from_squad"/>
+                                    <input class="button is-danger" value="DELETE FROM SQUAD"  type="submit" id="delete_player_from_squad" />
                                 </form>
                             </td>
                         </tr>
                         {%endfor%}
                     </table>
                 </div>
+
+{%if user.is_active%}
+<script>
+    
+        document.getElementById('delete_player_from_squad').disabled = false;
+        document.getElementById('add_player_to_squad').disabled = false;
+        document.getElementById('deleteButton').disabled = false;
+    
+</script>
+{%endif%}
 
 <script>
     function myFunction(id) {
