@@ -45,14 +45,14 @@
                         <div class="column">
                             <label>Minute</label>
                             <div class="field" style="width:27%;">
-                                <input class="input" type="number" name="minute"/>
+                                <input class="input" id="minutebutton" onkeyup="minutecontrol()" type="number" name="minute"/>
                             </div>
                             
                         </div>
                         <div class="column">
                             
                             <div calss="field">
-                                <input class="button is-danger" type="submit" value="SAVE GOAL"/>
+                                <input class="button is-danger" type="submit" id="save" disabled value="SAVE GOAL"/>
                             </div>
                             <br>
                             
@@ -62,6 +62,15 @@
             </div>
         </div>
     </section>
+    <script>
+        function minutecontrol() {
+         if(document.getElementById("minutebutton").value <= 0 || document.getElementById("minutebutton").value >= 120) { 
+                document.getElementById('save').disabled = true; 
+            } else { 
+                document.getElementById('save').disabled = false;
+            }
+        }
+    </script>
             
             
 {% endblock %}
