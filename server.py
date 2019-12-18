@@ -15,7 +15,7 @@ def load_user(user_id):
     if user_id is not None:
         get_user = "SELECT a.username, a.password, a.name, a.age, a.email FROM ACCOUNT a WHERE(a.username='%s')"%(user_id)
         user = views.getOneRowQuery(db_uri, get_user)
-        user = User(user[0], user[1], user[2], user[3], user[4])
+        user = User(user[0], user[1], user[2], user[4], user[3])
         return user
     return None
 
@@ -30,6 +30,8 @@ def create_app():
     app.add_url_rule("/login", methods=["POST", "GET"], view_func=views.checkSignIn)
     app.add_url_rule("/logout", methods=["POST", "GET"], view_func=views.logOut)
     app.add_url_rule("/signup", methods=["POST", "GET"], view_func=views.signUp)
+    app.add_url_rule("/update_user", methods=["POST", "GET"], view_func=views.update_account)
+    app.add_url_rule("/delete_user", methods=["POST", "GET"], view_func=views.signUp)
     app.add_url_rule("/players/detail_<int:personid>", methods=["POST","GET"], view_func=views.player_page)
     app.add_url_rule("/player/add_card_to_player_<int:playerid>", methods=["POST","GET"], view_func=views.add_card_to_player)
     app.add_url_rule("/player/delete_card_<int:cardid>", methods=["POST"], view_func=views.delete_card)

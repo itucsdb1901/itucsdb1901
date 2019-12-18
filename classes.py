@@ -52,15 +52,18 @@ class Standing:
 
 
 class Match:
-	def __init__(self, id, homeID, awayID, homeScore, awayScore, stadiumID, leagueID, date, refreeID):
+	def __init__(self, id, homeID, awayID, homeScore, awayScore, stadiumID, leagueID, date, ex1, ex2):
 		self.id = id
-		self.homeID = homeID
-		self.awayID = awayID
-		self.homeScore = homeScore
-		self.awayScore = awayScore
-		self.stadiumID = stadiumID
-		self.refreeID = refreeID
-		self.date = date
+		self.homeid = homeID
+		self.awayid = awayID
+		self.homescore = homeScore
+		self.awayscore = awayScore
+		self.stadiumid = stadiumID
+		self.leagueid = leagueID
+		self.matchdate = date
+		self.extratime1 = ex1
+		self.extratime2 = ex2
+
 
 class Goal:
 	def __init__(self, id, playerID, toTeamID, matchID, minute):

@@ -70,7 +70,9 @@
               </div>
               {% if (user.is_active) %}
                 <p class="navbar-item" id="welcome">Welcome {{user.name}}!</p> 
+                <a class="navbar-item" id="update" href="/update_user">Update User Info</a> 
                 <a class="navbar-item" id="session" href="/logout">Log out</a>
+                <a class="navbar-item" id="delete" href="/delete_user">Delete Account</a>
               {%else%}
                 <p class="navbar-item" id="welcome">Welcome Guest!</p> 
                 <a class="navbar-item" id="session" href="/login">Log in</a>

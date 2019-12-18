@@ -78,9 +78,39 @@ def signUp():
     return render_template("signup.html", error=0, user = current_user)
 
 @login_required
+def delete_account():
+    url = current_app.config["db_url"]
+    query = "DELETE FROM ACCOUNT WHERE username = '%s'"%current_user.username
+    executeSQLquery(url, [query])
+    redirect(url_for('logOut'))
+
+@login_required
+def update_account():
+    if(request.method == "POST"):
+        url=current_app.config["db_url"]
+        oldpassword = request.form.get("oldpassword",False)
+        if check_password_hash(current_user.password, oldpassword):
+            password = request.form.get("password",False)
+            name = request.form.get("name",False)
+            email = request.form.get("email",False)
+            age = int(request.form.get("age",False))
+            if password is not False:
+                password = generate_password_hash(password, method="sha256")
+            else:
+                password = user.password
+            query = "UPDATE ACCOUNT SET password='%s', name='%s', email='%s', age=%d WHERE USERNAME='%s'" %(password, name, email, age, current_user.username)
+            user = User(current_user.username, password, name, email, age)
+            logout_user()
+            login_user(user, remember=True)
+            return redirect('/')
+        else:
+            render_template("signup.html", error=1, user = current_user, update=True)
+    return render_template("signup.html", error=0, user = current_user, update=True)
+
+@login_required
 def logOut():
     logout_user()
-    return home_page()
+    return redirect(url_for('home_page'))
 
 
 #########Home Page Function############

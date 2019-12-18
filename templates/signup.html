@@ -1,5 +1,5 @@
 
-{% block title %}Home{% endblock %}
+{% block title %}{{"Update " + user.username if update else "Sign Up"}}{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
@@ -83,8 +83,13 @@
 </style>
 <div class="sidenav">
         <div class="login-main-text">
-           <h2>Application<br> Login Page</h2>
-           <p>Login or register from here to access.</p>
+            {% if update %}
+                <h2>Update User<br> {{user.username}}</h2>
+                <p>Update your informations from here.</p>
+            {%else%}
+                <h2>Application<br> Login Page</h2>
+                <p>Login or register from here to access.</p>
+            {% endif %}
         </div>
 </div>
 
@@ -92,36 +97,58 @@
 <div class="main">
 <div class="col-md-6 col-sm-12">
     <div class="login-form">
-        <form method="POST" action="/signup" name="signForm" id="signForm">
+        <form method="POST" name="signForm" id="signForm">
             <div class="form-group">
                 <label>User Name</label>
-                <input type="text" class="form-control" placeholder="Username" name="username" required>
+                {% if update %}
+                    <input type="text" class="form-control" placeholder="Username" name="username" id="username" disabled value="{{user.username}}">
+                {%else%}
+                    <input type="text" class="form-control" placeholder="Username" name="username" id="username" required>
+                {% endif %}
+            </div>
+            {% if update %}
+                <div class="form-group">
+                    <label>Current Password</label>
+                <input type="password" class="form-control" placeholder="Current Password" name="oldpassword" required>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label>{{'New ' if update else ''}}Password</label>
+                {% if update %}
+                    <input type="password" class="form-control" placeholder="Password" name="password">
+                {%else%}
+                    <input type="password" class="form-control" placeholder="Password" name="password" required>
+                {% endif %}
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" placeholder="Password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label>Password Again</label>
-                <input type="password" class="form-control" placeholder="Password Again" name="password_again" required>
+                <label>{{'New' if update else ''}}Password Again</label>
+                {% if update %}
+                    <input type="password" class="form-control" placeholder="Password Again" name="password_again">
+                {%else%}
+                    <input type="password" class="form-control" placeholder="Password Again" name="password_again" required>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" class="form-control" placeholder="Name" name="name" required>
+                <input type="text" class="form-control" placeholder="Name" name="name" required value="{{user.name if update else ''}}">
             </div>
             <div class="form-group">
                 <label>Age</label>
-                <input type="number" class="form-control" placeholder="Age" name="age" required>
+                <input type="number" class="form-control" placeholder="Age" name="age" required value="{{user.age if update else ''}}">
             </div>
             <div class="form-group">
                 <label>E-mail</label>
-                <input type="email" class="form-control" placeholder="Email" name="email" required>
+                <input type="email" class="form-control" placeholder="Email" name="email" required value="{{user.email if update else ''}}">
             </div>
-            <button class="btn btn-black" id="signup">Sign Up</button>
+            <button class="btn btn-black" id="signup">{{'Update' if update else 'Sign Up'}}</button>
         </form>
         <div class="row">
             <div class="col-sm">
-                <button class="btn btn-black" id="goLogIn" onclick="toLogIn()">Log In</button>
+                {% if update %}
+                    <button class="btn btn-black" id="goHome" onclick="toHome()">To Home Page</button>
+                {%else%}
+                    <button class="btn btn-black" id="goLogIn" onclick="toLogIn()">Log In</button>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -135,6 +162,12 @@
 {% endif %}
 
 {% if error == 1 %}
+    {% if update %}
+        <script>
+            alert("The password that you entered is not correct, please try again!");
+            document.getElementById("signForm").reset();
+        </script>
+    {%endif%}
         <script>
             alert("This username is already exist, please sign in!");
             location.href = "/login";   
@@ -142,44 +175,90 @@
 {% endif %}
 
 
-<script type="text/javascript">
-    function toLogIn(){
-        location.href = "/login";
-    }
-    document.getElementById("signup").onclick = function(){
-        return validateForm();
-    }
-    function validateEmail(mail){
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
-            return (true)
+{% if update %}
+    <script type="text/javascript">
+        function toHome(){
+            location.href = "/";
         }
-        return (false)
-    }
-    function validateForm(){
-        var username = document.forms["signForm"]["username"].value;
-        var pw = document.forms["signForm"]["password"].value;
-        var pw2 = document.forms["signForm"]["password_again"].value;
-        var name = document.forms["signForm"]["name"].value;
-        var email = document.forms["signForm"]["email"].value;
-        var age = document.forms["signForm"]["age"].value;
-        if(pw != pw2){
-            alert("Passwords should match!");
-            document.getElementById("signForm").reset();
-            return false;
+        document.getElementById("signup").onclick = function(){
+            return validateForm();
         }
-        else if(!validateEmail(email)){
-            alert("You have entered an invalid email address!");
-            document.getElementById("signForm").reset();
-            return false;
+        function validateEmail(mail){
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+                return (true)
+            }
+            return (false)
         }
-        else if(pw.length < 6 || username.length < 6 || age <= 0){
-            alert("Username and password values must be longer than 6 characters and age must be a positive integer!");
-            document.getElementById("signForm").reset();
-            return false;
+        function validateForm(){
+            var pw = document.forms["signForm"]["password"].value;
+            var pw2 = document.forms["signForm"]["password_again"].value;
+            var name = document.forms["signForm"]["name"].value;
+            var email = document.forms["signForm"]["email"].value;
+            var age = document.forms["signForm"]["age"].value;
+            if(pw != pw2){
+                alert("Passwords should match!");
+                document.getElementById("signForm").reset();
+                return false;
+            }
+            else if(!validateEmail(email)){
+                alert("You have entered an invalid email address!");
+                document.getElementById("signForm").reset();
+                return false;
+            }
+            else if(pw.length > 0 && pw.length < 6 || age < 0){
+                alert(pw.length)
+                alert(age)
+                alert("Username and password values must be longer than 6 characters and age must be a positive integer!");
+                document.getElementById("signForm").reset();
+                return false;
+            }
+            else {
+                document.getElementById("signForm").submit();
+            }
         }
-        else {
-            document.getElementById("form").submit();
+    </script>
+{%else%}
+    <script type="text/javascript">
+        function toLogIn(){
+            location.href = "/login";
         }
-    }
-</script>
+        document.getElementById("signup").onclick = function(){
+            return validateForm();
+        }
+        function validateEmail(mail){
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+                return (true)
+            }
+            return (false)
+        }
+        function validateForm(){
+            var username = document.forms["signForm"]["username"].value;
+            var pw = document.forms["signForm"]["password"].value;
+            var pw2 = document.forms["signForm"]["password_again"].value;
+            var name = document.forms["signForm"]["name"].value;
+            var email = document.forms["signForm"]["email"].value;
+            var age = document.forms["signForm"]["age"].value;
+            if(pw != pw2){
+                alert("Passwords should match!");
+                document.getElementById("signForm").reset();
+                return false;
+            }
+            else if(!validateEmail(email)){
+                alert("You have entered an invalid email address!");
+                document.getElementById("signForm").reset();
+                return false;
+            }
+            else if(pw.length < 6 || username.length < 6 || age <= 0){
+                alert("Username and password values must be longer than 6 characters and age must be a positive integer!");
+                document.getElementById("signForm").reset();
+                return false;
+            }
+            else {
+                document.getElementById("form").submit();
+            }
+        }
+    </script>
+{% endif %}
+
+
 {% endblock %}
