@@ -34,7 +34,7 @@ def create_app():
     app.add_url_rule("/player/add_card_to_player_<int:playerid>", methods=["POST","GET"], view_func=views.add_card_to_player)
     app.add_url_rule("/player/delete_card_<int:cardid>", methods=["POST"], view_func=views.delete_card)
     app.add_url_rule("/player/delete_goal_<int:goalid>", methods=["POST"], view_func=views.delete_goal)
-    app.add_url_rule("/player/delete_substitution_<int:subid>", methods=["POST"], view_func=views.delete_substitution)
+    app.add_url_rule("/substitution/delete_<int:subid>", methods=["POST"], view_func=views.delete_substitution)
     app.add_url_rule("/players/search_player", methods=["POST","GET"], view_func=views.search_player)
     app.add_url_rule("/player/delete_<int:personid>", methods=["POST"], view_func=views.delete_player)
     app.add_url_rule("/player/add_goal_<int:personid>", methods=["GET","POST"], view_func=views.add_goal)
