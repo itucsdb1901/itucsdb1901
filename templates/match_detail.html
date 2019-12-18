@@ -17,6 +17,9 @@
                         <th>Name</th>
                         <th>Red/Yellow</th>
                         <th>Minute</th>
+                        <th>First/Second Yellow</th>
+                        <th>Ban Duration</th>
+                        <th>Delete Card</th>
                     </tr>
                     {%for card in cards%}
                     <tr>
@@ -24,14 +27,30 @@
                         <td>
                             {%if card[1] %}
                                 Red
-                            {%else%}
+                            {%else %}
                                 Yellow
                             {%endif%}
                         </td>
                         <td>{{card[2]}}</td>
+                        <td>
+                            {%if card[1]==1 and card[5]==1%}
+                                Second Yellow
+                            {%elif card[4]==1%}
+                                First Yellow
+                            {%elif card[1]==1 and card[5]==0%}
+                                -
+                            {%endif%}
+                        </td>
+                        <td>
+                            {%if card[1]%}
+                                {{card[6]}}
+                            {%else%}
+                                -
+                            {%endif%}
+                        </td>
                         <td>                        
                             <form method="POST" name ="card{{card[3]}}" action="/player/delete_card_{{card[3]}}">
-                                <button class="button is-danger" action="submit" id="delete_cardButton" name="delete_cardButton" >Delete Card</button>
+                                <button class="button is-danger" action="submit" id="delete_cardButton" name="delete_cardButton" >Delete</button>
                             </form>
                          </td>
                     </tr>
@@ -78,6 +97,7 @@
                         <th>After Offside</th>
                         <th>After Goal</th>
                         <th>After Out</th>
+                        <th>Delete</th>                          
                     </tr>
                     {%for substitution in substitutions%}
                     <tr>
@@ -88,7 +108,11 @@
                         <td>{{substitution[4]}}</td>
                         <td>{{substitution[5]}}</td>
                         <td>{{substitution[6]}}</td>
-                    
+                        <td>
+                            <form method="POST" name ="substitution{{substitution[7]}}" action="/substitution/delete_{{substitution[7]}}">
+                                <button class="button is-danger" action="submit" id="delete_subButton" name="delete_subButton" >Delete</button>
+                            </form>
+                        </td>
                     </tr>
                     {%endfor%}    
                 </table>

@@ -508,7 +508,7 @@ def match_detail(matchid):
     url = current_app.config["db_url"]
     query="SELECT t1.name as home,t2.name as away,m.homescore,m.awayscore FROM MATCH m join team t1 on (t1.id=m.homeid) join team t2 on (t2.id=m.awayid) WHERE (m.id=%d)"%matchid
     teams = listTable(url,query)
-    query="SELECT p.name,c.red,c.minute,c.id as cardid FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
+    query="SELECT p.name,c.red,c.minute,c.id as cardid,c.yellow1,c.yellow2,c.banduration FROM MATCH m LEFT JOIN CARD c ON (c.matchid=m.id) JOIN PERSON p ON (p.id=c.playerid)  WHERE(m.id=%d) ORDER BY c.minute ASC"%matchid
     cards = listTable(url, query)
     query="SELECT p.name as playername,g.minute,t.name as teamname,g.id as goalid FROM MATCH m LEFT JOIN goal g ON (g.matchid=m.id) JOIN person p on (p.id=g.playerid) JOIN SQUAD s ON (s.personid=p.id) JOIN TEAM t ON (t.id=s.teamid) WHERE (m.id=%d) ORDER BY g.minute ASC"%matchid
     goals = listTable(url,query)
@@ -612,14 +612,21 @@ def add_card_to_player(playerid):
     if(request.method == 'POST'):
         matchid=int(request.form['match'])
         minute=int(request.form['minute'])
-        red=request.form['cardColor']
-        yellow1st=request.form['firstyellow']
-        if(yellow1st == 'true'):
-            yellow2st='false'
+        red=str(request.form['cardColor'])
+        yellow1st=str(request.form.get('firstyellow','false'))
+        banduration=int(request.form.get('banduration',0))
+        if(red == 'false'):
+            if(yellow1st == 'true'):
+                yellow2st='false'
+            else:
+                yellow2st='true'
+                red = 'true'
+                banduration=1
         else:
-            yellow2st='true'
-        banduration=int(request.form['banduration'])
-        query = "INSERT INTO CARD (playerid,red,matchid,minute) VALUES (%d, '%s', %d ,%d ,'%s' ,'%s' ,%d)" %(playerid, red, matchid, minute, yellow1st, yellow2st, banduration)
+            yellow1st = 'false'
+            yellow2st = 'false'
+        
+        query = "INSERT INTO CARD (playerid,red,matchid,minute,yellow1,yellow2,banduration) VALUES (%d, '%s', %d ,%d ,'%s' ,'%s' ,%d)" %(playerid, red, matchid, minute, yellow1st, yellow2st, banduration)
         executeSQLquery(url, [query])
     return render_template("add_card_to_player.html",matches=matches,playerid=playerid, user=current_user)
 
